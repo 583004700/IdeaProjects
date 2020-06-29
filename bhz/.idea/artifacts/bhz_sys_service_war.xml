@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="bhz-sys-service:war">
-    <output-path>$PROJECT_DIR$/bhz-sys-service/target</output-path>
-    <root id="archive" name="bhz-sys-service.war">
-      <element id="artifact" artifact-name="bhz-sys-service:war exploded" />
-    </root>
-  </artifact>
-</component>

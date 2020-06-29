@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="zhuwb:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="zhuwb-1.5.6.RELEASE.war">
-      <element id="artifact" artifact-name="zhuwb:war exploded" />
-    </root>
-  </artifact>
-</component>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-
-<!--封装单个表的常用操作-->
-<mapper namespace="com.common.mapper.BaseMapper" >
-    <select id="selectList" resultType="map" parameterType="map">
-        select * from ${tableName}
-    </select>
-</mapper>

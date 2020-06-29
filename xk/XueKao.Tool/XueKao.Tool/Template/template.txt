@@ -1,1 +1,0 @@
-{{"touser":"{0}","template_id":"q67G75Ua9H--BzcFbOzfCKkwptYZIgksi_KT2hg3U_U","url":"{1}","data":{{"first":{{"value":"{2}","color":"{3}"}},"keyword1":{{"value":"{4}","color":"{5}"}},"keyword2":{{"value":"{6}","color":"{7}"}},"keyword3":{{"value":"{`8}","color":"{9}"}},"remark":{{"value":"{10}","color":"{11}"}}}}}}
