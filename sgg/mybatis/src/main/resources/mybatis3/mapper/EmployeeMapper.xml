@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis3.mapper.EmployeeMapper">
+
+    <!--返回map-->
+    <select id="getEmpReturnMap" resultType="map">
+        select * from tbl_employee where id = #{id}
+    </select>
+
+    <!--返回map多条,键是表的主键-->
+    <select id="getEmpReturnMap2" resultType="mybatis3.mapper.Employee">
+        select * from tbl_employee
+    </select>
+
+    <!--对于支持自增的主键，可以使用这种方法得到主键-->
+    <insert id="addEmp" useGeneratedKeys="true" keyProperty="id" keyColumn="id" databaseId="mysql">
+        insert into tbl_employee(last_name,email,gender)
+        values(#{lastName},#{email},#{gender})
+    </insert>
+    <!--oracle不支持自增主键-->
+    <!--oracle在插入null时，不指定jdbcType会报错-->
+    <insert id="addEmpO"  databaseId="oracle">
+        <!--插入时的主键是从序列中拿到的,
+        keyProperty表示查询出来的主键给javaBean的哪个属性,
+        order=BEOFRE代表sql是在插入语句之前运行,
+        resultType表示查询出来的返回值类型-->
+        <!--<selectKey keyProperty="empNo" order="BEFORE" resultType="Integer">-->
+            <!--&lt;!&ndash;查询主键的sql语句&ndash;&gt;-->
+            <!--select emp_auto.nextval from dual-->
+        <!--</selectKey>-->
+        <!--insert into emp(empno,ename,job,mgr,hiredate,sal,comm,deptno)-->
+        <!--values(#{empNo},#{ename},#{job},#{mgr},#{hiredate},#{sal},#{comm,jdbcType=NUMERIC},#{deptno})-->
+
+        <!--第二种方法-->
+        <selectKey keyProperty="empNo" order="AFTER" resultType="Integer">
+            select emp_auto.currval from dual
+        </selectKey>
+        insert into emp(empno,ename,job,mgr,hiredate,sal,comm,deptno)
+        values(emp_auto.nextval,#{ename},#{job,jdbcType=NULL},#{mgr},#{hiredate},#{sal},#{comm,jdbcType=NUMERIC},#{deptno})
+    </insert>
+    
+    <update id="updateEmp">
+        update tbl_employee set last_name = #{lastName} where id = #{id}
+    </update>
+    
+    <delete id="delEmp">
+        delete from tbl_employee where id = #{id}
+    </delete>
+
+    <!--如果返回的是一个集合，返回类型是集合中泛型的类型-->
+    <select id="list" resultType="mybatis3.mapper.Employee">
+        select * from tbl_employee
+    </select>
+
+    <!--当只有一个参数时,#{}中的参数可以随便写-->
+    <select id="getEmpById" resultType="mybatis3.mapper.Employee" databaseId="mysql">
+        select * from tbl_employee where id = #{aa}
+    </select>
+
+    <!--当有多个参数时，参数会被封装成map,键分别为param1到paramN，而#{}是从map从取出键对应的值-->
+    <!--封装参数时，map的key可以命名，使用@Param注解可以明确指定key-->
+    <!--多个参数也可以使用pojo或者map-->
+    <select id="getEmpByIdAndLastName" resultType="mybatis3.mapper.Employee">
+        <!--select * from tbl_employee where id = #{param1} and last_name = #{param2}-->
+        select * from tbl_employee where id = #{id} and last_name = #{lastName}
+    </select>
+
+</mapper>

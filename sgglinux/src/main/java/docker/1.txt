@@ -1,0 +1,6 @@
+安装基础的centos
+docker pull hub.c.163.com/public/centos:6.7-tools
+后台运行镜像
+docker run --name centos6.7 -d hub.c.163.com/public/centos:6.7-tools
+进入容器内部
+docker exec -it centos6.7 /bin/bash

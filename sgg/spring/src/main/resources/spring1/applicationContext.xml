@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="myBeanFactoryPostProcessor" class="spring1.spring.bean.MyBeanFactoryPostProcessor"></bean>
+
+    <bean id="helloWorld" class="spring1.spring.bean.HelloWorld">
+        <property name="name" value="Spring"></property>
+    </bean>
+
+    <bean id="car" class="spring1.spring.bean.Car">
+        <constructor-arg value="Audi" index="0"></constructor-arg>
+        <constructor-arg>
+            <!--如果有特殊符号，可以用这个标签包裹起来-->
+            <value><![CDATA[<ShangHai>]]></value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>300000</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="car2" class="spring1.spring.bean.Car">
+        <constructor-arg value="Baoma"></constructor-arg>
+        <constructor-arg value="ShangHai"></constructor-arg>
+        <constructor-arg value="140" type="int"></constructor-arg>
+    </bean>
+
+    <!--使用ref元素或ref属性都可以引用其它的bean实例-->
+    <bean id="person" class="spring1.spring.bean.Person">
+        <property name="name" value="zhuwb"></property>
+        <property name="age" value="25"></property>
+
+        <!--引用外部配置的bean-->
+        <property name="car" ref="car"></property>
+        <!--给级联属性赋值-->
+        <property name="car.maxSpeed" value="120"></property>
+        <!--<property name="car">-->
+            <!--&lt;!&ndash;引用内部临时创建出来的bean&ndash;&gt;-->
+            <!--<bean class="spring1.spring.bean.Car">-->
+                <!--<constructor-arg value="Baoma"></constructor-arg>-->
+                <!--<constructor-arg value="ShangHai"></constructor-arg>-->
+                <!--<constructor-arg value="140" type="int"></constructor-arg>-->
+            <!--</bean>-->
+        <!--</property>-->
+    </bean>
+
+    <!--测试配置集合属性-->
+    <bean id="person2" class="spring1.spring.bean.collections.Person">
+        <property name="name" value="Mike"></property>
+        <property name="age" value="27"></property>
+        <property name="cars" ref="cars">
+            <!--<list>-->
+                <!--<ref bean="car"></ref>-->
+                <!--<ref bean="car2"></ref>-->
+                <!--&lt;!&ndash;也可以使用内部bean&ndash;&gt;-->
+            <!--</list>-->
+        </property>
+        <property name="carMap">
+            <map>
+                <entry key="AA" value-ref="car"></entry>
+                <entry key="BB" value-ref="car2"></entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="spring1.spring.bean.collections.DataSource">
+        <property name="properties">
+            <props>
+                <prop key="user">root</prop>
+                <prop key="password">1234</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--配置集合bean，为其它的bean引用-->
+    <util:list id="cars">
+        <ref bean="car"></ref>
+        <ref bean="car2"></ref>
+    </util:list>
+
+    <!--通过p命名空间 为bean 的属性赋值，需要先导入p 命名空间-->
+    <bean id="person3" class="spring1.spring.bean.collections.Person" p:age="30" p:name="Queen" p:cars-ref="cars"></bean>
+
+</beans>

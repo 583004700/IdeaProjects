@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--客户端-->
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ns2:sayX xmlns:ns2="http://server.cxf.mydemo.demo.com/">
+            <arg0>小东西</arg0>
+        </ns2:sayX>
+    </soap:Body>
+</soap:Envelope>
+
+<!--服务端-->
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ns2:sayX xmlns:ns2="http://server.cxf.mydemo.demo.com/">
+            <arg0>小东西</arg0>
+        </ns2:sayX>
+    </soap:Body>
+</soap:Envelope>
+

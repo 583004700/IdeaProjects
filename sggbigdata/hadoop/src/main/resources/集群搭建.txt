@@ -1,0 +1,73 @@
+docker network create --subnet=192.168.1.0/24 netgroup
+
+docker run -d --privileged -ti -v /sys/fs/cgroup:/sys/fs/cgroup --name hadoop101 -h hadoop101 -p 18088:18088 -p 9870:9870 --net netgroup --ip 192.168.1.101 hub.c.163.com/public/centos:6.7-tools
+docker run -d --privileged -ti -v /sys/fs/cgroup:/sys/fs/cgroup --name hadoop102 -h hadoop102 --net netgroup --ip 192.168.1.102 hub.c.163.com/public/centos:6.7-tools
+docker run -d --privileged -ti -v /sys/fs/cgroup:/sys/fs/cgroup --name hadoop103 -h hadoop103 --net netgroup --ip 192.168.1.103 hub.c.163.com/public/centos:6.7-tools
+
+修改hosts
+vim ~/.bashrc       然后添加保存
+
+cat >>/etc/hosts<<EOF
+127.0.0.1   localhost
+192.168.1.101  hadoop101
+192.168.1.102  hadoop102
+192.168.1.103  hadoop103
+192.168.1.104  hadoop104
+192.168.1.105  hadoop105
+192.168.1.106  hadoop106
+192.168.1.107  hadoop107
+192.168.1.108  hadoop108
+EOF
+
+source ~/.bashrc
+
+docker export -o hadoop1.0.tar hadoop101
+docker import hadoop1.0.tar hadoop:1.0
+docker run --name hadoop102 -d -h hadoop102 -p 50070:50070 --net netgroup --ip 192.168.1.102  hadoop:2.0 /usr/bin/supervisord
+
+修改容器端口映射
+docker 修改容器映射方法：
+容器运行后，又不想新建容器，修改端口映射的可以如下操作：
+下面以增加25端口映射为例：
+
+1：停止容器： docker stop XXX容器名
+2：停止systemctl stop docker
+3：　vim /var/lib/docker/containers/容器名/hostconfig.json
+　"PortBindings":{"50090/tcp":[{"HostIp":"","HostPort":"50090"}],"19888/tcp":[{"HostIp":"","HostPort":"19888"}],"8088/tcp":[{"HostIp":"","HostPort":"8088"}],"50070/tcp":[{"HostIp":"","HostPort":"50070"}],"80/tcp":[{"HostIp":"","HostPort":"80"}]}
+保存退出
+4：vi /var/lib/docker/containers/容器名/config.v2.json
+修改
+"ExposedPorts":{"50090/tcp":{},"19888/tcp":{},"8088/tcp":{},"50070/tcp":{},"80/tcp":{}}
+保存退出
+5：重启docker :systemctl start  docker
+6:　重启容器:docker restart 容器名
+OK！修改完成。
+
+因为docker不知道怎么配置免密登录，所以每个节点单独启动
+每个节点单独启动集群：
+docker run --name hadoop102 -d -h hadoop102 -p 10000:10000 -p 3306:3306 -p 50070:50070 -p 9000:9000 -p 19888:19888 --privileged=true -v /bigdata:/bigdata --net netgroup --ip 192.168.1.102  hadoop:2.0 /usr/bin/supervisord
+    第一次启动:
+    rm -rf data/ logs/
+    hadoop namenode -format
+    之后
+    hadoop-daemon.sh start namenode
+        hadoop-daemon.sh start datanode
+            yarn-daemon.sh start nodemanager
+
+            mr-jobhistory-daemon.sh start historyserver
+
+docker run --name hadoop103 -d -h hadoop103 -p 8088:8088 --privileged=true -v /bigdata:/bigdata --net netgroup --ip 192.168.1.103  hadoop:2.0 /usr/bin/supervisord
+    第一次启动:
+    rm -rf data/ logs/
+    之后
+    yarn-daemon.sh start resourcemanager
+        hadoop-daemon.sh start datanode
+            yarn-daemon.sh start nodemanager
+
+docker run --name hadoop104 -d -h hadoop104 -p 50090:50090 --privileged=true -v /bigdata:/bigdata --net netgroup --ip 192.168.1.104  hadoop:2.0 /usr/bin/supervisord
+    第一次启动:
+    rm -rf data/ logs/
+    之后
+    hadoop-daemon.sh start secondarynamenode
+        hadoop-daemon.sh start datanode
+            yarn-daemon.sh start nodemanager

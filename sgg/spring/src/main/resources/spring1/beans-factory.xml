@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--静态工厂方法配置bean-->
+    <bean id="car1" class="spring1.spring.bean.factory.StaticCarFactory" factory-method="getCar">
+        <constructor-arg value="audi"></constructor-arg>
+    </bean>
+
+    <!--先配置工厂实例-->
+    <bean id="carFactory" class="spring1.spring.bean.factory.InstanceCarFactory"></bean>
+
+    <bean id="car2" class="spring1.spring.bean.factory.Car" factory-bean="carFactory" factory-method="getCar">
+        <constructor-arg value="ford"></constructor-arg>
+    </bean>
+
+    <bean id="car3" class="spring1.spring.bean.factory.CarFactoryBean">
+        <property name="brand" value="BWM"></property>
+    </bean>
+</beans>

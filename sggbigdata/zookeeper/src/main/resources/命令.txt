@@ -1,0 +1,3 @@
+需要修改zkData/myid改成节点id,在conf/zoo.cfg中查看集群配置
+bin/zkServer.sh start启动集群
+bin/zkServer.sh stop停止

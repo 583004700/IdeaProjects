@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Implementation-Title: mybatis
+Implementation-Version: 3.4.0
+Specification-Vendor: MyBatis.org
+Built-By: Jeremy
+Implementation-Build-Date: 2016-04-17 17:43:25+0000
+Created-By: Apache Maven
+Implementation-URL: http://www.mybatis.org/mybatis-3
+X-Compile-Source-JDK: 1.6
+Implementation-Vendor: MyBatis.org
+Implementation-Vendor-Id: org.mybatis
+Build-Jdk: 1.7.0_80
+Specification-Title: mybatis
+Specification-Version: 3.4.0
+X-Compile-Target-JDK: 1.6
+Archiver-Version: Plexus Archiver
+

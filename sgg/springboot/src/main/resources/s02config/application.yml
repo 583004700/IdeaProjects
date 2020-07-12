@@ -1,0 +1,18 @@
+server:
+  port: 8082
+spring:
+  profiles:
+    active: prod
+
+#文档块模式指定不同配置
+---
+server:
+  port: 8083
+spring:
+  profiles: dev
+
+---
+server:
+  port: 8084
+spring:
+  profiles: prod

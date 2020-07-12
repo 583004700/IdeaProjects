@@ -1,0 +1,5 @@
+FROM centos
+RUN yum install -y curl
+ENTRYPOINT ["curl","-s","http://ip.cn"]
+#被继承时会执行
+ONBUILD RUN echo "father image onbuild--------886"

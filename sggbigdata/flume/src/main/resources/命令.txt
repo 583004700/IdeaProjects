@@ -1,0 +1,5 @@
+1.启动flume
+bin/flume-ng agent --conf conf/ --conf-file job/netcat-flume-logger.conf --name a1 -Dflume.root.logger=INFO,console
+bin/flume-ng agent -c conf/ -f job/netcat-flume-logger.conf -n a1 -Dflume.root.logger=INFO,console
+
+bin/flume-ng agent -c conf/ -f job/file-flume-hdfs.conf -n a2

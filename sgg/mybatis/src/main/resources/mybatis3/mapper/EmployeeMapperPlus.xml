@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis3.mapper.EmployeeMapperPlus">
+    <!--自定义javaBean封装规则-->
+    <resultMap id="myEmp" type="mybatis3.mapper.Employee">
+        <!--指定主键列的封装规则-->
+        <id column="id" property="id" />
+        <result column="email" property="email" />
+        <!--没写的属性会自动对应上-->
+    </resultMap>
+
+    <select id="getEmpById" resultMap="myEmp">
+        select * from tbl_employee where id = #{id}
+    </select>
+
+
+    <!--关联查询，或者使用下面那种方式-->
+    <resultMap id="myDifEmp" type="mybatis3.mapper.Employee">
+        <result column="id" property="id" />
+        <result column="last_name" property="lastName" />
+        <result column="gender" property="gender" />
+        <result column="did" property="department.id"/>
+        <result column="dept_name" property="department.departmentName" />
+    </resultMap>
+
+    <!--不用发送多条sql语句-->
+    <resultMap id="myDifEmp2" type="mybatis3.mapper.Employee">
+        <result column="id" property="id" />
+        <result column="last_name" property="lastName" />
+        <result column="gender" property="gender" />
+        <!--也可以使用association指定哪个属性是联合对象-->
+        <association property="department" javaType="mybatis3.mapper.Department">
+            <id column="did" property="id"/>
+            <result column="dept_name" property="departmentName" />
+        </association>
+    </resultMap>
+
+    <!--查询员工时查询出员工的部门,级联属性封装结果-->
+    <select id="getEmpAndDept" resultMap="myDifEmp2">
+        select e.id id,e.last_name last_name,e.gender gender,e.d_id d_id,d.id did,d.dept_name dept_name
+        from tbl_employee e,tbl_dept d
+        where e.d_id = d.id and e.id = #{id}
+    </select>
+
+    <!--使用association进行分步查询
+    1.先按照员工id查询员工信息
+    2.根据查询员工中的d_id去部门表中查询部门信息
+    3.部门设置到员工中去
+    -->
+    <!--这种方法查询出来的员工，每个员工会单独发一条sql语句去查询部门信息-->
+    <resultMap id="myEmpStep" type="mybatis3.mapper.Employee">
+        <result column="id" property="id" />
+        <result column="last_name" property="lastName" />
+        <result column="gender" property="gender" />
+        <!--也可以使用association指定哪个属性是联合对象-->
+        <!--当前属性是调用select方法查询出来的结果,column指定外键列-->
+        <association property="department" select="mybatis3.mapper.DepartmentMapper.getDeptById" column="d_id">
+
+        </association>
+    </resultMap>
+
+    <select id="getEmpByIdStep" resultMap="myEmpStep">
+        select * from tbl_employee where id = #{id}
+    </select>
+
+    <select id="getEmpStep" resultMap="myEmpStep">
+        select * from tbl_employee
+    </select>
+
+    <!--根据外键查询-->
+    <select id="getEmpsByDeptId" resultType="mybatis3.mapper.Employee">
+        select * from tbl_employee where d_id = #{deptId}
+    </select>
+
+    <!--
+        discriminator鉴别器，判断某列的值，根据某列的值改变封装行为
+        如果查出的是女生，则把部门信息查询出来，否则不查询
+        如果是男生，把last_name这一列值赋值给email
+    -->
+    <resultMap id="myEmpDisResultMap" type="mybatis3.mapper.Employee">
+        <result column="id" property="id" />
+        <result column="last_name" property="lastName" />
+        <result column="email" property="email" />
+        <result column="gender" property="gender" />
+        <discriminator javaType="string" column="gender">
+            <case value="0" resultType="mybatis3.mapper.Employee">
+                <association property="department" select="mybatis3.mapper.DepartmentMapper.getDeptById" column="d_id">
+
+                </association>
+            </case>
+            <case value="1" resultType="mybatis3.mapper.Employee">
+                <result column="last_name" property="email" />
+            </case>
+        </discriminator>
+
+    </resultMap>
+    
+    <select id="myEmpDis" resultMap="myEmpDisResultMap">
+        select * from tbl_employee where id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,26 @@
+1.启动/关闭/重启    bin目录下执行./activemq start/stop/restart 默认端口是61616
+    ./activemq start xbean:file:/app/activemq/conf/activemq02.xml   指定配置文件启动
+2.带日志启动     ./activemq start > runmq.log
+
+activemq控制台：
+    http://192.168.33.13:8161   前台界面    默认用户名密码：admin/admin
+配置支持nio协议
+    <transportConnectors>
+         <transportConnector name="nio" uri="nio://0.0.0.0:61618?trace=true"/>
+    </transportConnectors>
+
+配置jdbc持久化方式 createTablesOnStartup=true 运行时会创建表，第一次使用
+<persistenceAdapter>
+    <jdbcPersistenceAdapter dataSource="#mysql-ds" createTablesOnStartup="true" />
+</persistenceAdapter>
+
+<bean id="mysql-ds" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    <property name="url" value="jdbc:mysql://192.168.33.1:3306/activemq?relaxAutoCommit=true" />
+    <property name="username" value="root" />
+    <property name="password" value="root" />
+    <property name="maxTotal" value="200" />
+    <property name="poolPreparedStatements" value="true" />
+</bean>
+
+默认会消息会重发6次，如果6次消费失败(未commit或签收)，则会放到死信队列中

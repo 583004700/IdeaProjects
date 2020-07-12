@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <!--开启驼峰命名映射-->
+        <setting name="mapUnderscoreToCamelCase" value="true"></setting>
+        <!--默认使用的是OTHER,但在oracle数据库中插入null值时会报错-->
+        <setting name="jdbcTypeForNull" value="NULL"></setting>
+        <!--开启懒加载-->
+        <setting name="lazyLoadingEnabled" value="true"></setting>
+        <setting name="aggressiveLazyLoading" value="false"></setting>
+        <!--开启二级缓存-->
+        <setting name="cacheEnabled" value="true"></setting>
+    </settings>
+
+    <databaseIdProvider type="DB_VENDOR">
+        <property name="MySQL" value="mysql"></property>
+        <property name="Oracle" value="oracle"></property>
+    </databaseIdProvider>
+
+</configuration>

@@ -1,0 +1,32 @@
+server: 
+  port: 9527
+ 
+spring: 
+  application:
+    name: microservice-zuul-gateway
+ 
+eureka: 
+  client: 
+    service-url: 
+      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka,http://eureka7003.com:7003/eureka  
+  instance:
+    instance-id: gateway-9527.com
+    prefer-ip-address: true 
+ 
+ 
+zuul:
+
+  #ignored-services: microservice-dept
+  prefix: /atguigu  #服务前缀
+  ignored-services: "*" #让真实服务不可访问
+  routes:
+    #id和路由映射
+    mydept.serviceId: microservice-dept
+    mydept.path: /mydept/**
+ 
+info:
+  app.name: atguigu-microcloud
+  company.name: www.atguigu.com
+  build.artifactId: $project.artifactId$
+  build.version: $project.version$
+

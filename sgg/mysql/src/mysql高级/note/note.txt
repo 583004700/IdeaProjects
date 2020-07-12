@@ -1,0 +1,11 @@
+允许root用户远程登录任务数据库  grant all on *.* to 'root用户'@'%' identified by 'root密码' with grant option;flush privileges;
+设置root用户密码  /usr/bin/mysqladmin -u root password root
+设置自启动   chkconfig mysql on
+查看mysql的安装位置    ps -ef|grep mysql
+复制配置文件5.5版本  cp /usr/share/mysql/my-huge.cnf /etc/my.cnf
+复制配置文件5.6版本     cp /usr/share/mysql/my-default.cnf /etc/my.cnf
+查看字符集   show variables like '%char%';
+查看存储引擎  show engines;
+查看存储引擎  show variables like '%storage_engine%';
+查看索引    show index from 表名
+创建索引    create [unique] index 索引名 on 表名(列名1,列名2);

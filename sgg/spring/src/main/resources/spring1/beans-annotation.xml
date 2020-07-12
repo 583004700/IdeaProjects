@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--指定spring 容器扫描的包-->
+    <context:component-scan base-package="spring1.spring.bean.annotation"
+    resource-pattern="*.class" use-default-filters="true">
+        <!--排除哪些类-->
+        <!--<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />-->
+        <!--包含哪些类,因为默认的filter会扫描Repository注解，所以要先将use-default-filters设置为false-->
+        <!--<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />-->
+        <!--包含UserRepository实现类的-->
+        <!--<context:include-filter type="assignable" expression="spring1.spring.bean.annotation.UserRepository" />-->
+    </context:component-scan>
+</beans>

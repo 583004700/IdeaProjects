@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--标签是有顺序的-->
+
+    <!--
+        resource引入类路径下的资源
+        url引入网络路径或者磁盘下的资源
+    -->
+    <properties resource="mybatis2/config/dbconfig.properties"></properties>
+
+    <settings>
+        <!--开启驼峰命名映射-->
+        <setting name="mapUnderscoreToCamelCase" value="true"></setting>
+    </settings>
+
+    <!--起别名-->
+    <typeAliases>
+        <!--<typeAlias type="mybatis2.config.Employee" alias="emp"></typeAlias>-->
+        <package name="mybatis2"></package>
+    </typeAliases>
+    <!--环境配置,default指定使用某种环境-->
+    <environments default="development">
+        <environment id="test">
+            <!--事务管理器，type JDBC|MANAGED ,在Configuration中有注册这两个别名，也可以自定义事务管理器,需要实现TransactionFactory接口-->
+            <transactionManager type="JDBC"></transactionManager>
+            <!--数据源，type UNPOOLED,POOLED,JNDI,也是别名-->
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+        
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--支持多数据库厂商的，type=DB_VENDOR:VendorDatabaseIdProvider.class
+        作用就是得到数据库厂商标识，根据不同厂商执行不同的sql，在全局配置文件中会自动根据environments信息选择
+    -->
+    <databaseIdProvider type="DB_VENDOR">
+        <property name="MySQL" value="mysql"></property>
+        <property name="Oracle" value="oracle"></property>
+    </databaseIdProvider>
+
+    <!--resource引用类路径下的文件,url引用磁盘或者网络资源,class注册接口，可以直接用注解开发-->
+    <mappers>
+        <!--<mapper resource="mybatis2/config/EmployeeMapper.xml"/>-->
+        <!--&lt;!&ndash;使用注解时没有mapper.xml配置文件，直接指定类名&ndash;&gt;-->
+        <!--<mapper class="mybatis2.config.EmployeeAnnotationMapper"></mapper>-->
+
+        <!--批量注册时，映射文件要和类名相同-->
+        <package name="mybatis2"></package>
+    </mappers>
+
+</configuration>

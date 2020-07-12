@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis4.dynamicSQL.EmployeeMapper">
+    <select id="getEmpsByConditionIf" resultType="mybatis4.dynamicSQL.Employee">
+        select * from tbl_employee
+        <!--where 1 = 1-->
+        <!--OGNL表达式,从参数中取值进行判断,xml中特殊符号应该转义，比如&为&amp;-->
+        <!--where可以解决前面没有where标签的报错-->
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="lastName != null &amp;&amp; lastName != ''">
+                <!--bind可以重新绑定值-->
+                <bind name="_lastName" value="'%'+lastName+'%'"></bind>
+                and last_name like #{_lastName}
+            </if>
+            <if test="email != null and email.trim() != ''">
+                and email = #{email}
+            </if>
+            <if test="gender == 0 or gender == 1">
+                and gender = #{gender}
+            </if>
+        </where>
+    </select>
+
+    <select id="getEmpsByConditionTrim" resultType="mybatis4.dynamicSQL.Employee">
+        select * from tbl_employee
+        <!--后面多出的and 或 or where标签不能解决,trim标签体中是整个字符串,prefix加上前缀
+        prefixOverrides:前缀覆盖，去掉整个字符串前面多余的字符,后缀同理
+        -->
+        <trim prefix="where" suffixOverrides="and">
+            <if test="id != null">
+                id = #{id} and
+            </if>
+            <if test="lastName != null &amp;&amp; lastName != ''">
+                last_name like #lastName and
+            </if>
+            <if test="email != null and email.trim() != ''">
+                email = #{email} and
+            </if>
+            <if test="gender == 0 or gender == 1">
+                gender = #{gender}
+            </if>
+        </trim>
+    </select>
+
+    <select id="getEmpsByConditionChoose" resultType="mybatis4.dynamicSQL.Employee">
+        select * from tbl_employee
+        <trim prefix="where" suffixOverrides="and">
+            <!--只会进入一个分支-->
+            <choose>
+                <when test="id != null">
+                    id = #{id} and
+                </when>
+                <when test="lastName != null &amp;&amp; lastName != ''">
+                    last_name like #lastName and
+                </when>
+                <otherwise>
+                    gender = 0
+                </otherwise>
+            </choose>
+        </trim>
+    </select>
+    
+    <update id="updateEmp">
+        <!--set标签用来更新-->
+        update tbl_employee
+        <set>
+            <if test="lastName != null and lastName != ''">
+                last_name = #{lastName},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    
+    <select id="getEmpsByConditionForeach" resultType="mybatis4.dynamicSQL.Employee">
+        select * from tbl_employee where id in
+            <!--separator每个元素之间的分隔符,open开始字符,close结束字符,index遍历list是索引,遍历map是key-->
+        <foreach collection="ids" item="id" separator="," open="(" close=")" index="i">
+            #{id}
+        </foreach>
+    </select>
+
+    <!--mysql下批量保存,mysql支持values(),(),(),...
+        也可以在连接参数中加上allowMultiQueries=true来支持多条sql的执行，再insert into table;insert into table;
+    -->
+
+    <insert id="addEmps">
+        insert into tbl_employee
+        <!--引用外部定义的sql片段-->
+        <include refid="mybatis4.dynamicSQL.CommonMapper.insertColumn">
+            <property name="testColumn" value="abc" />
+        </include>
+        values
+        <foreach collection="emps" item="emp" separator=",">
+          (#{emp.lastName},#{emp.email},#{emp.gender},#{emp.department.id})
+        </foreach>
+    </insert>
+
+    <!--oracle批量插入
+    1.  begin
+        insert into emp(empno,ename,deptno) values(1234,'sss1',20);
+        insert into emp(empno,ename,deptno) values(5678,'sss2',20);
+        end;
+    2.
+    -->
+    <!--<insert id="addEmpsO" databaseId="oracle">-->
+
+    <!--</insert>-->
+
+    <!--两个内置参数
+        不只是方法传递过来的参数可以用来判断，取值，
+        mybatis默认还有两个内置参数
+        _parameter:代表整个参数
+            单个参数：_parameter就是这个参数
+            多个参数：_parameter就是map
+        _databaseId:如果配置了databaseIdProvider标签，
+        则就是代表当前数据库的别名
+    -->
+    <!--<select id="getEmpsTestInnerParameter" resultType="mybatis4.dynamicSQL.Employee">-->
+        <!--<if test="_databaseId == 'mysql'">-->
+            <!--select * from tbl_employee-->
+        <!--</if>-->
+        <!--<if test="_databaseId == 'oracle'">-->
+            <!--select * from emp-->
+        <!--</if>-->
+    <!--</select>-->
+
+
+    <!--sql标签抽取可重用的sql片段-->
+    <!--<sql id="insertColumn">-->
+        <!--&lt;!&ndash;${testColumn}-->
+            <!--可以取出testColumn的值-->
+        <!--&ndash;&gt;-->
+      <!--(last_name,email,gender,d_id)-->
+    <!--</sql>-->
+</mapper>

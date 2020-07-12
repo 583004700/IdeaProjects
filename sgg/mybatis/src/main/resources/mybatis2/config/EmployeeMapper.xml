@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis2.config.EmployeeMapper">
+    <!--在全局配置中起了别名可以直接引用,不区分大小写-->
+    <select id="selectEmp" resultType="emp">
+        select * from tbl_employee where id = #{id}
+    </select>
+
+    <!--databaseId表示使用mysql环境下的sql语句-->
+    <select id="getEmpById" resultType="emp" databaseId="mysql">
+        select * from tbl_employee where id = #{id}
+        <if test="lastName != null ">
+            and 1 = 1
+        </if>
+    </select>
+    <!--databaseId表示使用oracle环境下的sql语句-->
+    <select id="getEmpById" resultType="emp" databaseId="oracle">
+        select * from tbl_employee where id = #{id}
+        <if test="lastName != null ">
+            and 1 = 1
+        </if>
+    </select>
+
+</mapper>

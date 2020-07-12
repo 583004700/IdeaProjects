@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="address" class="spring1.spring.bean.autowire.Address" p:city="BeiJing" p:street="HuiLongGuan"></bean>
+    <bean id="car" class="spring1.spring.bean.Car" p:brand="Audi" p:price="300000"></bean>
+    <!--<bean id="person" class="spring1.spring.bean.autowire.Person" p:name="Tom" p:address-ref="address" p:car-ref="car"></bean>-->
+    <!--会自动将car和address将配到person中,这种方式配置在类的级别上，不灵活-->
+    <bean id="person" class="spring1.spring.bean.autowire.Person" p:name="Tom" autowire="byName"></bean>
+
+</beans>

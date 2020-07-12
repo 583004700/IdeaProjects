@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mapper.DepartmentMapper">
+
+    <select id="getDeptById" resultType="mybatis.mapper.Department">
+        select id,dept_name departmentName from tbl_dept where id = #{id}
+    </select>
+
+
+    <resultMap id="myDept" type="mybatis.mapper.Department">
+        <id column="did" property="id" />
+        <result column="dept_name" property="departmentName" />
+
+        <!--定义员工集合,此处可以不用select标签，避免发多条sql语句association也可以这样使用-->
+        <collection property="emps" ofType="mybatis.mapper.Employee">
+            <id column="eid" property="id" />
+            <id column="last_name" property="lastName" />
+            <id column="email" property="email" />
+            <id column="gender" property="gender" />
+        </collection>
+    </resultMap>
+    
+    <select id="getDeptByIdPlus" resultMap="myDept">
+        select d.id did,d.dept_name dept_name,e.id eid,e.last_name last_name,e.email email,e.gender gender
+        from tbl_dept d
+        left join tbl_employee e
+        on e.d_id = d.id
+        where d.id = #{id}
+    </select>
+
+    <select id="getDeptListPlus" resultMap="myDept">
+        select d.id did,d.dept_name dept_name,e.id eid,e.last_name last_name,e.email email,e.gender gender
+        from tbl_dept d
+        left join tbl_employee e
+        on e.d_id = d.id
+    </select>
+
+    <resultMap id="myDeptStep" type="mybatis.mapper.Department">
+        <id column="id" property="id"/>
+        <result column="departmentName" property="departmentName"/>
+        <!--也可以分步加载-->
+        <collection property="emps" select=".mapper.EmployeeMapperPlus.getEmpsByDeptId" column="{deptId=id}" fetchType="lazy"></collection>
+    </resultMap>
+
+    <select id="getDeptByIdStep" resultMap="myDeptStep">
+        select id,dept_name departmentName from tbl_dept where id = #{id}
+    </select>
+
+    <!--分段查询传递多列值：
+        将多列值封装成map
+        column="{key1=column1,key2=column2}"
+    -->
+</mapper>
