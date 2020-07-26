@@ -40,7 +40,7 @@ public interface BaseMapper<T> {
      * @return
      */
     @UpdateProvider(type=EntityProvider.class,method = "update")
-    int update(Object obj, String propertyColumns, String whereColumns);
+    int update(@Param("param1") Object obj,@Param("param2") String propertyColumns,@Param("param3") String whereColumns);
 
     /**
      * 通过主键查询
@@ -57,8 +57,8 @@ public interface BaseMapper<T> {
      * @return
      */
     @SelectProvider(type=EntityProvider.class,method = "selectOne")
-    T selectOne(Object obj, String propertyColumns);
+    T selectOne(@Param("param1") Object obj, @Param("param2") String propertyColumns);
 
     @SelectProvider(type=EntityProvider.class,method = "selectList")
-    List<T> selectList(Object obj, String propertyColumns);
+    List<T> selectList(@Param("param1") Object obj,@Param("param2") String propertyColumns);
 }

@@ -1,9 +1,12 @@
 package common.mapper;
 
+
+
 import common.annotation.Column;
 import common.annotation.Id;
 import common.annotation.Table;
 import common.annotation.Transient;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 
@@ -103,7 +106,7 @@ public final class EntityProvider {
     }
 
     //update(obj,"id,name","id,name")
-    public String update(Object obj, String propertyColumns, String whereColumns) throws Exception {
+    public String update(@Param("param1") Object obj,@Param("param2") String propertyColumns,@Param("param3") String whereColumns) throws Exception {
         String[] propertyColumnsArr = propertyColumns.split(",");
         if(propertyColumns.equals("all")){
             propertyColumnsArr = getterNames(obj);
@@ -129,7 +132,7 @@ public final class EntityProvider {
         return sql;
     }
 
-    public String selectOne(Object obj, String whereColumns) throws Exception {
+    public String selectOne(@Param("param1") Object obj, @Param("param2") String whereColumns) throws Exception {
         String[] ws = whereColumns.split(",");
         String tableName = getTableName(obj);
         String where = buildWhere(Arrays.asList(ws),obj,"param1.");
@@ -144,7 +147,7 @@ public final class EntityProvider {
         return sql;
     }
 
-    public String selectList(Object obj, String whereColumns) throws Exception {
+    public String selectList(@Param("param1") Object obj,@Param("param2") String whereColumns) throws Exception {
         return selectOne(obj,whereColumns);
     }
 
@@ -291,10 +294,12 @@ public final class EntityProvider {
         for(String propertyName : propertyNames){
             String annColumn = getAnnColumn(propertyName,obj);
             if(StringUtils.isNotEmpty(annColumn) && !annColumn.equals(propertyName)){
-                columnAliases.append(annColumn+" "+propertyName);
+                columnAliases.append(annColumn+" "+propertyName+",");
             }
         }
-        return columnAliases.toString();
+        String columnAliasesStr = columnAliases.toString();
+        columnAliasesStr = columnAliasesStr.substring(0,columnAliasesStr.length()-1);
+        return columnAliasesStr;
     }
 
 }
