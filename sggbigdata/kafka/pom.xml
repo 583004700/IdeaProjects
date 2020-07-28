@@ -37,7 +37,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.demo.kafka.consumer.MyConsumer</mainClass>
+                            <mainClass>com.demo.kafka.producer.InterceptorProducer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
