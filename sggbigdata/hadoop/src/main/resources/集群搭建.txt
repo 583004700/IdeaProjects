@@ -21,8 +21,8 @@ EOF
 
 source ~/.bashrc
 
-docker export -o hadoop1.0.tar hadoop101
-docker import hadoop1.0.tar hadoop:1.0
+docker export -o hadoop2.0.tar hadoop102
+docker import hadoop2.0.tar hadoop:2.0
 docker run --name hadoop102 -d -h hadoop102 -p 50070:50070 --net netgroup --ip 192.168.1.102  hadoop:2.0 /usr/bin/supervisord
 
 修改容器端口映射
