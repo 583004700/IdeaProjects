@@ -289,16 +289,20 @@ public final class EntityProvider {
     }
 
     protected String buildColumnAliases(Object obj) throws Exception {
+        boolean a = false;
         StringBuilder columnAliases = new StringBuilder();
         String[] propertyNames = getterNames(obj);
-        for(String propertyName : propertyNames){
-            String annColumn = getAnnColumn(propertyName,obj);
-            if(StringUtils.isNotEmpty(annColumn) && !annColumn.equals(propertyName)){
-                columnAliases.append(annColumn+" "+propertyName+",");
+        for (String propertyName : propertyNames) {
+            String annColumn = getAnnColumn(propertyName, obj);
+            if (StringUtils.isNotEmpty(annColumn) && !annColumn.equals(propertyName)) {
+                columnAliases.append(annColumn + " " + propertyName + ",");
+                a = true;
             }
         }
         String columnAliasesStr = columnAliases.toString();
-        columnAliasesStr = columnAliasesStr.substring(0,columnAliasesStr.length()-1);
+        if(a) {
+            columnAliasesStr = columnAliasesStr.substring(0, columnAliasesStr.length() - 1);
+        }
         return columnAliasesStr;
     }
 
