@@ -1,0 +1,4 @@
+启动：bin/hbase-daemon.sh start master
+访问web：hadoop102:16010
+启动region server：bin/hbase-daemon.sh start regionserver
+控制台：bin/hbase shell
