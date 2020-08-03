@@ -104,20 +104,52 @@ public class TestAPI {
         table.close();
     }
 
-    public static void getData(String tableName,String rowKey,String cf,String cn) throws IOException {
+    //获取数据（get）
+    public static void getData(String tableName, String rowKey, String cf, String cn) throws IOException {
         Table table = connection.getTable(TableName.valueOf(tableName));
         Get get = new Get(Bytes.toBytes(rowKey));
         //指定获取的列族
         //get.addFamily(Bytes.toBytes(cf));
-        get.addColumn(Bytes.toBytes(cf),Bytes.toBytes(cn));
+        get.addColumn(Bytes.toBytes(cf), Bytes.toBytes(cn));
         //设置获取数据的版本数
         get.setMaxVersions();
 
         Result result = table.get(get);
         for (Cell cell : result.rawCells()) {
-            System.out.println("CF:"+Bytes.toString(CellUtil.cloneFamily(cell))+",CN:"+Bytes.toString(CellUtil.cloneQualifier(cell))
-            +",Value:"+Bytes.toString(CellUtil.cloneValue(cell)));
+            System.out.println("CF:" + Bytes.toString(CellUtil.cloneFamily(cell)) + ",CN:" + Bytes.toString(CellUtil.cloneQualifier(cell))
+                    + ",Value:" + Bytes.toString(CellUtil.cloneValue(cell)));
         }
+        table.close();
+    }
+
+    //获取数据（scan）
+    public static void scanTable(String tableName) throws IOException {
+        Table table = connection.getTable(TableName.valueOf(tableName));
+        Scan scan = new Scan(Bytes.toBytes("1001"), Bytes.toBytes("1003"));
+        ResultScanner resultScanner = table.getScanner(scan);
+        for (Result result : resultScanner) {
+            for (Cell cell : result.rawCells()) {
+                System.out.println("RK:" + Bytes.toString(CellUtil.cloneRow(cell)) + ",CF:" + Bytes.toString(CellUtil.cloneFamily(cell)) + ",CN:" + Bytes.toString(CellUtil.cloneQualifier(cell))
+                        + ",Value:" + Bytes.toString(CellUtil.cloneValue(cell)));
+            }
+        }
+        table.close();
+    }
+
+    //删除数据
+    public static void deleteData(String tableName, String rowKey, String cf, String cn) throws Exception{
+        Table table = connection.getTable(TableName.valueOf(tableName));
+
+        Delete delete = new Delete(Bytes.toBytes(rowKey));
+        //设置删除的列,如果加了时间戳，只删除指定的时间戳的版本，如果时间戳小于最大时间戳，则还能scan到数据，其它的加了时间戳删除时间戳小于参数的最新版本
+        //delete.addColumns(Bytes.toBytes(cf),Bytes.toBytes(cn));
+        //设置删除的列，删除一个版本后，另一个最新版本会出来。如果flush了，另一个版本又不会出来。慎用
+        //delete.addColumn(Bytes.toBytes(cf),Bytes.toBytes(cn));
+        //删除指定列族
+        delete.addFamily(Bytes.toBytes(cf));
+
+        table.delete(delete);
+        table.close();
     }
 
     public static void main(String[] args) throws Exception {
@@ -131,9 +163,11 @@ public class TestAPI {
 //
 //        createNameSpace("0408");
 
-        putData("stu", "1001", "info2", "name", "zhangsan");
-        getData("stu","1002","info2","name");
+//        putData("stu", "1001", "info2", "name", "zhangsan");
+//        getData("stu","1002","info2","name");
 
+        scanTable("stu");
+        //deleteData("stu","1006","info1","name");
         close();
     }
 }

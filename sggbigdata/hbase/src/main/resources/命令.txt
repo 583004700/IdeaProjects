@@ -2,3 +2,4 @@
 访问web：hadoop102:16010
 启动region server：bin/hbase-daemon.sh start regionserver
 控制台：bin/hbase shell
+退出hdfs安全模式：hadoop dfsadmin -safemode leave
