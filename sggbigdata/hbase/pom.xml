@@ -43,7 +43,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.demo.hbase.mr1.FruitDriver</mainClass>
+                            <mainClass>com.demo.hbase.mr2.Fruit2Driver</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
