@@ -1,5 +1,6 @@
 启动：bin/hbase-daemon.sh start master
+停止：bin/stop-hbase.sh
 访问web：hadoop102:16010
-启动region server：bin/hbase-daemon.sh start regionserver
+启动region server：/opt/module/hbase/bin/hbase-daemon.sh start regionserver
 控制台：bin/hbase shell
 退出hdfs安全模式：hadoop dfsadmin -safemode leave
