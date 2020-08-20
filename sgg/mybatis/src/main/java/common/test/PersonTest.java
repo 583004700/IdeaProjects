@@ -3,40 +3,35 @@ package common.test;
 import common.mapper.EntityProvider;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class PersonTest {
-
-    @Before
-    public void init() throws Exception{
-
-    }
+    @Autowired
+    PersonMapper personMapper;
 
     @Test
     public void testInsert() throws Exception{
         //会插入person非空字段
         Person person = new Person();
         person.setName("张三");
-        String sql = new EntityProvider().insert(person);
-        System.out.println(sql);
+        personMapper.insert(person);
     }
 
     @Test
     public void testUpdate() throws Exception{
-        //会更新指定条件指定字段，更新id为5的姓名为张三
         Person person = new Person();
-        person.setName("张三");
-        person.setId(5);
-        String sql = new EntityProvider().update(person,"name","id");
-        System.out.println(sql);
+        person.setName("张三").setId(5).setEmail("222@qq.com");
+        //相当于 update person set email = '222@qq.com' where id = 5 and name = '张三'
+        int row = personMapper.update(person,"email","id,name");
     }
 
     @Test
-    public void testUpdateByPrimary() throws Exception{
-        //会更新指定条件指定字段，更新id为5的姓名为张三
+    public void testQuery() throws Exception{
         Person person = new Person();
-        person.setName("张三");
-        person.setId(5);
-        String sql = new EntityProvider().updateByPrimaryKey(person);
-        System.out.println(sql);
+        person.setName("张三").setId(5).setEmail("222@qq.com");
+        //相当于 select t.* from person t where id = 5 and name = '张三'
+        personMapper.selectList(person,"id,name");
+        //相当于 select t.* from person t where t.id = 5
+        personMapper.selectOne(person,"id");
     }
 }
