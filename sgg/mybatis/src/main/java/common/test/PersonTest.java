@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class PersonTest {
     @Autowired
     PersonMapper personMapper;
@@ -30,8 +32,8 @@ public class PersonTest {
         Person person = new Person();
         person.setName("张三").setId(5).setEmail("222@qq.com");
         //相当于 select t.* from person t where id = 5 and name = '张三'
-        personMapper.selectList(person,"id,name");
+        List<Person> personList = personMapper.selectList(person,"id,name");
         //相当于 select t.* from person t where t.id = 5
-        personMapper.selectOne(person,"id");
+        Person newPerson = personMapper.selectOne(person,"id");
     }
 }
