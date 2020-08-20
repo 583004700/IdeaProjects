@@ -1,11 +1,11 @@
-package common.mapper;
+package cn.com.servyou.bzdsjpt.common.mybatis.operator.mapper;
 
 
 
-import common.annotation.Column;
-import common.annotation.Id;
-import common.annotation.Table;
-import common.annotation.Transient;
+import cn.com.servyou.bzdsjpt.common.mybatis.operator.annotation.Column;
+import cn.com.servyou.bzdsjpt.common.mybatis.operator.annotation.Id;
+import cn.com.servyou.bzdsjpt.common.mybatis.operator.annotation.Table;
+import cn.com.servyou.bzdsjpt.common.mybatis.operator.annotation.Transient;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
@@ -106,7 +106,7 @@ public final class EntityProvider {
     }
 
     //update(obj,"id,name","id,name")
-    public String update(@Param("param1") Object obj,@Param("param2") String propertyColumns,@Param("param3") String whereColumns) throws Exception {
+    public String update(Object obj, String propertyColumns, String whereColumns) throws Exception {
         String[] propertyColumnsArr = propertyColumns.split(",");
         if(propertyColumns.equals("all")){
             propertyColumnsArr = getterNames(obj);
@@ -132,7 +132,7 @@ public final class EntityProvider {
         return sql;
     }
 
-    public String selectOne(@Param("param1") Object obj, @Param("param2") String whereColumns) throws Exception {
+    public String selectOne(@Param("param1") Object obj,@Param("param2") String whereColumns) throws Exception {
         String[] ws = whereColumns.split(",");
         String tableName = getTableName(obj);
         String where = buildWhere(Arrays.asList(ws),obj,"param1.");
@@ -147,7 +147,7 @@ public final class EntityProvider {
         return sql;
     }
 
-    public String selectList(@Param("param1") Object obj,@Param("param2") String whereColumns) throws Exception {
+    public String selectList(Object obj, String whereColumns) throws Exception {
         return selectOne(obj,whereColumns);
     }
 
@@ -289,18 +289,16 @@ public final class EntityProvider {
     }
 
     protected String buildColumnAliases(Object obj) throws Exception {
-        boolean a = false;
         StringBuilder columnAliases = new StringBuilder();
         String[] propertyNames = getterNames(obj);
-        for (String propertyName : propertyNames) {
-            String annColumn = getAnnColumn(propertyName, obj);
-            if (StringUtils.isNotEmpty(annColumn) && !annColumn.equals(propertyName)) {
-                columnAliases.append(annColumn + " " + propertyName + ",");
-                a = true;
+        for(String propertyName : propertyNames){
+            String annColumn = getAnnColumn(propertyName,obj);
+            if(StringUtils.isNotEmpty(annColumn) && !annColumn.equals(propertyName)){
+                columnAliases.append(annColumn+" "+propertyName+",");
             }
         }
         String columnAliasesStr = columnAliases.toString();
-        if(a) {
+        if(!"".equals(columnAliasesStr)) {
             columnAliasesStr = columnAliasesStr.substring(0, columnAliasesStr.length() - 1);
         }
         return columnAliasesStr;
