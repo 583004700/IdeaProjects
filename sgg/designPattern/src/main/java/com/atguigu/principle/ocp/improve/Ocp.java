@@ -3,7 +3,7 @@ package com.atguigu.principle.ocp.improve;
 public class Ocp {
 
 	public static void main(String[] args) {
-		//Ê¹ÓÃ¿´¿´´æÔÚµÄÎÊÌâ
+		//Ê¹ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½
 		GraphicEditor graphicEditor = new GraphicEditor();
 		graphicEditor.drawShape(new Rectangle());
 		graphicEditor.drawShape(new Circle());
@@ -13,9 +13,9 @@ public class Ocp {
 
 }
 
-//ÕâÊÇÒ»¸öÓÃÓÚ»æÍ¼µÄÀà [Ê¹ÓÃ·½]
+//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ [Ê¹ï¿½Ã·ï¿½]
 class GraphicEditor {
-	//½ÓÊÕShape¶ÔÏó£¬µ÷ÓÃdraw·½·¨
+	//ï¿½ï¿½ï¿½ï¿½Shapeï¿½ï¿½ï¿½ó£¬µï¿½ï¿½ï¿½drawï¿½ï¿½ï¿½ï¿½
 	public void drawShape(Shape s) {
 		s.draw();
 	}
@@ -23,11 +23,11 @@ class GraphicEditor {
 	
 }
 
-//ShapeÀà£¬»ùÀà
+//Shapeï¿½à£¬ï¿½ï¿½ï¿½ï¿½
 abstract class Shape {
 	int m_type;
 	
-	public abstract void draw();//³éÏó·½·¨
+	public abstract void draw();//ï¿½ï¿½ï¿½ó·½·ï¿½
 }
 
 class Rectangle extends Shape {
@@ -38,7 +38,7 @@ class Rectangle extends Shape {
 	@Override
 	public void draw() {
 		
-		System.out.println(" »æÖÆ¾ØÐÎ ");
+		System.out.println(" ï¿½ï¿½ï¿½Æ¾ï¿½ï¿½ï¿½ ");
 	}
 }
 
@@ -48,11 +48,11 @@ class Circle extends Shape {
 	}
 	@Override
 	public void draw() {
-		System.out.println(" »æÖÆÔ²ÐÎ ");
+		System.out.println(" ï¿½ï¿½ï¿½ï¿½Ô²ï¿½ï¿½ ");
 	}
 }
 
-//ÐÂÔö»­Èý½ÇÐÎ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 class Triangle extends Shape {
 	Triangle() {
 		super.m_type = 3;
@@ -60,11 +60,11 @@ class Triangle extends Shape {
 	@Override
 	public void draw() {
 		
-		System.out.println(" »æÖÆÈý½ÇÐÎ ");
+		System.out.println(" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ");
 	}
 }
 
-//ÐÂÔöÒ»¸öÍ¼ÐÎ
+//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Í¼ï¿½ï¿½
 class OtherGraphic extends Shape {
 	OtherGraphic() {
 		super.m_type = 4;
@@ -73,6 +73,6 @@ class OtherGraphic extends Shape {
 	@Override
 	public void draw() {
 		
-		System.out.println(" »æÖÆÆäËüÍ¼ÐÎ ");
+		System.out.println(" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ ");
 	}
 }
