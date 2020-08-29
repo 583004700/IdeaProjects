@@ -10,31 +10,31 @@ public class OrderPizza2 {
 
 	Pizza pizza = null;
 	String orderType = "";
-	// ¹¹ÔìÆ÷
+	// æ„é€ å™¨
 	public OrderPizza2() {
 		
 		do {
 			orderType = getType();
 			pizza = SimpleFactory.createPizza2(orderType);
 
-			// Êä³öpizza
-			if (pizza != null) { // ¶©¹º³É¹¦
+			// è¾“å‡ºpizza
+			if (pizza != null) { // è®¢è´­æˆåŠŸ
 				pizza.prepare();
 				pizza.bake();
 				pizza.cut();
 				pizza.box();
 			} else {
-				System.out.println(" ¶©¹ºÅûÈøÊ§°Ü ");
+				System.out.println(" è®¢è´­æŠ«è¨å¤±è´¥ ");
 				break;
 			}
 		} while (true);
 	}
 
-	// Ğ´Ò»¸ö·½·¨£¬¿ÉÒÔ»ñÈ¡¿Í»§Ï£Íû¶©¹ºµÄÅûÈøÖÖÀà
+	// å†™ä¸€ä¸ªæ–¹æ³•ï¼Œå¯ä»¥è·å–å®¢æˆ·å¸Œæœ›è®¢è´­çš„æŠ«è¨ç§ç±»
 	private String getType() {
 		try {
 			BufferedReader strin = new BufferedReader(new InputStreamReader(System.in));
-			System.out.println("input pizza ÖÖÀà:");
+			System.out.println("input pizza ç§ç±»:");
 			String str = strin.readLine();
 			return str;
 		} catch (IOException e) {

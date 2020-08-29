@@ -3,23 +3,23 @@ package com.atguigu.composite;
 import java.util.ArrayList;
 import java.util.List;
 
-//University ¾ÍÊÇ Composite , ¿ÉÒÔ¹ÜÀíCollege
+//University å°±æ˜¯ Composite , å¯ä»¥ç®¡ç†College
 public class University extends OrganizationComponent {
 
 	List<OrganizationComponent> organizationComponents = new ArrayList<OrganizationComponent>();
 
-	// ¹¹ÔìÆ÷
+	// æ„é€ å™¨
 	public University(String name, String des) {
 		super(name, des);
 	}
 
-	// ÖØĞ´add
+	// é‡å†™add
 	@Override
 	protected void add(OrganizationComponent organizationComponent) {
 		organizationComponents.add(organizationComponent);
 	}
 
-	// ÖØĞ´remove
+	// é‡å†™remove
 	@Override
 	protected void remove(OrganizationComponent organizationComponent) {
 		organizationComponents.remove(organizationComponent);
@@ -35,11 +35,11 @@ public class University extends OrganizationComponent {
 		return super.getDes();
 	}
 
-	// print·½·¨£¬¾ÍÊÇÊä³öUniversity °üº¬µÄÑ§Ôº
+	// printæ–¹æ³•ï¼Œå°±æ˜¯è¾“å‡ºUniversity åŒ…å«çš„å­¦é™¢
 	@Override
 	protected void print() {
 		System.out.println("--------------" + getName() + "--------------");
-		//±éÀú organizationComponents 
+		//éå† organizationComponents 
 		for (OrganizationComponent organizationComponent : organizationComponents) {
 			organizationComponent.print();
 		}

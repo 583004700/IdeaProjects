@@ -20,12 +20,12 @@
         <module>servlet3.0</module>
         <module>shiro</module>
         <module>spring</module>
-        <module>spring-annotation</module>
         <module>springboot</module>
         <module>springboot-concordance</module>
         <module>springdata</module>
         <module>springmvc</module>
         <module>springmvc-annotation</module>
+        <module>spring-annotation</module>
     </modules>
 
     <properties>

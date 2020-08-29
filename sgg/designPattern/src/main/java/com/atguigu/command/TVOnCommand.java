@@ -2,11 +2,11 @@ package com.atguigu.command;
 
 public class TVOnCommand implements Command {
 
-	// 聚合TVReceiver
+	// 鑱氬悎TVReceiver
 
 	TVReceiver tv;
 
-	// 构造器
+	// 鏋勯�犲櫒
 	public TVOnCommand(TVReceiver tv) {
 		super();
 		this.tv = tv;
@@ -14,13 +14,13 @@ public class TVOnCommand implements Command {
 
 	@Override
 	public void execute() {
-		// 调用接收者的方法
+		// 璋冪敤鎺ユ敹鑰呯殑鏂规硶
 		tv.on();
 	}
 
 	@Override
 	public void undo() {
-		// 调用接收者的方法
+		// 璋冪敤鎺ユ敹鑰呯殑鏂规硶
 		tv.off();
 	}
 }
