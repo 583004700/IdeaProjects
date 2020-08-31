@@ -1,0 +1,60 @@
+/opt/module/sqoop/bin/sqoop list-databases --connect jdbc:mysql://hadoop102:3306/ --username root --password root
+
+导入数据
+	（1）全部导入
+bin/sqoop import \
+--connect jdbc:mysql://hadoop102:3306/company \
+--username root \
+--password root \
+--table staff \
+--target-dir /user/company \
+--delete-target-dir \
+--num-mappers 1 \
+--fields-terminated-by "\t"
+	（2）查询导入
+bin/sqoop import \
+--connect jdbc:mysql://hadoop102:3306/company \
+--username root \
+--password root \
+--target-dir /user/company \
+--delete-target-dir \
+--num-mappers 1 \
+--fields-terminated-by "\t" \
+--query 'select name,sex from staff where id <=1 and $CONDITIONS;'
+提示：must contain '$CONDITIONS' in WHERE clause.
+如果query后使用的是双引号，则$CONDITIONS前必须加转移符，防止shell识别为自己的变量。
+	（3）导入指定列
+bin/sqoop import \
+--connect jdbc:mysql://hadoop102:3306/company \
+--username root \
+--password root \
+--table staff \
+--columns id,sex \
+--target-dir /user/company \
+--delete-target-dir \
+--num-mappers 1 \
+--fields-terminated-by "\t"
+提示：columns中如果涉及到多列，用逗号分隔，分隔时不要添加空格
+	（4）使用sqoop关键字筛选查询导入数据
+bin/sqoop import \
+--connect jdbc:mysql://hadoop102:3306/company \
+--username root \
+--password root \
+--table staff \
+--where "id=1" \
+--target-dir /user/company \
+--delete-target-dir \
+--num-mappers 1 \
+--fields-terminated-by "\t"
+
+RDBMS到Hive
+bin/sqoop import \
+--connect jdbc:mysql://hadoop102:3306/company \
+--username root \
+--password root \
+--table staff \
+--num-mappers 1 \
+--hive-import \
+--fields-terminated-by "\t" \
+--hive-overwrite \
+--hive-table staff_hive

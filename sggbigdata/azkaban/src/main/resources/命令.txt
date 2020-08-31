@@ -1,0 +1,6 @@
+生成密钥：keytool -keystore keystore -alias jetty -genkey -keyalg RSA    密码设置的是：123456
+
+启动web：/opt/module/azkaban/server/bin/azkaban-web-start.sh
+启动executor：/opt/module/azkaban/executor/bin//azkaban-executor-start.sh
+
+job必须打成 zip包

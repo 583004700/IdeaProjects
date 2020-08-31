@@ -1,0 +1,2 @@
+type=command
+command=/opt/module/hive/bin/hive -f /opt/module/azkaban/jobs/student.sql
