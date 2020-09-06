@@ -19,6 +19,7 @@
         <module>oozie</module>
         <module>sqoop</module>
         <module>zookeeper</module>
+        <module>project</module>
     </modules>
 
     <properties>
