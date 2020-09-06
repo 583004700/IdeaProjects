@@ -1,0 +1,37 @@
+cd /opt/module/cdh/hadoop-2.5.0-cdh5.3.6
+
+hadoop102：格式化namenode：bin/hdfs namenode -format
+
+rm -rf data/ logs/
+
+hadoop102：sbin/hadoop-daemon.sh start namenode
+                sbin/hadoop-daemon.sh start datanode
+                    sbin/yarn-daemon.sh start nodemanager
+
+
+                    sbin/mr-jobhistory-daemon.sh start historyserver
+
+hadoop103：sbin/yarn-daemon.sh start resourcemanager
+                  sbin/hadoop-daemon.sh start datanode
+                      sbin/yarn-daemon.sh start nodemanager
+
+hadoop104：sbin/hadoop-daemon.sh start secondarynamenode
+                  sbin/hadoop-daemon.sh start datanode
+                      sbin/yarn-daemon.sh start nodemanager
+
+初始化：bin/oozie-setup.sh sharelib create -fs hdfs://hadoop102:8020 -locallib oozie-sharelib-4.0.0-cdh5.3.6-yarn.tar.gz
+初始化数据库：bin/ooziedb.sh create -sqlfile oozie.sql -run
+打成war包：bin/oozie-setup.sh prepare-war
+
+
+
+启动：bin/oozied.sh start
+web地址：http://hadoop102:11000/oozie/
+停止：bin/oozied.sh stop
+
+提交任务：bin/oozie job -oozie http://hadoop102:11000/oozie -config oozie-apps/shell/job.properties -run
+杀死任务：bin/oozie job -oozie http://hadoop102:11000/oozie -kill 14-20090525161321-oozie-joe
+查看日志：bin/oozie job -oozie http://hadoop102:11000/oozie -log 0000003-191226020256021-oozie-oozi-W
+查看共享库：bin/oozie admin -oozie http://hadoop102:11000/oozie  -shareliblist
+安装共享库：bin/oozie-setup.sh sharelib create -fs hdfs://hadoop102:8020 -locallib oozie-sharelib-4.0.0-cdh5.3.6.tar.gz
+        bin/oozie-setup.sh sharelib create -fs hdfs://hadoop102:8020 -locallib oozie-sharelib-4.0.0-cdh5.3.6-yarn.tar.gz
