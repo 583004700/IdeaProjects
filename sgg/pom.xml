@@ -12,6 +12,7 @@
     <modules>
         <module>activeMq</module>
         <module>designPattern</module>
+        <module>dubbo</module>
         <module>jdbc</module>
         <module>jpa</module>
         <module>microservicecloud</module>
@@ -26,6 +27,8 @@
         <module>springmvc</module>
         <module>springmvc-annotation</module>
         <module>spring-annotation</module>
+
+        <module>dubbo-admin</module>
     </modules>
 
     <properties>
