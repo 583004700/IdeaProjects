@@ -25,7 +25,8 @@
 	<!-- retries="":重试次数，不包含第一次调用，0代表不重试-->
 	<!-- 幂等（设置重试次数）【查询、删除、修改】、非幂等（不能设置重试次数）【新增】 -->
 	<dubbo:reference interface="com.demo.mydemo.gmall.service.UserService"
-		id="userService" timeout="5000" retries="3" version="*">
+		id="userService" timeout="5000" retries="3"
+					 stub="com.demo.mydemo.gmall.service.impl.UserServiceStub">
 		<!-- <dubbo:method name="getUserAddressList" timeout="1000"></dubbo:method> -->
 	</dubbo:reference>
 		

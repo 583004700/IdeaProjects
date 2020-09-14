@@ -13,7 +13,8 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     //@Autowired
-    @Reference
+    //可以直接配置url，不用连接注册中心也可以
+    @Reference(url = "hadoop102:20880")
     UserService userService;
 
     public List<UserAddress> initOrder(String userId) {
