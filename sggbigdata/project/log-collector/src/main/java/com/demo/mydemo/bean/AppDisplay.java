@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 商品曝光日志
+ * 商品点击日志
  */
 @Setter
 @Getter

@@ -13,5 +13,4 @@ public class AppFavorites {
     private int course_id;//商品id
     private int userid;//用户ID
     private String add_time;//创建时间
-
 }

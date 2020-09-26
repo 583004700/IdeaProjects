@@ -43,74 +43,101 @@ public class AppMain {
 
         for (int i = 0; i < loop_len; i++) {
 
-            JSONObject json = new JSONObject();
+            int flag = rand.nextInt(2);
 
-            json.put("ap", "app");
-            json.put("cm", generateComFields());
+            switch (flag) {
+                case (0):
+                    //应用启动
+                    AppStart appStart = generateStart();
+                    String jsonString = JSON.toJSONString(appStart);
 
-            JSONArray eventsArray = new JSONArray();
+                    //控制台打印
+                    logger.info(jsonString);
+                    break;
 
-            // 启动日志
-            eventsArray.add(generateStart());
+                case (1):
 
-            // 事件日志
-            // 商品曝光
-            if (rand.nextBoolean()) {
-                eventsArray.add(generateDisplay());
+                    JSONObject json = new JSONObject();
+
+                    json.put("ap", "app");
+                    json.put("cm", generateComFields());
+
+                    JSONArray eventsArray = new JSONArray();
+
+                    // 事件日志
+                    // 商品点击，展示
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generateDisplay());
+                        json.put("et", eventsArray);
+                    }
+
+                    // 商品详情页
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generateNewsDetail());
+                        json.put("et", eventsArray);
+                    }
+
+                    // 商品列表页
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generateNewList());
+                        json.put("et", eventsArray);
+                    }
+
+                    // 广告
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generateAd());
+                        json.put("et", eventsArray);
+                    }
+
+                    // 消息通知
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generateNotification());
+                        json.put("et", eventsArray);
+                    }
+
+                    // 用户前台活跃
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generatbeforeground());
+                        json.put("et", eventsArray);
+                    }
+
+                    // 用户后台活跃
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generateBackground());
+                        json.put("et", eventsArray);
+                    }
+
+                    //故障日志
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generateError());
+                        json.put("et", eventsArray);
+                    }
+
+                    // 用户评论
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generateComment());
+                        json.put("et", eventsArray);
+                    }
+
+                    // 用户收藏
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generateFavorites());
+                        json.put("et", eventsArray);
+                    }
+
+                    // 用户点赞
+                    if (rand.nextBoolean()) {
+                        eventsArray.add(generatePraise());
+                        json.put("et", eventsArray);
+                    }
+
+                    //时间
+                    long millis = System.currentTimeMillis();
+
+                    //控制台打印
+                    logger.info(millis + "|" + json.toJSONString());
+                    break;
             }
-
-            // 商品详情页
-            if (rand.nextBoolean()) {
-                eventsArray.add(generateNewsDetail());
-            }
-
-            // 商品列表页
-            if (rand.nextBoolean()) {
-                eventsArray.add(generateNewList());
-            }
-
-            // 购物车
-            if (rand.nextBoolean()) {
-                eventsArray.add(generateCart());
-            }
-
-            // 广告
-            if (rand.nextBoolean()) {
-                eventsArray.add(generateAd());
-            }
-
-            // 消息通知
-            if (rand.nextBoolean()) {
-                eventsArray.add(generateNotification());
-            }
-
-            //故障日志
-            if (rand.nextBoolean()) {
-                eventsArray.add(generateError());
-            }
-
-            // 用户评论
-            if (rand.nextBoolean()) {
-                eventsArray.add(generateComment());
-            }
-
-            // 用户收藏
-            if (rand.nextBoolean()) {
-                eventsArray.add(generateFavorites());
-            }
-
-            // 用户点赞
-            if (rand.nextBoolean()) {
-                eventsArray.add(generatePraise());
-            }
-
-            json.put("et", eventsArray);
-
-            //时间
-            long millis2 = System.currentTimeMillis();
-
-            //控制台打印
-            logger.info(millis2 + "|" + json.toJSONString());
 
             // 延迟
             try {
@@ -399,29 +426,6 @@ public class AppMain {
     }
 
     /**
-     * 购物车
-     */
-    static public JSONObject generateCart() {
-
-        AppCart appItemCart = new AppCart();
-        appItemCart.setItemid(s_mid);
-        appItemCart.setBeforeNum(1 + rand.nextInt(3));
-        appItemCart.setAction(1 + rand.nextInt(2));
-
-        if (appItemCart.getAction() == 2) {
-            int changNum = (-1) + rand.nextInt(3);
-            changNum = (changNum == 0 ? 1 : changNum);
-            appItemCart.setChangeNum(changNum);
-            appItemCart.setAfterNum(appItemCart.getBeforeNum() + appItemCart.getChangeNum());
-        }
-
-
-        JSONObject jsonObject = (JSONObject) JSON.toJSON(appItemCart);
-
-        return packEventJson("favorites", jsonObject);
-    }
-
-    /**
      * 广告相关字段
      */
     private static JSONObject generateAd() {
@@ -487,26 +491,135 @@ public class AppMain {
     /**
      * 启动日志
      */
-    static JSONObject generateStart() {
+    private static AppStart generateStart() {
 
         AppStart appStart = new AppStart();
 
-//      入口
-        int flag = rand.nextInt(5) + 1;
+        //设备id
+        appStart.setMid(s_mid + "");
+        s_mid++;
+
+        // 用户id
+        appStart.setUid(s_uid + "");
+        s_uid++;
+
+        // 程序版本号 5,6等
+        appStart.setVc("" + rand.nextInt(20));
+
+        //程序版本名 v1.1.1
+        appStart.setVn("1." + rand.nextInt(4) + "." + rand.nextInt(10));
+
+        // 安卓系统版本
+        appStart.setOs("8." + rand.nextInt(3) + "." + rand.nextInt(10));
+
+        //设置日志类型
+        appStart.setEn("start");
+
+        //    语言  es,en,pt
+        int flag = rand.nextInt(3);
+        switch (flag) {
+            case (0):
+                appStart.setL("es");
+                break;
+            case (1):
+                appStart.setL("en");
+                break;
+            case (2):
+                appStart.setL("pt");
+                break;
+        }
+
+        // 渠道号   从哪个渠道来的
+        appStart.setSr(getRandomChar(1));
+
+        // 区域
+        flag = rand.nextInt(2);
+        switch (flag) {
+            case 0:
+                appStart.setAr("BR");
+            case 1:
+                appStart.setAr("MX");
+        }
+
+        // 手机品牌 ba ,手机型号 md，就取2位数字了
+        flag = rand.nextInt(3);
+        switch (flag) {
+            case 0:
+                appStart.setBa("Sumsung");
+                appStart.setMd("sumsung-" + rand.nextInt(20));
+                break;
+            case 1:
+                appStart.setBa("Huawei");
+                appStart.setMd("Huawei-" + rand.nextInt(20));
+                break;
+            case 2:
+                appStart.setBa("HTC");
+                appStart.setMd("HTC-" + rand.nextInt(20));
+                break;
+        }
+
+        // 嵌入sdk的版本
+        appStart.setSv("V2." + rand.nextInt(10) + "." + rand.nextInt(10));
+        // gmail
+        appStart.setG(getRandomCharAndNumr(8) + "@gmail.com");
+
+        // 屏幕宽高 hw
+        flag = rand.nextInt(4);
+        switch (flag) {
+            case 0:
+                appStart.setHw("640*960");
+                break;
+            case 1:
+                appStart.setHw("640*1136");
+                break;
+            case 2:
+                appStart.setHw("750*1134");
+                break;
+            case 3:
+                appStart.setHw("1080*1920");
+                break;
+        }
+
+        // 客户端产生日志时间
+        long millis = System.currentTimeMillis();
+        appStart.setT("" + (millis - rand.nextInt(99999999)));
+
+        // 手机网络模式 3G,4G,WIFI
+        flag = rand.nextInt(3);
+        switch (flag) {
+            case 0:
+                appStart.setNw("3G");
+                break;
+            case 1:
+                appStart.setNw("4G");
+                break;
+            case 2:
+                appStart.setNw("WIFI");
+                break;
+        }
+
+        // 拉丁美洲 西经34°46′至西经117°09；北纬32°42′至南纬53°54′
+        // 经度
+        appStart.setLn((-34 - rand.nextInt(83) - rand.nextInt(60) / 10.0) + "");
+        // 纬度
+        appStart.setLa((32 - rand.nextInt(85) - rand.nextInt(60) / 10.0) + "");
+
+        // 入口
+        flag = rand.nextInt(5) + 1;
         appStart.setEntry(flag + "");
 
-//      开屏广告类型
+        // 开屏广告类型
         flag = rand.nextInt(2) + 1;
         appStart.setOpen_ad_type(flag + "");
 
-//      状态
+        // 状态
         flag = rand.nextInt(10) > 8 ? 2 : 1;
         appStart.setAction(flag + "");
 
-//      加载时长
+        // 加载时长
         appStart.setLoading_time(rand.nextInt(20) + "");
 
-//      失败码
+        // 失败码
         flag = rand.nextInt(10);
         switch (flag) {
             case 1:
@@ -529,11 +642,11 @@ public class AppMain {
                 break;
         }
 
-        JSONObject jsonObject = (JSONObject) JSON.toJSON(appStart);
+        // 扩展字段
+        appStart.setExtend1("");
 
-        return packEventJson("start", jsonObject);
+        return appStart;
     }
-
     /**
      * 消息通知
      */
@@ -562,11 +675,54 @@ public class AppMain {
     }
 
     /**
+     * 前台活跃
+     */
+    private static JSONObject generatbeforeground() {
+
+        AppActive_foreground appActive_foreground = new AppActive_foreground();
+
+        // 推送消息的id
+        int flag = rand.nextInt(2);
+        switch (flag) {
+            case 1:
+                appActive_foreground.setAccess(flag + "");
+                break;
+            default:
+                appActive_foreground.setAccess("");
+                break;
+        }
+
+        // 1.push 2.icon 3.其他
+        flag = rand.nextInt(3) + 1;
+        appActive_foreground.setPush_id(flag + "");
+
+        JSONObject jsonObject = (JSONObject) JSON.toJSON(appActive_foreground);
+
+        return packEventJson("active_foreground", jsonObject);
+    }
+
+    /**
+     * 后台活跃
+     */
+    private static JSONObject generateBackground() {
+
+        AppActive_background appActive_background = new AppActive_background();
+
+        // 启动源
+        int flag = rand.nextInt(3) + 1;
+        appActive_background.setActive_source(flag + "");
+
+        JSONObject jsonObject = (JSONObject) JSON.toJSON(appActive_background);
+
+        return packEventJson("active_background", jsonObject);
+    }
+
+    /**
      * 错误日志数据
      */
     private static JSONObject generateError() {
 
-        AppError appErrorLog = new AppError();
+        AppErrorLog appErrorLog = new AppErrorLog();
 
         String[] errorBriefs = {"at cn.lift.dfdf.web.AbstractBaseController.validInbound(AbstractBaseController.java:72)", "at cn.lift.appIn.control.CommandUtil.getInfo(CommandUtil.java:67)"};        //错误摘要
         String[] errorDetails = {"java.lang.NullPointerException\\n    " + "at cn.lift.appIn.web.AbstractBaseController.validInbound(AbstractBaseController.java:72)\\n " + "at cn.lift.dfdf.web.AbstractBaseController.validInbound", "at cn.lift.dfdfdf.control.CommandUtil.getInfo(CommandUtil.java:67)\\n " + "at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\\n" + " at java.lang.reflect.Method.invoke(Method.java:606)\\n"};        //错误详情

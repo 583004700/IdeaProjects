@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AppNewsDetail {
-
     private String entry;//页面入口来源：应用首页=1、push=2、详情页相关推荐=3
     private String action;//动作：开始加载=1，加载成功=2（pv），加载失败=3, 退出页面=4
     private String goodsid;//商品ID（服务端下发的ID）
@@ -18,5 +17,4 @@ public class AppNewsDetail {
     private String loading_time;//加载时长：计算页面开始加载到接口返回数据的时间 （开始加载报0，加载成功或加载失败才上报时间）
     private String type1;//加载失败码：把加载失败状态码报回来（报空为加载成功，没有失败）
     private String category;//分类ID（服务端定义的分类ID）
-
 }

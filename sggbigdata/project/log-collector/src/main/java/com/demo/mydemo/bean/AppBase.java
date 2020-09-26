@@ -8,7 +8,7 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class AppBase{
+public class AppBase {
     private String mid; // (String) 设备唯一标识
     private String uid; // (String) 用户uid
     private String vc;  // (String) versionCode，程序版本号

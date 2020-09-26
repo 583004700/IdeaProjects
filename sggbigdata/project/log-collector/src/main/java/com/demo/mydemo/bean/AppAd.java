@@ -1,6 +1,5 @@
 package com.demo.mydemo.bean;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AppAd {
+
     private String entry;//入口：商品列表页=1  应用首页=2 商品详情页=3
     private String action;//动作：请求广告=1 取缓存广告=2  广告位展示=3 广告展示=4 广告点击=5
     private String content;//状态：成功=1  失败=2
