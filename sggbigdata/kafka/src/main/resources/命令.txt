@@ -1,8 +1,8 @@
 修改配置文件config/server.properties：broker.id 分别为0，1，2
 
 启动:bin/kafka-server-start.sh config/server.properties
-后台启动:bin/kafka-server-start.sh -daemon config/server.properties
-关闭:bin/kafka-server-stop.sh
+后台启动:/opt/module/kafka/bin/kafka-server-start.sh -daemon /opt/module/kafka/config/server.properties
+关闭:/opt/module/kafka/bin/kafka-server-stop.sh
 
 创建一个主题：bin/kafka-topics.sh --create --zookeeper hadoop102:2181 --topic first --partitions 2 --replication-factor 2
 查看主题：bin/kafka-topics.sh --list --zookeeper hadoop102:2181

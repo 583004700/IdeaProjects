@@ -10,6 +10,8 @@ import com.demo.mydemo.bean.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+//java -classpath /bigdata/project/log-collector-jar-with-dependencies.jar com.demo.mydemo.AppMain >/opt/module/test.log
+
 /**
  * 日志行为数据模拟
  */
