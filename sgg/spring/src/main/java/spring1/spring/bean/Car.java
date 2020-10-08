@@ -5,6 +5,7 @@ public class Car {
     private String corp;
     private double price;
     private int maxSpeed;
+    private Person person;
 
     public Car(String brand, String corp, double price) {
         this.brand = brand;
@@ -61,5 +62,13 @@ public class Car {
 
     public void setMaxSpeed(int maxSpeed) {
         this.maxSpeed = maxSpeed;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

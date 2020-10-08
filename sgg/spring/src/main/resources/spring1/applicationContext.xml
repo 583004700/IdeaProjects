@@ -13,14 +13,15 @@
     </bean>
 
     <bean id="car" class="spring1.spring.bean.Car">
-        <constructor-arg value="Audi" index="0"></constructor-arg>
-        <constructor-arg>
-            <!--如果有特殊符号，可以用这个标签包裹起来-->
-            <value><![CDATA[<ShangHai>]]></value>
-        </constructor-arg>
-        <constructor-arg>
-            <value>300000</value>
-        </constructor-arg>
+<!--        <constructor-arg value="Audi" index="0"></constructor-arg>-->
+<!--        <constructor-arg>-->
+<!--            &lt;!&ndash;如果有特殊符号，可以用这个标签包裹起来&ndash;&gt;-->
+<!--            <value><![CDATA[<ShangHai>]]></value>-->
+<!--        </constructor-arg>-->
+<!--        <constructor-arg>-->
+<!--            <value>300000</value>-->
+<!--        </constructor-arg>-->
+        <property name="person" ref="person"></property>
     </bean>
 
     <bean id="car2" class="spring1.spring.bean.Car">
@@ -37,7 +38,7 @@
         <!--引用外部配置的bean-->
         <property name="car" ref="car"></property>
         <!--给级联属性赋值-->
-        <property name="car.maxSpeed" value="120"></property>
+<!--        <property name="car.maxSpeed" value="120"></property>-->
         <!--<property name="car">-->
             <!--&lt;!&ndash;引用内部临时创建出来的bean&ndash;&gt;-->
             <!--<bean class="spring1.spring.bean.Car">-->
