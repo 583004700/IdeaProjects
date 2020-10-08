@@ -6,3 +6,8 @@ hadoop102,hadoop103
 hadoop104
 启动flume：nohup /opt/module/flume/bin/flume-ng agent --conf-file /opt/module/flume/conf/kafka-flume-hdfs.conf --name a1 -Dflume.root.logger=INFO,LOGFILE > /opt/module/flume/log.txt 2>&1 &
 停止flume：ps -ef | grep kafka-flume-hdfs | grep -v grep | awk '{print $2}' | xargs kill
+
+hive引擎优化需要上传的文件：
+hadoop fs -mkdir /tez
+hadoop fs -put /opt/module/tez-0.9.1/ /tez
+
