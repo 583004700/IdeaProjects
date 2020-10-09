@@ -40,6 +40,7 @@
         <!--<property name="typeAliasesPackage" value="org.mybatis.jpetstore.domain" />-->
         <!--指定mybatis全局配置文件，也可以直接写mybatis的配置项-->
         <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"></property>
     </bean>
 
     <!--扫描mapper,META-INF下有个配置spring.handlers，定义了命名空间处理器

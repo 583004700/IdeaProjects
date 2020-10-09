@@ -33,11 +33,11 @@
       <version>0.9.5</version>
     </dependency>
 
-    <dependency>
+    <!--<dependency>
       <groupId>com.oracle</groupId>
       <artifactId>ojdbc6</artifactId>
       <version>12.1.0.1-atlassian-hosted</version>
-    </dependency>
+    </dependency>-->
 
     <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
     <dependency>

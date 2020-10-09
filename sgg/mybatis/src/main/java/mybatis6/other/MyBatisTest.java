@@ -2,6 +2,8 @@ package mybatis6.other;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import mybatis.mapper.Department;
+import mybatis.mapper.DepartmentMapper;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
@@ -9,6 +11,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.InputStream;
 import java.util.List;
@@ -51,7 +55,8 @@ public class MyBatisTest {
 
     @Test
     public void testProcedure(){
-        
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+        applicationContext.getBean(DepartmentMapper.class).getDeptListPlus();
     }
 
 }
