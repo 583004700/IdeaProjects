@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Configurable  //告诉spring这是一个配置类
 @ComponentScans(
         value={
-                @ComponentScan(value="com.atguigu",includeFilters = {
+                @ComponentScan(value="com.atguigu.ext",includeFilters = {
 //                        @ComponentScan.Filter(type= FilterType.ANNOTATION,
 //                                classes = {Controller.class, Service.class}),
 //                        @ComponentScan.Filter(type=FilterType.ASSIGNABLE_TYPE,
