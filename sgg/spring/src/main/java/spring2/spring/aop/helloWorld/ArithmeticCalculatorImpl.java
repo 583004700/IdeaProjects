@@ -2,7 +2,14 @@ package spring2.spring.aop.helloWorld;
 
 public class ArithmeticCalculatorImpl implements ArithmeticCalculator {
     @Override
-    public int add(int i, int j) {
+    public synchronized int add(int i, int j) {
+        System.out.println(Thread.currentThread()+"方法运行开始");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(Thread.currentThread()+"方法运行结束");
         return i + j;
     }
 
