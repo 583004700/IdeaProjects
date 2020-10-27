@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis6.other.EmployeeMapper">
+    <select id="getEmps" resultType="mybatis6.other.Employee">
+        select * from tbl_employee
+    </select>
+
+    <insert id="addEmp">
+        insert into tbl_employee
+        (last_name,email,gender,d_id)
+        values
+        (#{lastName},#{email},#{gender},#{department.id})
+    </insert>
+</mapper>

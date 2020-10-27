@@ -49,6 +49,8 @@
 
     <mappers>
         <package name="mybatis6"></package>
+<!--        <mapper resource="mybatis6/other/EmployeeMapper.xml"></mapper>-->
+<!--        <mapper resource="mybatis6/other/EmployeeMapper2.xml"></mapper>-->
     </mappers>
 
 
