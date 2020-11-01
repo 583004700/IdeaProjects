@@ -1,0 +1,66 @@
+keys *:查看所以key
+exists key:判断key是否存在
+move key 2:移除key到2 db，当前库就不存在了
+expire key 秒种:为给定的key设置过期时间
+ttl key:查看还有多少秒过期，-1表示永不过期，-2表示已过期
+type key:查看你的key是什么类型
+set/get/del/append/strlen key:设置/获取/删除/追加/查看值长度
+incr/decr/incrby/decrby key:数字的 加/减/加某个值/减某个值
+getrange key 0 -1/3 : 0 -1表示截取全部，0 3表示截取0-3之间的
+setrange key 0 值:从0下标开始插入值
+setex key 3 val:设置值的过期时间为3秒
+setnx key val:如果key不存在，则设置。返回值0设置失败，返回值1设置成功
+mset k1 v1 k2 v2:设置多个值
+mget k1 k2：获取多个值
+msetnx k1 v1 k2 v2:如果k1,k2都不存在，则设置成功
+
+lpush list0 1 2 3 4 5   :从左边插入值
+rpush list0 1 2 3 4 5   :从右边插入值
+lrange list0 0 -1：获取list0中的值
+lpop list0:从左边弹出
+rpop list0:从右边弹出
+lindex list0 2:获取相应下标的值
+lleng list0:获取长度
+lrem list0 2 3:删除两个3
+ltrim list0 3 5 : 截取 3-5 下标的数据，再重新赋值给list0
+rpoplpush list0 list1:从list0中rpop一个值lpush 到 list1中
+lset list0 1 val:设置下标1的值为val
+linsert list0 before/after 值1 值2: 在值1的前面/后面插入值2
+
+sadd set0 1 1 2 2 3 3: 往set0中插入值,会去重
+smembers set0: 获取集合中的元素
+scard set0 : 获取集合中元素个数
+srem key value： 删除集合中的value元素
+srandmember set0 2: 从set0中随机获取两个值
+spop set0： 随机弹出一个元素
+smove set0 set1 5: 把set0中的5移到set1
+sdiff set0 set1：在set0中，不在set1中的元素
+sinter set0 set1:交集
+sunion set0 set1:并集
+
+hset user id 11：设置值
+hget user id : 获取值
+hmset customer id 11 name li4 age 26 ： 设置多个值
+hmget customer id name age ： 获取多个值
+hgetall customer ： 获取所有值
+hlen user ： 获取值的个数
+hexists customer id ： 判断值是否存在，存在返回1，不存在返回0
+hkeys customer ： 获取所有key
+hvals customer :  获取所有值
+hincrby customer age 2 ： 年龄加2
+hincrbyfloat user id  0.5 : 加0.5
+hsetnx customer age 26 : 如果不存在，则设置
+
+zadd zset0 60 v1 70 v2 : 设置分数和值
+zrange zset0 0 -1 : 取值
+zrange zset0 0 -1 withscore : 取出值和分数
+zrangebyscore zset0 60 90  : 取出分数为 60-90 分的值
+zrangebyscore zset0 60 90 limit 2 2 : 取出分数为 60-90 分的值,下标从2，取出2个
+zrem zset0 v1 : 删除某个值
+zcard zset0 : 返回个数
+zcount zset0 60 80 ： 统计60-80之间的个数
+zrank zset0 v4 : 获取某个值的下标
+zscore zset0 v4 : 获取某个值的分数
+zrevrank zset0 v4 : 逆序获取下标值
+zrevrange zset0 0 -1 : 逆序获取值
+zrevrangebyscore zset0 90 60 : 分数 60-90 之间的值
