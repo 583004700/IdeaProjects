@@ -28,6 +28,7 @@
         <module>springmvc-annotation</module>
         <module>spring-annotation</module>
         <module>redis</module>
+        <module>mybatisplus</module>
 
         <module>dubbo-admin</module>
     </modules>
