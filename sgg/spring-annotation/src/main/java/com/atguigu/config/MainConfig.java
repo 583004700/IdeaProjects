@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 @Configurable  //告诉spring这是一个配置类
 @ComponentScans(
         value={
-                @ComponentScan(value="com.atguigu.ext",includeFilters = {
+                @ComponentScan(value="com.atguigu.bean",includeFilters = {
 //                        @ComponentScan.Filter(type= FilterType.ANNOTATION,
 //                                classes = {Controller.class, Service.class}),
 //                        @ComponentScan.Filter(type=FilterType.ASSIGNABLE_TYPE,
 //                                classes = BookService.class),
-                        @ComponentScan.Filter(type=FilterType.CUSTOM,classes = MyTypeFilter.class)},
-                        useDefaultFilters = false)
+                        /*@ComponentScan.Filter(type=FilterType.CUSTOM,classes = MyTypeFilter.class)*/},
+                        useDefaultFilters = true)
         }
 )
 //@ComponentScan(value="com.atguigu",includeFilters = {@ComponentScan.Filter(type= FilterType.ANNOTATION,classes = {Controller.class, Service.class})},useDefaultFilters = false)
