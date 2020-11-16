@@ -61,7 +61,8 @@
         <!--配置LocaleChangeInterceptor-->
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"></bean>
     </mvc:interceptors>
-    
+
+    <!--可以不用在java中写Controller,直接跳转到视图-->
     <!--<mvc:view-controller path="/i18n" view-name="i18n" />-->
     <mvc:view-controller path="/i18n2" view-name="i18n2" />
 
