@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 //FilterType.ASPECTJ:使用ASPECTJ表达式
 //FilterType.REGEX:使用正则表达式
 //FilterType.CUSTOM:使用自定义规则
-public class MainConfig {
+public class MainConfig extends SuperClassConfig{
 
     //给容器中注册一个Bean;类型为返回值的类型，id默认是用方法名作为id
     @Bean("person")
