@@ -1,0 +1,4 @@
+info replication：查看状态
+slaveof masterIp masterPort：转为从节点，以某个主节点，从节点不能写数据，重启后要重新连接主节点
+
+哨兵模式：

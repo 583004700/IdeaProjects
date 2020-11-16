@@ -1,3 +1,5 @@
+启动：redis-server redis.conf
+
 keys *:查看所以key
 exists key:判断key是否存在
 move key 2:移除key到2 db，当前库就不存在了
