@@ -38,14 +38,14 @@
         <property name="configLocation" value="classpath:mybatis-config.xml"></property>
         <!-- 别名处理 -->
         <property name="typeAliasesPackage"
-                  value="com.demo.mydemo.beans"></property>
+                  value="com.demo.mydemo.mp2.beans"></property>
         <property name="globalConfig" ref="globalConfiguration"></property>
     </bean>
 
     <!--定义MybatisPlus全局策略配置-->
     <bean id="globalConfiguration" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
         <!--在2.3版本以后，默认值为true.驼峰命名自动转换-->
-        <property name="dbColumnUnderline" value="false"></property>
+        <property name="dbColumnUnderline" value="true"></property>
         <!--主键策略，0自增-->
         <property name="idType" value="0"></property>
         <!--全局的表前缀策略配置-->
@@ -57,6 +57,6 @@
     -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage"
-                  value="com.demo.mydemo.mapper"></property>
+                  value="com.demo.mydemo.mp2.mapper"></property>
     </bean>
 </beans>

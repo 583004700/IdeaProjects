@@ -1,9 +1,6 @@
-package com.demo.mydemo.beans;
+package com.demo.mydemo.mp1.beans;
 
 import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
