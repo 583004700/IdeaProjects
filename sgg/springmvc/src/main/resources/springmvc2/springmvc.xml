@@ -7,7 +7,11 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
-<!--配置自动扫描的包-->
+    <!--spring-webmvc包中META-INF/spring.handlers中配置了
+      mvc: 对应的  MvcNamespaceHandler会按配置的策略注入一些bean,
+    如果没有经过MvcNamespaceHandler处理，则会在DispatcherServlet 的 getDefaultStrategies方法中获取默认的策略-->
+
+    <!--配置自动扫描的包-->
     <context:component-scan base-package="springmvc2.com.springmvc"></context:component-scan>
 
     <!--配置视图解析器-->
@@ -27,9 +31,9 @@
 	-->
     <mvc:default-servlet-handler/>
 
-    <!--<mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>-->
+    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
 
-    <mvc:annotation-driven></mvc:annotation-driven>
+<!--    <mvc:annotation-driven></mvc:annotation-driven>-->
 
     <!--配置ConversionService-->
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
