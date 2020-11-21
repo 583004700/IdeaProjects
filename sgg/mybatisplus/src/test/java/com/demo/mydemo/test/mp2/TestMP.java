@@ -10,7 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.util.List;
 
 public class TestMP {
-    private ApplicationContext ioc = new ClassPathXmlApplicationContext("applicationContext.xml");
+    private ApplicationContext ioc = new ClassPathXmlApplicationContext("mp2/applicationContext.xml");
 
     /**
      * AR 分页复杂操作

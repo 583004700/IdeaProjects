@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class TestMP {
-    private ApplicationContext ioc = new ClassPathXmlApplicationContext("applicationContext.xml");
+    private ApplicationContext ioc = new ClassPathXmlApplicationContext("mp1/applicationContext.xml");
 
     private EmployeeMapper employeeMapper = ioc.getBean("employeeMapper", EmployeeMapper.class);
 
