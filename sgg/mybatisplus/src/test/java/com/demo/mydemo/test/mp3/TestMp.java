@@ -8,12 +8,14 @@ import com.baomidou.mybatisplus.generator.config.PackageConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.rules.DbType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import org.junit.Test;
 
 public class TestMp {
 
     /**
      * 代码生成 示例代码
      */
+    @Test
     public void testGenerator() {
         //1.全局配置
         GlobalConfig config = new GlobalConfig();

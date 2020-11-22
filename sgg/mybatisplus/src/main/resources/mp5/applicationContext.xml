@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring
+        http://mybatis.org/schema/mybatis-spring-1.2.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+    <!-- 数据源 -->
+    <context:property-placeholder location="classpath:mp5/db.properties"/>
+    <bean id="dataSource"
+          class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}"></property>
+        <property name="jdbcUrl" value="${jdbc.url}"></property>
+        <property name="user" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+    <!-- 事务管理器 -->
+    <bean id="dataSourceTransactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!-- 基于注解的事务管理 -->
+    <tx:annotation-driven
+            transaction-manager="dataSourceTransactionManager"/>
+    <!-- 配置 SqlSessionFactoryBean ,只需要把org.mybatis.spring.SqlSessionFactoryBean
+    替换为 com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean,即可完成整合 -->
+    <bean id="sqlSessionFactoryBean"
+          class="com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean">
+        <!-- 数据源 -->
+        <property name="dataSource" ref="dataSource"></property>
+        <property name="configLocation" value="classpath:mp5/mybatis-config.xml"></property>
+        <!-- 别名处理 -->
+        <property name="typeAliasesPackage"
+                  value="com.demo.mydemo.mp5.beans"></property>
+        <property name="globalConfig" ref="globalConfiguration"></property>
+
+        <property name="plugins">
+            <list>
+                <!--注册分页插件-->
+                <bean class="com.baomidou.mybatisplus.plugins.PaginationInterceptor"></bean>
+                <!--注册执行分析插件，生产环境最好不要用-->
+                <bean class="com.baomidou.mybatisplus.plugins.SqlExplainInterceptor">
+                    <!--如果是全表操作，则停止,实际测试中好像并没有效果。。。目前只支持 MYSQL-5.6.3 以上版本 -->
+                    <property name="stopProceed" value="true"></property>
+                </bean>
+                <!--注册性能分析插件-->
+                <bean class="com.baomidou.mybatisplus.plugins.PerformanceInterceptor">
+                    <property name="format" value="true"></property>
+                    <!--超过指定时间抛出异常，单位毫秒-->
+                    <property name="maxTime" value="500"></property>
+                </bean>
+                <!--注册乐观锁插件-->
+                <bean class="com.baomidou.mybatisplus.plugins.OptimisticLockerInterceptor"></bean>
+            </list>
+        </property>
+    </bean>
+
+    <!--定义MybatisPlus全局策略配置-->
+    <bean id="globalConfiguration" class="com.baomidou.mybatisplus.entity.GlobalConfiguration">
+        <!--在2.3版本以后，默认值为true.驼峰命名自动转换-->
+        <property name="dbColumnUnderline" value="true"></property>
+        <!--主键策略，0自增-->
+        <property name="idType" value="0"></property>
+        <!--全局的表前缀策略配置-->
+        <property name="tablePrefix" value="tbl_"></property>
+
+        <!--注入自定义的全局操作-->
+        <property name="sqlInjector" ref="mySqlInjector"></property>
+    </bean>
+
+    <!--
+    配置 mybatis 扫描 mapper 接口的路径
+    -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage"
+                  value="com.demo.mydemo.mp5.mapper"></property>
+    </bean>
+
+    <!--定义自定义的注入器-->
+    <bean id="mySqlInjector" class="com.demo.mydemo.mp5.injector.MySqlInjector"></bean>
+</beans>
