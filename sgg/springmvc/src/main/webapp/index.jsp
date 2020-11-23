@@ -27,6 +27,21 @@
             });
         });
     </script>
+
+    <script type="text/javascript">
+        //在console中测试
+        function test(){
+            $.ajax({
+                url:"/testHttpMessageConverter",
+                type:"post",
+                headers: {'Content-Type': 'application/json'},
+                data:{"name":"zhangsan"},
+                success:function(data){
+                    console.log(data);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <form action="/testFileUpload" method="post" enctype="multipart/form-data">

@@ -116,6 +116,7 @@ public class SpringMVCTest {
     @RequestMapping("/testHttpMessageConverter")
     public String testHttpMessageConverter(@RequestBody String body){
         System.out.println(body);
+        int k = 1/0;
         return "helloWorld!" + new Date();
     }
 
