@@ -72,7 +72,12 @@
         <property name="tablePrefix" value="tbl_"></property>
 
         <!--注入自定义的全局操作-->
-        <property name="sqlInjector" ref="mySqlInjector"></property>
+<!--        <property name="sqlInjector" ref="mySqlInjector"></property>-->
+        <property name="sqlInjector" ref="logicSqlInjector"></property>
+        <!--注入逻辑删除全局值-->
+        <property name="logicDeleteValue" value="-1"></property>
+        <property name="logicNotDeleteValue" value="1"></property>
+        <property name="metaObjectHandler" ref="metaObjectHandler"></property>
     </bean>
 
     <!--
@@ -85,4 +90,10 @@
 
     <!--定义自定义的注入器-->
     <bean id="mySqlInjector" class="com.demo.mydemo.mp5.injector.MySqlInjector"></bean>
+
+    <!--逻辑删除-->
+    <bean id="logicSqlInjector" class="com.baomidou.mybatisplus.mapper.LogicSqlInjector"></bean>
+
+    <!--公共字段填充处理器-->
+    <bean id="metaObjectHandler" class="com.demo.mydemo.mp5.beans.metaObjectHandler.MyMetaObjectHandler"></bean>
 </beans>
