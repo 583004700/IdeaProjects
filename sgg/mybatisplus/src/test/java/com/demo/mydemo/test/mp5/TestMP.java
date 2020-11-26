@@ -15,6 +15,17 @@ public class TestMP {
     private UserMapper userMapper = ioc.getBean("userMapper", UserMapper.class);
 
     /**
+     * 测试Oracle 主键Sequence
+     */
+    @Test
+    public void testOracle() {
+        User user = new User();
+        user.setLogicFlag(1);
+        user.setName("lisi");
+        userMapper.insert(user);
+    }
+
+    /**
      * 测试公共字段填充
      */
     @Test

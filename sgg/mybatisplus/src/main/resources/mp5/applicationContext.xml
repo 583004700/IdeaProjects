@@ -14,13 +14,22 @@
         http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
     <!-- 数据源 -->
     <context:property-placeholder location="classpath:mp5/db.properties"/>
+    <!--    <bean id="dataSource"-->
+    <!--          class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+    <!--        <property name="driverClass" value="${jdbc.driver}"></property>-->
+    <!--        <property name="jdbcUrl" value="${jdbc.url}"></property>-->
+    <!--        <property name="user" value="${jdbc.username}"></property>-->
+    <!--        <property name="password" value="${jdbc.password}"></property>-->
+    <!--    </bean>-->
+
     <bean id="dataSource"
           class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClass" value="${jdbc.driver}"></property>
-        <property name="jdbcUrl" value="${jdbc.url}"></property>
-        <property name="user" value="${jdbc.username}"></property>
-        <property name="password" value="${jdbc.password}"></property>
+        <property name="driverClass" value="${orcl.driver}"></property>
+        <property name="jdbcUrl" value="${orcl.url}"></property>
+        <property name="user" value="${orcl.username}"></property>
+        <property name="password" value="${orcl.password}"></property>
     </bean>
+
     <!-- 事务管理器 -->
     <bean id="dataSourceTransactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -67,17 +76,24 @@
         <!--在2.3版本以后，默认值为true.驼峰命名自动转换-->
         <property name="dbColumnUnderline" value="true"></property>
         <!--主键策略，0自增-->
-        <property name="idType" value="0"></property>
+<!--        <property name="idType" value="0"></property>-->
+
+        <!--支持oracle序列的方式-->
+        <property name="idType" value="1"></property>
+
         <!--全局的表前缀策略配置-->
         <property name="tablePrefix" value="tbl_"></property>
 
         <!--注入自定义的全局操作-->
-<!--        <property name="sqlInjector" ref="mySqlInjector"></property>-->
+        <!--        <property name="sqlInjector" ref="mySqlInjector"></property>-->
         <property name="sqlInjector" ref="logicSqlInjector"></property>
         <!--注入逻辑删除全局值-->
         <property name="logicDeleteValue" value="-1"></property>
         <property name="logicNotDeleteValue" value="1"></property>
         <property name="metaObjectHandler" ref="metaObjectHandler"></property>
+
+        <!--注入oracle主键Sequence-->
+        <property name="keyGenerator" ref="oracleKeyGenerator"></property>
     </bean>
 
     <!--
@@ -96,4 +112,7 @@
 
     <!--公共字段填充处理器-->
     <bean id="metaObjectHandler" class="com.demo.mydemo.mp5.beans.metaObjectHandler.MyMetaObjectHandler"></bean>
+
+    <!--配置Oracle主键Sequence-->
+    <bean id="oracleKeyGenerator" class="com.baomidou.mybatisplus.incrementer.OracleKeyGenerator"></bean>
 </beans>
