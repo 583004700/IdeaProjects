@@ -1,0 +1,41 @@
+创建组：groupadd elsearch
+创建用户：useradd elsearch -g elsearch -p codingwhy
+修改所属用户：chown -R elsearch:elsearch elasticsearch-2.4.6/
+切换用户：su elsearch
+启动：./bin/elasticsearch
+
+1、
+测试：put请求到 hadoop102:9200/megacorp/employee/1
+body为：
+{
+    "first_name" : "John",
+    "last_name" :  "Smith",
+    "age" :        25,
+    "about" :      "I love to go rock climbing",
+    "interests": [ "sports", "music" ]
+}
+put请求到 hadoop102:9200/megacorp/employee/2
+body为：
+{
+    "first_name" :  "Jane",
+    "last_name" :   "Smith",
+    "age" :         32,
+    "about" :       "I like to collect rock albums",
+    "interests":  [ "music" ]
+}
+put请求到 hadoop102:9200/megacorp/employee/3
+body为：
+{
+    "first_name" :  "Douglas",
+    "last_name" :   "Fir",
+    "age" :         35,
+    "about":        "I like to build cabinets",
+    "interests":  [ "forestry" ]
+}
+相当于添加了3个员工信息
+
+2、查找1号员工：get请求到 hadoop102:9200/megacorp/employee/1
+3、删除1号员工：delete请求到 hadoop102:9200/megacorp/employee/1
+4、搜索：hadoop102:9200/megacorp/employee/_search
+        搜索last_name为Smith的：hadoop102:9200/megacorp/employee/_search?q=last_name:Smith
+5、也可以根据查询表达式查询
