@@ -24,6 +24,8 @@
         <module>springboot</module>
         <module>springboot-concordance</module>
         <module>springboot-concordance/springboot-concordance-security</module>
+        <module>springboot-concordance/springboot-concordance-springcloud</module>
+        <module>springboot-concordance/springboot-concordance-actuator</module>
 
         <module>springdata</module>
         <module>springmvc</module>
