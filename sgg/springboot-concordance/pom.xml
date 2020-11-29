@@ -75,18 +75,25 @@
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
 
-        <!--使用springData操作elasticsearch-->
+<!--        &lt;!&ndash;使用springData操作elasticsearch&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash;使用jest操作elasticsearch&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>io.searchbox</groupId>-->
+<!--            <artifactId>jest</artifactId>-->
+<!--            <version>5.3.3</version>-->
+<!--        </dependency>-->
+
+        <!--邮件-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
-        <!--使用jest操作elasticsearch-->
-        <dependency>
-            <groupId>io.searchbox</groupId>
-            <artifactId>jest</artifactId>
-            <version>5.3.3</version>
-        </dependency>
     </dependencies>
 
     <!-- 这个插件，可以将应用打包成一个可执行的jar包；-->

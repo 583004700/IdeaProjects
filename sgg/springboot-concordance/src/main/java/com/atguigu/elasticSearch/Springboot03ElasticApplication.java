@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 2、SpringData ElasticSearch (maven中引入的es版本可能不对)
  *
  */
-@SpringBootApplication
+//@SpringBootApplication
 public class Springboot03ElasticApplication {
     public static void main(String[] args) {
         SpringApplication.run(Springboot03ElasticApplication.class,args);
