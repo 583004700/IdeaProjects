@@ -43,6 +43,15 @@ public interface BaseMapper<T> {
     int update(@Param("param1") Object obj,@Param("param2") String propertyColumns,@Param("param3") String whereColumns);
 
     /**
+     * 删除
+     * @param obj
+     * @param whereColumns
+     * @return
+     */
+    @UpdateProvider(type=EntityProvider.class,method = "delete")
+    int delete(Object obj, String whereColumns);
+
+    /**
      * 通过主键查询
      * @param obj
      * @return

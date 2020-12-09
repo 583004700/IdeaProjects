@@ -118,6 +118,16 @@ public final class EntityProvider {
         return sb.toString();
     }
 
+    //delete(obj,whereColumns)
+    public String delete(Object obj, String whereColumns) throws Exception {
+        String[] whereColumnsArr = whereColumns.split(",");
+        String tableName = getTableName(obj);
+        StringBuilder sb = new StringBuilder("delete from "+tableName);
+        String where = buildWhere(Arrays.asList(whereColumnsArr),obj,"param1.");
+        sb.append(where);
+        return sb.toString();
+    }
+
     public String selectOneByPrimaryKey(Object obj) throws Exception {
         String primaryKey = getPrimaryProperty(obj);
         String tableName = getTableName(obj);
