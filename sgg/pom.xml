@@ -33,6 +33,7 @@
         <module>spring-annotation</module>
         <module>redis</module>
         <module>mybatisplus</module>
+        <module>encrypt-decrypt</module>
 
         <module>dubbo-admin</module>
     </modules>
