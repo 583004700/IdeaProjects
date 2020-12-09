@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class EntityProvider {
-    public String insert(Object obj) throws Exception {
+    public String insert(@Param("obj") Object obj) throws Exception {
         MetaObject metaObject = SystemMetaObject.forObject(obj);
         String tableName = getTableName(obj);
         String[] getterNames = getterNames(obj);
@@ -75,7 +75,7 @@ public final class EntityProvider {
         return sb.toString();
     }
 
-    public String updateByPrimaryKey(Object obj) throws Exception {
+    public String updateByPrimaryKey(@Param("obj") Object obj) throws Exception {
         String tableName = getTableName(obj);
         String[] getterNames = getterNames(obj);
         StringBuilder sb = new StringBuilder("update " + tableName + " set ");
@@ -104,7 +104,7 @@ public final class EntityProvider {
     }
 
     //update(obj,"id,name","id,name")
-    public String update(Object obj, String propertyColumns, String whereColumns) throws Exception {
+    public String update(@Param("param1") Object obj, @Param("param2") String propertyColumns, @Param("param3") String whereColumns) throws Exception {
         String[] propertyColumnsArr = propertyColumns.split(",");
         if (propertyColumns.equals("all")) {
             propertyColumnsArr = getterNames(obj);
@@ -119,16 +119,16 @@ public final class EntityProvider {
     }
 
     //delete(obj,whereColumns)
-    public String delete(Object obj, String whereColumns) throws Exception {
+    public String delete(@Param("param1") Object obj, @Param("param2") String whereColumns) throws Exception {
         String[] whereColumnsArr = whereColumns.split(",");
         String tableName = getTableName(obj);
-        StringBuilder sb = new StringBuilder("delete from "+tableName);
-        String where = buildWhere(Arrays.asList(whereColumnsArr),obj,"param1.");
+        StringBuilder sb = new StringBuilder("delete from " + tableName);
+        String where = buildWhere(Arrays.asList(whereColumnsArr), obj, "param1.");
         sb.append(where);
         return sb.toString();
     }
 
-    public String selectOneByPrimaryKey(Object obj) throws Exception {
+    public String selectOneByPrimaryKey(@Param("param1") Object obj) throws Exception {
         String primaryKey = getPrimaryProperty(obj);
         String tableName = getTableName(obj);
         String where = buildWhere(Arrays.asList(primaryKey), obj, "");
@@ -155,7 +155,7 @@ public final class EntityProvider {
         return sql;
     }
 
-    public String selectList(Object obj, String whereColumns) throws Exception {
+    public String selectList(@Param("param1") Object obj, @Param("param2") String whereColumns) throws Exception {
         return selectOne(obj, whereColumns);
     }
 
