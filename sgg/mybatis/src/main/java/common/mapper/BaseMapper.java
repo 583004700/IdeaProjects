@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.apache.ibatis.annotations.UpdateProvider;
 
+import java.util.List;
+
 public interface BaseMapper<T> {
     /**
      * 添加一条记录
@@ -13,7 +15,7 @@ public interface BaseMapper<T> {
      * @return
      */
     @InsertProvider(type = EntityProvider.class, method = "insert")
-    int insert(@Param("obj") T obj);
+    int insert(T obj);
 
     /**
      * 一次插入多条记录
@@ -22,7 +24,7 @@ public interface BaseMapper<T> {
      * @return
      */
     @InsertProvider(type = EntityProvider.class, method = "insertList")
-    int insertList(@Param("list") java.util.List<T> list);
+    int insertList(@Param("list") List<T> list);
 
     /**
      * 通过主键更新记录
@@ -31,7 +33,7 @@ public interface BaseMapper<T> {
      * @return
      */
     @UpdateProvider(type = EntityProvider.class, method = "updateByPrimaryKey")
-    int updateByPrimaryKey(@Param("obj") Object obj);
+    int updateByPrimaryKey(Object obj);
 
     /**
      * 更新指定列通过指定的条件
@@ -46,12 +48,13 @@ public interface BaseMapper<T> {
 
     /**
      * 删除
+     *
      * @param obj
      * @param whereColumns
      * @return
      */
-    @UpdateProvider(type=EntityProvider.class,method = "delete")
-    int delete(@Param("param1") Object obj,@Param("param2") String whereColumns);
+    @UpdateProvider(type = EntityProvider.class, method = "delete")
+    int delete(@Param("param1") Object obj, @Param("param2") String whereColumns);
 
     /**
      * 通过主键查询
@@ -60,7 +63,7 @@ public interface BaseMapper<T> {
      * @return
      */
     @SelectProvider(type = EntityProvider.class, method = "selectOneByPrimaryKey")
-    T selectOneByPrimaryKey(@Param("param1") Object obj);
+    T selectOneByPrimaryKey(Object obj);
 
     /**
      * 通过指定列查询
@@ -73,5 +76,5 @@ public interface BaseMapper<T> {
     T selectOne(@Param("param1") Object obj, @Param("param2") String propertyColumns);
 
     @SelectProvider(type = EntityProvider.class, method = "selectList")
-    java.util.List<T> selectList(@Param("param1") Object obj, @Param("param2") String propertyColumns);
+    List<T> selectList(@Param("param1") Object obj, @Param("param2") String propertyColumns);
 }

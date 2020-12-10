@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class EntityProvider {
-    public String insert(@Param("obj") Object obj) throws Exception {
+    public String insert(Object obj) throws Exception {
         MetaObject metaObject = SystemMetaObject.forObject(obj);
         String tableName = getTableName(obj);
         String[] getterNames = getterNames(obj);
@@ -75,7 +75,7 @@ public final class EntityProvider {
         return sb.toString();
     }
 
-    public String updateByPrimaryKey(@Param("obj") Object obj) throws Exception {
+    public String updateByPrimaryKey(Object obj) throws Exception {
         String tableName = getTableName(obj);
         String[] getterNames = getterNames(obj);
         StringBuilder sb = new StringBuilder("update " + tableName + " set ");
@@ -128,7 +128,7 @@ public final class EntityProvider {
         return sb.toString();
     }
 
-    public String selectOneByPrimaryKey(@Param("param1") Object obj) throws Exception {
+    public String selectOneByPrimaryKey(Object obj) throws Exception {
         String primaryKey = getPrimaryProperty(obj);
         String tableName = getTableName(obj);
         String where = buildWhere(Arrays.asList(primaryKey), obj, "");
