@@ -1,0 +1,17 @@
+初始化本地库：git init
+配置仓库级别：git config
+配置系统用户级别：git config --global
+
+配置签名（保存在.git/config文件中）：
+git config user.name tom_pro
+git config user.email goodMorning_pro@atguigu.com
+查看状态：git status
+添加到暂存区：git add good.txt
+从暂存区移除：git rm --cache good.txt
+提交到本地库：git commit -m "注释" good.txt
+查看历史记录：git log --pretty=oneline
+查看历史记录：git reflog
+回到某个版本：git reset --hard/--soft/--mixed 01ca49e
+
+
+

@@ -34,6 +34,7 @@
         <module>redis</module>
         <module>mybatisplus</module>
         <module>encrypt-decrypt</module>
+        <module>gitGithub</module>
 
         <module>dubbo-admin</module>
     </modules>
