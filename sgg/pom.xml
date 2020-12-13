@@ -35,6 +35,7 @@
         <module>mybatisplus</module>
         <module>encrypt-decrypt</module>
         <module>gitGithub</module>
+        <module>mycat</module>
 
         <module>dubbo-admin</module>
     </modules>

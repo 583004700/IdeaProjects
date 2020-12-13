@@ -1,0 +1,1 @@
+docker run --name hadoop102 -d -h hadoop102 -p 9200:9200 -p 9300:9300 -p 6379:6379 -p 2181:2181 -p 11000:11000 -p 8443:8443 -p 16000:16000 -p 16010:16010 -p 10000:10000 -p 3306:3306 -p 50070:50070 -p 9000:9000 -p 19888:19888 --privileged=true -v /bigdata:/bigdata --net netgroup --ip 192.168.1.102  hadoop:2.0 /usr/bin/supervisord
