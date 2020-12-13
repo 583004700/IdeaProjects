@@ -1,0 +1,4 @@
+修改：server.xml和schema.xml
+
+启动mycat：bin/mycat console
+连接mycat：mysql -umycat -p123456 -h hadoop102 -P 8066
