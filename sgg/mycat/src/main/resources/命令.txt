@@ -2,3 +2,28 @@
 
 启动mycat：bin/mycat console
 连接mycat：mysql -umycat -p123456 -h hadoop102 -P 8066
+
+配置主从复制：
+在hadoop102(主机)中执行sql
+grant replication slave on *.* to 'slave'@'%' identified by 'root';
+查看主机状态
+show master status;
+
+在hadoop103(从机)中执行sql,如果之前连过，需要 stop slave;reset master;
+change master to master_host='hadoop102',
+master_user='slave',
+master_password='root',
+master_log_file='mysql-bin.具体数字(上一步中show master status;file列)',
+master_log_pos='具体值(上一步中show master status;position列)';
+
+执行命令启动从机：
+start slave;
+查看从机状态：
+show slave status\G;
+(
+Slave_IO_Running: Yes
+Slave_SQL_Running: Yes
+) 代表成功;
+
+停止主从复制：stop slave;
+重置主从复制：reset master;
