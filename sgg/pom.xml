@@ -22,6 +22,9 @@
         <module>shiro</module>
         <module>spring</module>
         <module>springboot</module>
+        <module>springboot/springboot-web</module>
+        <module>springboot/spring-boot-04-web-jsp</module>
+        <module>springboot/spring-boot-06-data-mybatis</module>
         <module>springboot-concordance</module>
         <module>springboot-concordance/springboot-concordance-security</module>
         <module>springboot-concordance/springboot-concordance-springcloud</module>

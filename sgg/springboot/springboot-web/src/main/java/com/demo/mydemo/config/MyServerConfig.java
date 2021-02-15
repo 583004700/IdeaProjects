@@ -1,5 +1,6 @@
 package com.demo.mydemo.config;
 
+import com.demo.mydemo.filter.CorsFilter;
 import com.demo.mydemo.filter.MyFilter;
 import com.demo.mydemo.listener.MyListener;
 import com.demo.mydemo.servlet.MyServlet;
@@ -28,6 +29,14 @@ public class MyServerConfig {
     public FilterRegistrationBean myFilter(){
         FilterRegistrationBean registrationBean = new FilterRegistrationBean();
         registrationBean.setFilter(new MyFilter());
+        registrationBean.setUrlPatterns(Arrays.asList("/hello","/myServlet"));
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean corsFilter(){
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        registrationBean.setFilter(new CorsFilter());
         registrationBean.setUrlPatterns(Arrays.asList("/hello","/myServlet"));
         return registrationBean;
     }
