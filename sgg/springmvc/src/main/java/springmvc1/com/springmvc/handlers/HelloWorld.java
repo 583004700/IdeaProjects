@@ -22,8 +22,15 @@ public class HelloWorld {
     }
 
     @RequestMapping("/testView")
-    public String testView(){
-        return "helloView";
+    public ModelAndView testView(@RequestParam Map params,int age){
+        System.out.println(params);
+        System.out.println(age);
+
+        ModelAndView modelAndView = new ModelAndView("redirect:/testMap");
+        modelAndView.addObject("age",18);
+
+        //return "helloView";
+        return modelAndView;
     }
 
     /**
@@ -31,7 +38,7 @@ public class HelloWorld {
      * @param id
      * @param map
      */
-    @ModelAttribute
+    //@ModelAttribute
     public void getUser(@RequestParam(value="id",required = false) Integer id,Map<String,Object> map){
         if(id != null){
             System.out.println("ModelAttribute method");
