@@ -1,0 +1,3 @@
+jps -l:查看后台运行的java进程
+jinfo -flag 配置项 进程编号:查看参数配置
+jinfo -flags 进程编号：查看改动过的jvm参数配置
