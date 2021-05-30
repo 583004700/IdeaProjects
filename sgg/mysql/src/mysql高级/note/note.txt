@@ -1,3 +1,5 @@
+允许所有用户可远程登录     GRANT ALL ON *.* TO 'root'@'%';
+
 允许root用户远程登录任务数据库  grant all on *.* to 'root用户'@'%' identified by 'root密码' with grant option;flush privileges;
 设置root用户密码  /usr/bin/mysqladmin -u root password root
 设置自启动   chkconfig mysql on
