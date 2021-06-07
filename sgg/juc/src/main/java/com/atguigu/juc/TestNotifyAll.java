@@ -1,7 +1,5 @@
 package com.atguigu.juc;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.NoFixedFacet;
-
 public class TestNotifyAll {
     public static void main(String[] args) throws Exception{
         C c = new C();
