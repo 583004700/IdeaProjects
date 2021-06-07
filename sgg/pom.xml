@@ -11,14 +11,17 @@
 
     <modules>
         <module>activeMq</module>
+        <module>dataStructuresAndAlgorithms</module>
         <module>designPattern</module>
         <module>dubbo</module>
         <module>jdbc</module>
         <module>jpa</module>
+        <module>juc</module>
         <module>mian</module>
         <module>microservicecloud</module>
         <module>mybatis</module>
         <module>netty</module>
+        <module>nio</module>
         <module>servlet3.0</module>
         <module>shiro</module>
         <module>spring</module>
@@ -40,6 +43,7 @@
         <module>mybatisplus</module>
 <!--        <module>encrypt-decrypt</module>-->
         <module>gitGithub</module>
+        <module>java8</module>
         <module>mycat</module>
 
         <module>dubbo-admin</module>
