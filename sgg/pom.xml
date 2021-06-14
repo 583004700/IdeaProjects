@@ -11,6 +11,7 @@
 
     <modules>
         <module>activeMq</module>
+        <module>activiti</module>
         <module>dataStructuresAndAlgorithms</module>
         <module>designPattern</module>
         <module>dubbo</module>

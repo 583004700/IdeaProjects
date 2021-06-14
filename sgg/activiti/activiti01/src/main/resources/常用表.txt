@@ -1,0 +1,22 @@
+select * from ACT_RE_DEPLOYMENT;    -- 流程部署表
+
+select * from ACT_RE_PROCDEF;       -- 流程定义表
+
+select * from ACT_GE_BYTEARRAY;     -- 流程资源表
+
+select * from ACT_GE_PROPERTY;
+
+select * from ACT_RU_TASK RES;
+
+-- WHERE RES.ASSIGNEE_ = ? and RES.PROC_DEF_ID_ = ?;
+
+select * from ACT_HI_TASKINST;
+select * from ACT_HI_ACTINST;
+select * from ACT_HI_IDENTITYLINK;
+select * from ACT_RU_TASK;
+select * from ACT_RU_IDENTITYLINK;
+
+select * from ACT_HI_TASKINST;
+select * from ACT_RU_EXECUTION;
+select * from ACT_HI_ACTINST;
+select * from ACT_RU_TASK;
