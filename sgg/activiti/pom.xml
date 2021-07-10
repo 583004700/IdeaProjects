@@ -12,5 +12,6 @@
     <modules>
         <module>activiti01</module>
         <module>actSpringDemo</module>
+        <module>actSpringBootDemo</module>
     </modules>
 </project>
