@@ -39,6 +39,11 @@ public class Lexer {
                 return false;
         return true;
     }
+
+    /**
+     * 读取一行数据，如果没有数据，则hasMore=false
+     * @throws ParseException
+     */
     protected void readLine() throws ParseException {
         String line;
         try {
