@@ -42,7 +42,7 @@ public class Lexer {
     }
 
     /**
-     * 读取一行数据，如果没有数据，则hasMore=false
+     * 读取一行数据，并添加扫描到的token到队列中，包括换行的token，如果没有数据，则hasMore=false
      * @throws ParseException
      */
     protected void readLine() throws ParseException {
@@ -72,20 +72,31 @@ public class Lexer {
         }
         queue.add(new IdToken(lineNo, Token.EOL));
     }
+
+    /**
+     * 判断 token的类型，并创建token添加到队列中
+     * @param lineNo
+     * @param matcher
+     */
     protected void addToken(int lineNo, Matcher matcher) {
         String m = matcher.group(1);
         if (m != null) // if not a space
             if (matcher.group(2) == null) { // if not a comment
                 Token token;
                 if (matcher.group(3) != null)
+                    // 整数值
                     token = new NumToken(lineNo, Integer.parseInt(m));
                 else if (matcher.group(4) != null)
+                    // 字符串
                     token = new StrToken(lineNo, toStringLiteral(m));
                 else
+                    // 标识符
                     token = new IdToken(lineNo, m);
                 queue.add(token);
             }
     }
+
+
     protected String toStringLiteral(String s) {
         StringBuilder sb = new StringBuilder();
         int len = s.length() - 1;
