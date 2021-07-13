@@ -96,7 +96,12 @@ public class Lexer {
             }
     }
 
-
+    /**
+     * 判断字符串中间（第一个字符和最后一个字符之间）是否包含 \" \\ \n 等转义字符，如果有，则添加 " 或 \ 或 换行符（\n）到sb中并返回
+     * 处理转义字符
+     * @param s
+     * @return
+     */
     protected String toStringLiteral(String s) {
         StringBuilder sb = new StringBuilder();
         int len = s.length() - 1;
