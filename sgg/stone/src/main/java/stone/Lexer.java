@@ -26,12 +26,26 @@ public class Lexer {
         else
             return Token.EOF;
     }
+
+    /**
+     * 读取指定下标的token，如果下标比队列长度大。则填充后再读取。如果没有，则返回 Token.EOF
+     * @param i
+     * @return
+     * @throws ParseException
+     */
     public Token peek(int i) throws ParseException {
         if (fillQueue(i))
             return queue.get(i);
         else
             return Token.EOF; 
     }
+
+    /**
+     * 如果队列的长度小于i，则再读取一行数据。直到队列长度大于i。如果一直读取最终还是小于i，则返回false
+     * @param i
+     * @return
+     * @throws ParseException
+     */
     private boolean fillQueue(int i) throws ParseException {
         while (i >= queue.size())
             if (hasMore)
