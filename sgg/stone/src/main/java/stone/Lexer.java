@@ -20,6 +20,12 @@ public class Lexer {
         hasMore = true;
         reader = new LineNumberReader(r);
     }
+
+    /**
+     * 读取一个token
+     * @return
+     * @throws ParseException
+     */
     public Token read() throws ParseException {
         if (fillQueue(0))
             return queue.remove(0);

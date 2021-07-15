@@ -1,4 +1,4 @@
-package stone;
+package stone.mycode;
 
 import org.junit.Test;
 
