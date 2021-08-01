@@ -295,6 +295,13 @@ public class Parser {
         elements = p.elements;
         factory = p.factory;
     }
+
+    /**
+     * 执行语法分析
+     * @param lexer
+     * @return
+     * @throws ParseException
+     */
     public ASTree parse(Lexer lexer) throws ParseException {
         ArrayList<ASTree> results = new ArrayList<ASTree>();
         for (Element e: elements)
@@ -310,81 +317,201 @@ public class Parser {
             return e.match(lexer);
         }
     }
+
+    /**
+     * 创建Parser对象
+     * @return
+     */
     public static Parser rule() { return rule(null); }
+
+    /**
+     * 创建Parser对象
+     * @param clazz
+     * @return
+     */
     public static Parser rule(Class<? extends ASTree> clazz) {
         return new Parser(clazz);
     }
+
+    /**
+     * 清空语法规则
+     * @return
+     */
     public Parser reset() {
         elements = new ArrayList<Element>();
         return this;
     }
+
+    /**
+     * 清空语法规则，将节点类赋值为clazz
+     * @param clazz
+     * @return
+     */
     public Parser reset(Class<? extends ASTree> clazz) {
         elements = new ArrayList<Element>();
         factory = Factory.getForASTList(clazz);
         return this;
     }
+
+    /**
+     * 向语法规则中添加终结符（整型字面量）
+     * @return
+     */
     public Parser number() {
         return number(null);
     }
+
+    /**
+     * 向语法规则中添加终结符（整型字面量）
+     * @param clazz
+     * @return
+     */
     public Parser number(Class<? extends ASTLeaf> clazz) {
         elements.add(new NumToken(clazz));
         return this;
     }
+
+    /**
+     * 向语法规则中添加终结符（除保留字reserved外的标识符）
+     * @param reserved
+     * @return
+     */
     public Parser identifier(HashSet<String> reserved) {
         return identifier(null, reserved);
     }
+
+    /**
+     * 向语法规则中添加终结符（除保留字reserved外的标识符）
+     * @param clazz
+     * @param reserved
+     * @return
+     */
     public Parser identifier(Class<? extends ASTLeaf> clazz,
                              HashSet<String> reserved)
     {
         elements.add(new IdToken(clazz, reserved));
         return this;
     }
+
+    /**
+     * 向语法规则中添加终结符（字符串字面量）
+     * @return
+     */
     public Parser string() {
         return string(null);
     }
+
+    /**
+     * 向语法规则中添加终结符（字符串字面量）
+     * @param clazz
+     * @return
+     */
     public Parser string(Class<? extends ASTLeaf> clazz) {
         elements.add(new StrToken(clazz));
         return this;
     }
+
+    /**
+     * 向语法规则中添加终结符（与pat匹配的标识符）
+     * @param pat
+     * @return
+     */
     public Parser token(String... pat) {
         elements.add(new Leaf(pat));
         return this;
     }
+
+    /**
+     * 向语法规则中添加未包含于抽象语法树的终结符（与pat匹配的标识符）
+     * @param pat
+     * @return
+     */
     public Parser sep(String... pat) {
         elements.add(new Skip(pat));
         return this;
     }
+
+    /**
+     * 向语法规则中添加非终结符p
+     * @param p
+     * @return
+     */
     public Parser ast(Parser p) {
         elements.add(new Tree(p));
         return this;
     }
+
+    /**
+     * 向语法规则中添加若干个由or关系连接的非终结符p
+     * @param p
+     * @return
+     */
     public Parser or(Parser... p) {
         elements.add(new OrTree(p));
         return this;
     }
+
+    /**
+     * 向语法规则中添加可省略的非终结符p（如果省略，则作为一颗仅有根节点的抽象语法树处理）
+     * @param p
+     * @return
+     */
     public Parser maybe(Parser p) {
         Parser p2 = new Parser(p);
         p2.reset();
         elements.add(new OrTree(new Parser[] { p, p2 }));
         return this;
     }
+
+    /**
+     * 向语法规则中添加可省略的非终结符p
+     * @param p
+     * @return
+     */
     public Parser option(Parser p) {
         elements.add(new Repeat(p, true));
         return this;
     }
+
+    /**
+     * 向语法规则中添加至少重复出现0次的非终结符p
+     * @param p
+     * @return
+     */
     public Parser repeat(Parser p) {
         elements.add(new Repeat(p, false));
         return this;
     }
+
+    /**
+     * 向语法规则中添加双目运算表达式（subexp是因子，operators是运算符表）
+     * @param subexp
+     * @param operators
+     * @return
+     */
     public Parser expression(Parser subexp, Operators operators) {
         elements.add(new Expr(null, subexp, operators));
         return this;
     }
+
+    /**
+     * 向语法规则中添加双目运算表达式（subexp是因子，operators是运算符表）
+     * @param clazz
+     * @param subexp
+     * @param operators
+     * @return
+     */
     public Parser expression(Class<? extends ASTree> clazz, Parser subexp,
                              Operators operators) {
         elements.add(new Expr(clazz, subexp, operators));
         return this;
     }
+
+    /**
+     * 为语法规则起始处的or添加新的分支选项
+     * @param p
+     * @return
+     */
     public Parser insertChoice(Parser p) {
         Element e = elements.get(0);
         if (e instanceof OrTree)
