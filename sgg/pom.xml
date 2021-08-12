@@ -37,7 +37,7 @@
         <module>springmvc</module>
         <module>springmvc-annotation</module>
         <module>spring-annotation</module>
-        <module>spring-security</module>
+<!--        <module>spring-security</module>-->
         <module>redis</module>
         <module>mybatisplus</module>
 <!--        <module>encrypt-decrypt</module>-->
@@ -47,9 +47,7 @@
 
         <module>dubbo-admin</module>
 
-
-
-        <module>activiti</module>
+<!--        <module>activiti</module>-->
         <module>stone</module>
     </modules>
 
