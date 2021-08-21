@@ -1,6 +1,6 @@
 package two.oom;
 
-import sun.misc.VM;
+import jdk.internal.misc.VM;
 
 import java.nio.ByteBuffer;
 

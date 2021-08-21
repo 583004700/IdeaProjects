@@ -22,6 +22,7 @@
         <!-- 布局功能的支持程序  thymeleaf3主程序  layout2以上版本 -->
         <!-- thymeleaf2   layout1-->
         <thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
+        <lombok.version>1.18.8</lombok.version>
     </properties>
 
     <dependencies>
