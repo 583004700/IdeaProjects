@@ -1,6 +1,6 @@
 package two.oom;
 
-import jdk.internal.misc.VM;
+//import jdk.internal.misc.VM;
 
 import java.nio.ByteBuffer;
 
@@ -21,7 +21,7 @@ import java.nio.ByteBuffer;
  */
 public class DirectBufferMemoryDemo {
     public static void main(String[] args) {
-        System.out.println("配置的maxDirectMemory:" + VM.maxDirectMemory() / (double) 1024 / 1024 + "MB");
+//        System.out.println("配置的maxDirectMemory:" + VM.maxDirectMemory() / (double) 1024 / 1024 + "MB");
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
