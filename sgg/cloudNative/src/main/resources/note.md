@@ -117,3 +117,36 @@ kubeadm join cluster-endpoint:6443 --token httx5v.jjujup0c2vbevns9     --discove
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
 ```
+### 14、
+```shell
+# 修改 type: ClusterIP 改为 type: NodePort
+kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
+# 找到端口，在安全组放行
+kubectl get svc -A | grep kubernetes-dashboard
+```
+### 15、创建访问账号
+```yaml
+#创建访问账号，准备一个yaml文件：vi dash.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kubernetes-dashboard
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata: 
+  name: admin-user
+roleRef: 
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects: 
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kuternetes-dashboard
+```
+### 16、获取访问令牌
+kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+
+## Deployment
