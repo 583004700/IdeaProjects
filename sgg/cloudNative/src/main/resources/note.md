@@ -149,4 +149,107 @@ subjects:
 ### 16、获取访问令牌
 kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
 
+## Namespace
+
+## Pod
+
 ## Deployment
+```
+无状态应用部署，比如微服务，提供多副本等功能
+```
+
+## Service
+```
+```
+
+## StatefulSet
+```
+有状态应用部署，比如redis，提供稳定的存储、网络等功能
+```
+## DaemonSet
+```
+守护型应用部署，比如日志收集组件，在每个机器都运行一份
+```
+## Job/CronJob
+```
+定时任务部署，比如垃圾清理组件，可以在指定时间运行
+```
+
+## Ingress
+    ### 下载 yaml
+    wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.47.0/deploy/static/provider/baremetal/deploy.yaml
+    
+    ### 修改deploy.yaml
+    将image的值改为如下值：
+    registry.cn-hangzhou.aliyuncs.com/lfy_k8s_images/ingress-nginx-controller:v0.46.0
+    
+    ### 检查安装的结果
+    kubectl get pod,svc -n ingress-nginx
+    kubectl get ing
+
+# 存储抽象
+```shell
+# 安装nfs
+yum install -y nfs-utils
+# 主节点执行
+  echo "/nfs/data *(insecure,rw,sync,no_root_squash)" > /etc/exports
+  mkdir -p /nfs/data
+  systemctl enable rpcbind --now
+  systemctl enable nfs-server --now
+  
+# 从节点执行
+  #查看可挂载
+  showmount -e 172.31.0.2
+  mkdir -p /nfs/data
+  
+  #同步主节点
+  mount -t nfs 172.31.0.2:/nfs/data /nfs/data
+  # 写入一个测试文件
+  echo "hello nfs server" > /nfs/data/test.txt
+```
+
+# 原生方式数据挂载
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-pv-demo
+  name: nginx-pv-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-pv-demo
+  template:
+    metadata:
+      labels:
+        app: nginx-pv-demo
+    spec:
+      containers:
+        - image: nginx
+          name: nginx
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: html
+          nfs:
+            server: 172.31.0.2
+            path: /nfs/data/nginx-pv
+```
+## 1 创建pv(见截图pv)
+#nfs主节点
+mkdir -p /nfs/data/01
+mkdir -p /nfs/data/02
+mkdir -p /nfs/data/03
+
+## 2 创建pvc(见截图pvc)
+## 3 创建pod绑定pvc(见截图podbindpvc)
+
+# ConfigMap
+    ### 创建配置集
+    kubectl create cm redis-config --from-file=redis.conf
+    ### 查看配置集
+    kubectl get cm
+# Secret
