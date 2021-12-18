@@ -2,9 +2,7 @@ package common.utils;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
-import ognl.Ognl;
-import ognl.OgnlContext;
+import org.apache.commons.beanutils.BeanUtilsBean;
 
 public class ObjectUtils {
     /**
@@ -37,20 +35,16 @@ public class ObjectUtils {
                         return ((JSONObject) data).get(key);
                     }else{
                         int rightIndex = key.indexOf("]");
-                        int index = Integer.valueOf(key.substring(leftIndex+1,rightIndex));
+                        int index = Integer.parseInt(key.substring(leftIndex+1,rightIndex));
                         String realKey = key.substring(0,leftIndex);
-                        ((JSONObject) data).getJSONArray(realKey).get(index);
+                        return ((JSONObject) data).getJSONArray(realKey).get(index);
                     }
-                }
-                if(data instanceof String){
-                    String r = (String) data;
-                    JSONObject jsonObject = JSONObject.parseObject(r);
+                }else if(data instanceof String){
+                    JSONObject jsonObject = JSONObject.parseObject((String)data);
                     return doGetValue(jsonObject,key);
+                }else {
+                    return BeanUtilsBean.getInstance().getPropertyUtils().getNestedProperty(data, key);
                 }
-                OgnlContext ognlContext = new OgnlContext();
-                ognlContext.setRoot(data);
-                Object value = Ognl.getValue(key, ognlContext, ognlContext.getRoot());
-                return value;
             }
         }catch (Exception e){
 
@@ -59,6 +53,8 @@ public class ObjectUtils {
     }
 
     public static void main(String[] args) {
+        System.out.println("--------------------");
+
         String jsonStr = "{\"extendField2\":\"{\\\"extendField3\\\":\\\"aaa\\\",\\\"extendField1\\\":\\\"CC2100-总经办\\\"}\",\"extendField1\":\"CC2100-总经办\"}";
         System.out.println("原对象："+jsonStr);
         System.out.println("取extendField2为："+ObjectUtils.getValue(jsonStr,"extendField2"));
@@ -92,8 +88,6 @@ public class ObjectUtils {
         jba.put("a",jbb.toJSONString());
         String jbaStr = jba.toJSONString();
         System.out.println(jbaStr);
-        System.out.println(ObjectUtils.getValue(jbaStr,"a.b.c.d"));
         System.out.println(ObjectUtils.getValue(jbaStr,"a.b.c.d[0]"));
-        System.out.println(ObjectUtils.getValue(jbaStr,"a.b.c.d["));
     }
 }
