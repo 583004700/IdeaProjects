@@ -48,7 +48,6 @@
         <module>dubbo-admin</module>
 
 <!--        <module>activiti</module>-->
-        <module>stone</module>
     </modules>
 
     <properties>
