@@ -103,6 +103,7 @@ public class Parser {
         protected AToken(Class<? extends ASTLeaf> type) {
             if (type == null)
                 type = ASTLeaf.class;
+            // 工厂的创建 AstTree的方式为： 以 Token.class 为参数，通过反射执行 type 类的 create 方法或构造方法
             factory = Factory.get(type, Token.class);
         }
 
