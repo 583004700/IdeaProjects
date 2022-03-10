@@ -75,6 +75,9 @@ public class Link<T> {
         Node<T> node = getNode(index - 1);
         Node<T> result = node.next;
         node.next = node.next.next;
+        if(node.next == null){
+            this.tail = node;
+        }
         return result.data;
     }
 
@@ -89,6 +92,8 @@ public class Link<T> {
             n = n.next;
         }
         sb.append("]");
+        sb.append("head:"+this.head.data+",");
+        sb.append("tail:"+this.tail.data);
         return sb.toString();
     }
 }
