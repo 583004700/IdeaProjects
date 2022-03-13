@@ -1,4 +1,4 @@
-package chapter2.datestructure;
+package chapter2.datastructure;
 
 import lombok.Getter;
 import lombok.Setter;
