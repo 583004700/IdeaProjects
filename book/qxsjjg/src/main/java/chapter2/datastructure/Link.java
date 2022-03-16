@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 链表
+ * 单链表
  */
-@Setter
-@Getter
 public class Link<T> {
 
     private Node<T> head;

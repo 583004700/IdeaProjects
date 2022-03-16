@@ -3,8 +3,10 @@ package chapter2.datastructure;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
+/**
+ * 双向链表
+ * @param <T>
+ */
 public class DoubleLink<T> {
     @Setter
     @Getter

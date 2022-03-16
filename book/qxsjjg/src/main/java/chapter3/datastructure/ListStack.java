@@ -1,7 +1,11 @@
 package chapter3.datastructure;
 
-
 import java.lang.reflect.Array;
+
+/**
+ * 顺序栈
+ * @param <T>
+ */
 
 public class ListStack<T> {
 
@@ -13,7 +17,7 @@ public class ListStack<T> {
     public ListStack(Class<T> c,int maxSize) {
         this.maxSize = maxSize;
         top = 0;
-        arr = (T[])Array.newInstance(c,maxSize);
+        arr = (T[])Array.newInstance(c,this.maxSize);
     }
 
     public boolean push(T ele){

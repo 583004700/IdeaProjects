@@ -3,8 +3,10 @@ package chapter3.datastructure;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
-@Getter
+/**
+ * 链栈
+ * @param <T>
+ */
 public class LinkStack<T> {
 
     private Node<T> head;
