@@ -1,1 +1,1 @@
-1、KMP算法的nextval原理
+1、KMP算法的nextval原理。
