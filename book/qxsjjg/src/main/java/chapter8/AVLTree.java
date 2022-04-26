@@ -11,14 +11,19 @@ import java.util.Map;
 /**
  * 平衡二叉查找树
  */
-public class AVLTree<T extends Comparable> {
+public class AVLTree<T extends Comparable<T>> {
 
     @Setter
     @Getter
-    public static class Node<T extends Comparable>{
+    public static class Node<T extends Comparable<T>>{
         private T data;
         private Node<T> left;
         private Node<T> right;
+
+        @Override
+        public String toString() {
+            return data.toString();
+        }
     }
 
     private Node<T> root;
@@ -52,7 +57,7 @@ public class AVLTree<T extends Comparable> {
         while(map.containsKey(level)){
             List<Node<T>> nodes = map.get(level);
             for (Node<T> node : nodes) {
-                System.out.print(node.getData()+" ");
+                System.out.print(node+"父:"+searchParent(node.getData())+" ");
             }
             System.out.println();
             level++;
@@ -357,7 +362,7 @@ public class AVLTree<T extends Comparable> {
 
     @Setter
     @Getter
-    public static class Balance<T extends Comparable>{
+    public static class Balance<T extends Comparable<T>>{
         // LL,RR,LR,RL
         private String type;
         // 不平衡的节点
