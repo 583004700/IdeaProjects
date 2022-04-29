@@ -296,20 +296,14 @@ public class BTree<T extends Comparable<T>> {
                 return doSearch(right, data);
             }
         } else {
-            int index = start.searchInsertIndex(data);
-            if (start.getDataList().size() != 0) {
-                if (start.getDataList().get(index).compareTo(data) == 0) {
-                    return start.getDataList().get(index);
-                }
+            int i = start.searchIndex(data);
+            if (i != -1) {
+                return start.getDataList().get(i);
             }
+            int index = start.searchInsertIndex(data);
             if (start.getChildrenList().size() != 0) {
                 Node<T> searchNode = start.getChildrenList().get(index);
                 return doSearch(searchNode, data);
-            } else {
-                int i = start.searchIndex(data);
-                if (i != -1) {
-                    return start.getDataList().get(i);
-                }
             }
         }
         return null;
@@ -332,20 +326,14 @@ public class BTree<T extends Comparable<T>> {
                 return doSearchNode(right, data);
             }
         } else {
-            int index = start.searchInsertIndex(data);
-            if (start.getDataList().size() != 0) {
-                if (start.getDataList().get(index).compareTo(data) == 0) {
-                    return start;
-                }
+            int i = start.searchIndex(data);
+            if (i != -1) {
+                return start;
             }
+            int index = start.searchInsertIndex(data);
             if (start.getChildrenList().size() != 0) {
                 Node<T> searchNode = start.getChildrenList().get(index);
                 return doSearchNode(searchNode, data);
-            } else {
-                int i = start.searchIndex(data);
-                if (i != -1) {
-                    return start;
-                }
             }
         }
         return null;
@@ -540,7 +528,7 @@ public class BTree<T extends Comparable<T>> {
             this.dataList.add(i, data);
             if (dataList.size() >= order) {
                 Up<T> up = new Up<>();
-                int middle = this.dataList.size() / 2;
+                int middle = (this.dataList.size() - 1) / 2;
                 T middleData = this.getDataList().get(middle);
                 up.setValue(middleData);
                 int i1 = searchNodeInsertIndex(middleData);
