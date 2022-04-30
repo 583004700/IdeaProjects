@@ -21,8 +21,11 @@ public class BTree<T extends Comparable<T>> {
     // 阶数
     private int order;
 
+    private int minDataLength;
+
     public BTree(int order) {
         this.order = order;
+        minDataLength = (int) Math.ceil((double) this.order / 2) - 1;
     }
 
     public void add(T data) {
@@ -71,6 +74,7 @@ public class BTree<T extends Comparable<T>> {
             T leftMaxData = leftMax.getMax();
             tNode.removeData(data);
             tNode.add(leftMaxData);
+
             if (leftMax.getDataList().size() == 1) {
                 down(leftMax);
             }
@@ -88,10 +92,8 @@ public class BTree<T extends Comparable<T>> {
         Node<T> leftBrother = getLeftBrother(node);
         Node<T> rightBrother = getRightBrother(node);
         Node<T> parent = searchParentNode(node);
-
         Node<T> borrow = leftBrother != null ? leftBrother : rightBrother;
-
-        if (borrow != rightBrother && rightBrother != null && rightBrother.getDataList().size() > 1) {
+        if (borrow != rightBrother && rightBrother != null && rightBrother.getDataList().size() > minDataLength) {
             borrow = rightBrother;
         }
         T borrowData = null;
@@ -107,12 +109,12 @@ public class BTree<T extends Comparable<T>> {
             borrowNode = borrow.getLeftNode();
         }
         T parentData = parent.getDataList().get(parentIndex);
-        if (borrow.getDataList().size() > 1) {
+        if (borrow.getDataList().size() > minDataLength) {
             node.add(parentData);
             parent.removeData(parentData);
             parent.add(borrowData);
             borrow.removeData(borrowData);
-            if(borrowNode != null){
+            if (borrowNode != null) {
                 borrow.removeChildNode(borrowNode);
                 node.addChildNode(borrowNode);
             }
@@ -135,12 +137,12 @@ public class BTree<T extends Comparable<T>> {
     }
 
     public static void main(String[] args) {
-        BTree<Integer> bTree = new BTree<Integer>(4);
+        BTree<Integer> bTree = new BTree<Integer>(30);
         Set<Integer> set = new HashSet<>();
         List<Integer> list = new ArrayList<>();
         Random r = new Random();
-        int count = 10000; // 添加多少个随机数
-        int max = 20000; // 随机数的范围
+        int count = 100000; // 添加多少个随机数
+        int max = 200000; // 随机数的范围
         for (int i = 0; i < count; ) {
             int k = r.nextInt(max);
             if (set.add(k)) {
@@ -149,21 +151,25 @@ public class BTree<T extends Comparable<T>> {
                 i++;
             }
         }
-        System.out.println("list:"+list);
+        //System.out.println("list:" + list);
         System.out.println("-------------------");
-        bTree.printTree();
+        //bTree.printTree();
         count = 0;
+        System.out.println("查询数据："+bTree.search(list.get(0)));
         // 测试删除后留多少个
-        int l = 10;
+        int l = 1000;
         for (Integer i : set) {
-            if (set.size()-count<=l) {
+            if (set.size() - count <= l) {
                 break;
             }
             bTree.delete(i);
-            System.out.println("删除了："+i);
-            bTree.printTree();
+            //System.out.println("删除了："+i);
+            //bTree.printTree();
             count++;
         }
+        System.out.println("删除后：");
+        bTree.printTree();
+        System.out.println("查询数据："+bTree.search(list.get(0)));
     }
 
     /**

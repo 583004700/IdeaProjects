@@ -22,8 +22,11 @@ public class BPTree<T extends Comparable<T>> {
     // 阶数
     private int order;
 
+    private int minDataLength;
+
     public BPTree(int order) {
         this.order = order;
+        minDataLength = (int) Math.ceil((double) this.order / 2) - 1;
     }
 
     public void add(T data) {
@@ -117,7 +120,7 @@ public class BPTree<T extends Comparable<T>> {
 
         Node<T> borrow = leftBrother != null ? leftBrother : rightBrother;
 
-        if (borrow != rightBrother && rightBrother != null && rightBrother.getDataList().size() > 1) {
+        if (borrow != rightBrother && rightBrother != null && rightBrother.getDataList().size() > minDataLength) {
             borrow = rightBrother;
         }
         T borrowData = null;
@@ -133,7 +136,7 @@ public class BPTree<T extends Comparable<T>> {
             borrowNode = borrow.getLeftNode();
         }
         T parentData = parent.getDataList().get(parentIndex);
-        if (borrow.getDataList().size() > 1) {
+        if (borrow.getDataList().size() > minDataLength) {
             node.add(parentData);
             parent.removeData(parentData);
             parent.add(borrowData);
@@ -161,12 +164,12 @@ public class BPTree<T extends Comparable<T>> {
     }
 
     public static void main(String[] args) {
-        BPTree<Integer> bTree = new BPTree<Integer>(4);
+        BPTree<Integer> bTree = new BPTree<Integer>(10000);
         Set<Integer> set = new HashSet<>();
         List<Integer> list = new ArrayList<>();
         Random r = new Random();
-        int count = 1000000; // 添加多少个随机数
-        int maxV = 2000000; // 随机数的范围
+        int count = 10000000; // 添加多少个随机数
+        int maxV = 400000000; // 随机数的范围
         for (int i = 0; i < count; ) {
             int k = r.nextInt(maxV);
             if (set.add(k)) {
@@ -175,9 +178,10 @@ public class BPTree<T extends Comparable<T>> {
             }
         }
         long insertStartTime = System.currentTimeMillis();
-        for (Integer i : list) {
-            bTree.add(i);
+        for (int i = 0; i < list.size(); i++) {
+            bTree.add(list.get(i));
         }
+        //bTree.printTree();
         System.out.println("插入"+count+"条数据耗时："+(System.currentTimeMillis()-insertStartTime));
         //System.out.println("list:"+list);
         //System.out.println("-------------------");
@@ -195,8 +199,8 @@ public class BPTree<T extends Comparable<T>> {
             count++;
         }*/
 
-        int min = 23;
-        int max = 78;
+        int min = 10000;
+        int max = 2000000;
         long selectStartTimeOld = System.currentTimeMillis();
         List<Integer> fw1 = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -207,12 +211,12 @@ public class BPTree<T extends Comparable<T>> {
         }
         System.out.println("查询数据耗时："+(System.currentTimeMillis()-selectStartTimeOld));
         Collections.sort(fw1);
-        System.out.println("查询结果："+fw1);
+        System.out.println("查询结果条数："+fw1.size());
         // 查询一定范围的数据
         long selectStartTime = System.currentTimeMillis();
         List<Integer> fw2 = bTree.searchScope(min,max);
         System.out.println("使用b+树查询数据耗时："+(System.currentTimeMillis()-selectStartTime));
-        System.out.println("使用b+树查询结果"+fw2);
+        System.out.println("使用b+树查询结果条数:"+fw2.size());
     }
 
     /**
@@ -498,9 +502,6 @@ public class BPTree<T extends Comparable<T>> {
 
         public List<T> getScope(T min, T max) {
             List<T> result = new ArrayList<>();
-            if (min.compareTo(this.getMin()) < 0) {
-                return result;
-            }
             Node<T> start = this;
             w:
             while (start != null && start.dataList.size() > 0) {
