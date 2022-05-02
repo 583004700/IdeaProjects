@@ -247,8 +247,8 @@ public class BPTree<T extends Comparable<T>> {
         //System.out.println("-----------------------------");
         //bTree.printTree();
 
-        int min = 1;
-        int max = 450000;
+        int min = 50000;
+        int max = 150000;
         long selectStartTimeOld = System.currentTimeMillis();
         List<Integer> fw1 = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
