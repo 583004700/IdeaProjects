@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ public class BPTree<T extends Comparable<T>> {
 
     public BPTree(int order) {
         this.order = order;
-        minDataLength = (int) Math.ceil((double) this.order / 2) - 1;
+        minDataLength = (int) Math.ceil((double) this.order / 2);
     }
 
     public void add(T data) {
@@ -39,9 +40,8 @@ public class BPTree<T extends Comparable<T>> {
             this.root = node;
         } else {
             Node<T> tNode = searchInsertNode(data);
-            boolean isMax = data.compareTo(tNode.getMax()) > 0;
             // 如果上溢
-            Node.Up<T> up = tNode.add(data);
+            Node.Up<T> up = addData(tNode, data);
             if (up != null) {
                 Node<T> n1 = up.getList().get(0);
                 Node<T> n2 = up.getList().get(1);
@@ -53,18 +53,6 @@ public class BPTree<T extends Comparable<T>> {
                 Node<T> rightBrother = tNode.getNext();
                 n2.setNext(rightBrother);
             }
-            if (isMax) {
-                // 如果插入的点是最大值，则要更新所有父节点的最大值
-                Node<T> temp = tNode;
-                while (temp != null) {
-                    Node<T> p = searchParentNode(temp);
-                    if (p != null) {
-                        p.setMax(data);
-                    }
-                    temp = p;
-                }
-            }
-
             while (up != null) {
                 List<Node<T>> listNode = up.getList();
                 Node<T> pNode = searchParentNode(tNode);
@@ -95,81 +83,133 @@ public class BPTree<T extends Comparable<T>> {
             root.removeData(data);
             return;
         }
-        if (tNode.getLeftNode() != null) {
-            Node<T> leftMax = getMax(tNode.getLeftNode(data));
-            T leftMaxData = leftMax.getMax();
-            tNode.removeData(data);
-            tNode.add(leftMaxData);
-            if (leftMax.getDataList().size() == 1) {
-                down(leftMax);
-            }
-            leftMax.removeData(leftMaxData);
-        } else {
-            if (tNode.getDataList().size() == 1) {
-                down(tNode);
-            }
-            tNode.removeData(data);
+        removeData(tNode, data);
+        if (tNode.getDataList().size() < this.minDataLength) {
+            down(tNode);
         }
+    }
+
+    /**
+     * 从节点上删除关键字,node为最后一层数据节点
+     *
+     * @param node
+     */
+    private void removeData(Node<T> node, T data) {
+        boolean isMax = data.compareTo(node.getMax()) == 0;
+        node.removeData(data);
+        T maxV = node.getMax();
+        boolean isOne = node.getDataList().size() == 0;
+        if (isOne) {
+            maxV = data;
+        }
+        // 如果移除的点是最大值，则要更新所有父节点的最大值
+        Node<T> temp = node;
+        while (temp != null && isMax) {
+            Node<T> p = searchParentNode(temp);
+            if (p != null) {
+                int i = p.searchNodeIndex(temp, false);
+                //判断更新的父结点是不是最大值,必须放在设置值之前判断
+                isMax = data.compareTo(p.getMax()) == 0;
+                if (!isOne) {
+                    p.getDataList().set(i, maxV);
+                } else {
+                    p.getDataList().remove(i);
+                    p.getChildrenList().remove(i);
+                }
+                isOne = p.getDataList().size() == 0;
+            }
+            temp = p;
+        }
+    }
+
+    /**
+     * 从节点上添加关键字，node为最后一层数据节点
+     *
+     * @param node
+     * @param data
+     */
+    private Node.Up<T> addData(Node<T> node, T data) {
+        boolean isMax = data.compareTo(node.getMax()) > 0;
+        // 如果插入的点是最大值，则要更新所有父节点的最大值
+        Node<T> temp = node;
+        while (temp != null && isMax) {
+            Node<T> p = searchParentNode(temp);
+            if (p != null) {
+                int i = p.searchNodeIndex(temp, false);
+                isMax = data.compareTo(p.getMax()) > 0;
+                p.getDataList().set(i, data);
+            }
+            temp = p;
+        }
+        return node.add(data);
     }
 
     // 下溢
     public void down(Node<T> node) {
-        Node<T> leftBrother = getLeftBrother(node);
-        Node<T> rightBrother = getRightBrother(node);
+        Node<T> leftBrother = node.getPre();
+        Node<T> rightBrother = node.getNext();
         Node<T> parent = searchParentNode(node);
-
         Node<T> borrow = leftBrother != null ? leftBrother : rightBrother;
-
+        if (borrow == null) {
+            leftBrother = getLeftBrother(node);
+            rightBrother = getRightBrother(node);
+            borrow = leftBrother != null ? leftBrother : rightBrother;
+        }
+        T borrowData = null;
+        Node<T> borrowNode = null;
         if (borrow != rightBrother && rightBrother != null && rightBrother.getDataList().size() > minDataLength) {
             borrow = rightBrother;
         }
-        T borrowData = null;
-        int parentIndex = -1;
-        Node<T> borrowNode = null;
         if (borrow == leftBrother) {
             borrowData = leftBrother.getMax();
-            parentIndex = parent.searchNodeIndex(node) - 1;
-            borrowNode = borrow.getRightNode();
+            borrowNode = leftBrother.getRightNode();
         } else {
             borrowData = rightBrother.getMin();
-            parentIndex = parent.searchNodeIndex(node);
-            borrowNode = borrow.getLeftNode();
+            borrowNode = rightBrother.getLeftNode();
         }
-        T parentData = parent.getDataList().get(parentIndex);
         if (borrow.getDataList().size() > minDataLength) {
-            node.add(parentData);
-            parent.removeData(parentData);
-            parent.add(borrowData);
-            borrow.removeData(borrowData);
+            addData(node, borrowData);
+            removeData(borrow, borrowData);
             if (borrowNode != null) {
-                borrow.removeChildNode(borrowNode);
                 node.addChildNode(borrowNode);
+                borrow.removeChildNode(borrowNode);
             }
         } else {
-            borrow.add(parentData);
-            if (node.getChildrenList().size() > 0) {
-                for (Node<T> tNode : node.getChildrenList()) {
-                    borrow.addChildNode(tNode);
+            //int count = node.getDataList().size() - 1;
+            int count = 0;
+            for (int i = 0; i < node.getDataList().size(); ) {
+                T t = node.getDataList().get(i);
+                addData(borrow, t);
+                if (node.getChildrenList().size() > 0) {
+                    borrow.addChildNode(node.getChildrenList().get(count++));
+                }
+                removeData(node, t);
+            }
+            if (parent.getDataList().size() == 1 && parent == root) {
+                root = parent.getLeftNode();
+            } else if (parent.getDataList().size() < minDataLength) {
+                if (parent != root) {
+                    down(parent);
                 }
             }
-            parent.removeChildNode(node);
-            if (parent.getDataList().size() == 1 && parent != root) {
-                down(parent);
+            // 需要维护next
+            if (node.getPre() != null) {
+                node.getPre().setNext(node.getNext());
+            } else if (node.getNext() != null) {
+                node.getNext().setPre(null);
             }
-            if (parent == root && root.getChildrenList().size() == 1) {
-                root = borrow;
-            }
-            parent.removeData(parentData);
         }
     }
 
     public static void main(String[] args) {
-        BPTree<Integer> bTree = new BPTree<Integer>(10000);
+        BPTree<Integer> bTree = new BPTree<Integer>(100);
         Set<Integer> set = new HashSet<>();
+        //Set<Integer> set = new HashSet<>(Arrays.asList(0, 66, 3, 68, 4, 6, 71, 75, 13, 77, 78, 17, 83, 21, 22, 86, 24, 88, 27, 34));
         List<Integer> list = new ArrayList<>();
+        //List<Integer> list = Arrays.asList(13, 34, 54, 38, 17, 3, 68, 59, 83, 21, 71, 22, 48, 86, 77, 78, 52, 42, 62, 0, 63, 46, 66, 4, 6, 27, 75, 24, 58, 88);
         Random r = new Random();
-        int count = 10000000; // 添加多少个随机数
-        int maxV = 400000000; // 随机数的范围
+        int count = 200000; // 添加多少个随机数
+        int maxV = 900000; // 随机数的范围
         for (int i = 0; i < count; ) {
             int k = r.nextInt(maxV);
             if (set.add(k)) {
@@ -182,41 +222,49 @@ public class BPTree<T extends Comparable<T>> {
             bTree.add(list.get(i));
         }
         //bTree.printTree();
-        System.out.println("插入"+count+"条数据耗时："+(System.currentTimeMillis()-insertStartTime));
-        //System.out.println("list:"+list);
+        System.out.println("插入" + count + "条数据耗时：" + (System.currentTimeMillis() - insertStartTime));
+        //System.out.println("list:" + list);
         //System.out.println("-------------------");
         //bTree.printTree();
-        /*count = 0;
+        count = 0;
         // 测试删除后留多少个
-        int l = 10;
+        int l = 100000;
+        long deleteTime = System.currentTimeMillis();
         for (Integer i : set) {
-            if (set.size()-count<=l) {
+            if (set.size() - count <= l) {
                 break;
             }
+            //System.out.println("删除：" + i);
             bTree.delete(i);
-            System.out.println("删除了："+i);
-            bTree.printTree();
+            list.remove(i);
+            //System.out.println("删除了：" + i);
+            //bTree.printTree();
             count++;
-        }*/
+        }
+        System.out.println("删除数据"+(set.size()-l)+"条数据耗时："+(System.currentTimeMillis()-deleteTime));
+        //Collections.sort(list);
+        //System.out.println(list);
+        //System.out.println("-----------------------------");
+        //bTree.printTree();
 
-        int min = 10000;
-        int max = 2000000;
+        int min = 1;
+        int max = 450000;
         long selectStartTimeOld = System.currentTimeMillis();
         List<Integer> fw1 = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             Integer e = list.get(i);
-            if(e.compareTo(min) >= 0 && e.compareTo(max) <= 0){
+            if (e.compareTo(min) >= 0 && e.compareTo(max) <= 0) {
                 fw1.add(e);
             }
         }
-        System.out.println("查询数据耗时："+(System.currentTimeMillis()-selectStartTimeOld));
+        System.out.println("查询数据耗时：" + (System.currentTimeMillis() - selectStartTimeOld));
         Collections.sort(fw1);
-        System.out.println("查询结果条数："+fw1.size());
+        System.out.println("查询结果条数：" + fw1.size());
         // 查询一定范围的数据
         long selectStartTime = System.currentTimeMillis();
-        List<Integer> fw2 = bTree.searchScope(min,max);
-        System.out.println("使用b+树查询数据耗时："+(System.currentTimeMillis()-selectStartTime));
-        System.out.println("使用b+树查询结果条数:"+fw2.size());
+        List<Integer> fw2 = bTree.searchScope(min, max);
+        System.out.println("使用b+树查询数据耗时：" + (System.currentTimeMillis() - selectStartTime));
+        System.out.println("使用b+树查询结果条数:" + fw2.size());
     }
 
     /**
@@ -228,7 +276,7 @@ public class BPTree<T extends Comparable<T>> {
     public Node<T> getRightBrother(Node<T> node) {
         Node<T> parent = searchParentNode(node);
         if (parent != null) {
-            int index = parent.searchNodeIndex(node);
+            int index = parent.searchNodeIndex(node, true);
             if (index < parent.getChildrenList().size() - 1) {
                 return parent.getChildrenList().get(index + 1);
             }
@@ -245,7 +293,7 @@ public class BPTree<T extends Comparable<T>> {
     public Node<T> getLeftBrother(Node<T> node) {
         Node<T> parent = searchParentNode(node);
         if (parent != null) {
-            int index = parent.searchNodeIndex(node);
+            int index = parent.searchNodeIndex(node, true);
             if (index > 0) {
                 return parent.getChildrenList().get(index - 1);
             }
@@ -350,7 +398,7 @@ public class BPTree<T extends Comparable<T>> {
             return null;
         } else {
             int i = start.searchIndex(data);
-            if (i != -1) {
+            if (i != -1 && start.getChildrenList().size() == 0) {
                 return start.getDataList().get(i);
             }
             int index = start.searchInsertIndex(data);
@@ -377,7 +425,8 @@ public class BPTree<T extends Comparable<T>> {
             return null;
         } else {
             int i = start.searchIndex(data);
-            if (i != -1) {
+            // 这里与B树不同，B+树所有数据在叶子节点
+            if (i != -1 && start.getChildrenList().size() == 0) {
                 return start;
             }
             int index = start.searchInsertIndex(data);
@@ -435,6 +484,10 @@ public class BPTree<T extends Comparable<T>> {
     }
 
     public void printTree() {
+        if(root == null){
+            System.out.println("null");
+            return;
+        }
         Map<Integer, List<BPTree.Node<T>>> map = new HashMap<Integer, List<BPTree.Node<T>>>();
         List<BPTree.Node<T>> first = new ArrayList<BPTree.Node<T>>();
         first.add(root);
@@ -509,7 +562,7 @@ public class BPTree<T extends Comparable<T>> {
                     if (t.compareTo(min) >= 0 && t.compareTo(max) <= 0) {
                         result.add(t);
                     }
-                    if(t.compareTo(max) > 0){
+                    if (t.compareTo(max) > 0) {
                         break w;
                     }
                 }
@@ -540,15 +593,6 @@ public class BPTree<T extends Comparable<T>> {
                 return dataList.get(dataList.size() - 1);
             }
             return null;
-        }
-
-        /**
-         * 设置最大的关键字
-         */
-        public void setMax(T maxData) {
-            if (dataList.size() > 0) {
-                dataList.set(dataList.size() - 1, maxData);
-            }
         }
 
         public Node<T> getLeftNode() {
@@ -612,6 +656,12 @@ public class BPTree<T extends Comparable<T>> {
                 return this.getDataList().remove(index);
             }
             return null;
+        }
+
+        public void removeDataAndChildrenNode(T data) {
+            int i = searchIndex(data);
+            getDataList().remove(i);
+            getChildrenList().remove(i);
         }
 
         /**
@@ -751,8 +801,26 @@ public class BPTree<T extends Comparable<T>> {
          * @param node
          * @return
          */
-        public int searchNodeIndex(Node<T> node) {
-            return doSearchNodeIndex(node, 0, childrenList.size() - 1);
+        public int searchNodeIndex(Node<T> node, boolean merge) {
+            if (merge) {
+                return doSearchNodeIndex(node, 0, childrenList.size() - 1);
+            } else {
+                return doSearchNodeIndexByLine(node);
+            }
+        }
+
+        /**
+         * 不使用二分查找，因为对于增加和删除节点数据后，影响节点在父节点中的位置
+         *
+         * @return
+         */
+        private int doSearchNodeIndexByLine(Node<T> node) {
+            for (int i = 0; i < getChildrenList().size(); i++) {
+                if (getChildrenList().get(i) == node) {
+                    return i;
+                }
+            }
+            return -1;
         }
 
         private int doSearchNodeIndex(Node<T> node, int startIndex, int endIndex) {

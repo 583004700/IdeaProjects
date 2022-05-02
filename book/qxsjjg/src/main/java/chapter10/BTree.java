@@ -75,12 +75,12 @@ public class BTree<T extends Comparable<T>> {
             tNode.removeData(data);
             tNode.add(leftMaxData);
 
-            if (leftMax.getDataList().size() == 1) {
+            if (leftMax.getDataList().size() == minDataLength) {
                 down(leftMax);
             }
             leftMax.removeData(leftMaxData);
         } else {
-            if (tNode.getDataList().size() == 1) {
+            if (tNode.getDataList().size() == minDataLength) {
                 down(tNode);
             }
             tNode.removeData(data);
@@ -137,11 +137,11 @@ public class BTree<T extends Comparable<T>> {
     }
 
     public static void main(String[] args) {
-        BTree<Integer> bTree = new BTree<Integer>(30);
+        BTree<Integer> bTree = new BTree<Integer>(70);
         Set<Integer> set = new HashSet<>();
         List<Integer> list = new ArrayList<>();
         Random r = new Random();
-        int count = 100000; // 添加多少个随机数
+        int count = 10000; // 添加多少个随机数
         int max = 200000; // 随机数的范围
         for (int i = 0; i < count; ) {
             int k = r.nextInt(max);
