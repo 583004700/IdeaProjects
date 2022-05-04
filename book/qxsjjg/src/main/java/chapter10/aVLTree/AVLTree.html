@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>RBTree</title>
+    <style type="text/css">
+        html, body {
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" width="100%" height="100%"></canvas>
+<input type="text" id="addValue" style="position: fixed; top: 10px; right: 60px;" />
+<button onclick="addV()" style="position: fixed;right: 10px;top: 10px;">添加</button>
+
+<input type="text" id="deleteValue" style="position: fixed; top: 40px; right: 60px;" />
+<button onclick="deleteV()" style="position: fixed;right: 10px;top: 40px;">删除</button>
+<script type="text/javascript" src="Comparable.js"></script>
+<script type="text/javascript" src="Node.js"></script>
+<script type="text/javascript" src="AVLTree.js"></script>
+<script type="text/javascript">
+    let bsTree = new AVLTree();
+    let canvasEle = document.getElementById("canvas");
+    canvasEle.width = window.innerWidth;
+    canvasEle.height = window.innerHeight * 4;
+    let ctx = canvasEle.getContext("2d");
+    let startX = window.innerWidth / 2;
+    let startY = 30;
+    function addV() {
+        let addValue = document.getElementById("addValue").value;
+        addValue = parseFloat(addValue);
+        bsTree.add(addValue);
+        let startW = bsTree.getHeight() * 50;
+        bsTree.drawTree(ctx, startX, startY, startW);
+    }
+
+    function deleteV(){
+        let deleteValue = document.getElementById("deleteValue").value;
+        deleteValue = parseFloat(deleteValue);
+        bsTree.delete(deleteValue);
+        let startW = bsTree.getHeight() * 50;
+        bsTree.drawTree(ctx, startX, startY, startW);
+    }
+</script>
+</body>
+</html>
