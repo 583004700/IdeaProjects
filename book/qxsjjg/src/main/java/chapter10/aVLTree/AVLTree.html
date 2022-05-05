@@ -31,6 +31,10 @@
     function addV() {
         let addValue = document.getElementById("addValue").value;
         addValue = parseFloat(addValue);
+        if(bsTree.search(addValue)!=null){
+            alert("数据已经存在！");
+            return;
+        }
         bsTree.add(addValue);
         let startSplitX = bsTree.getHeight() * startSplitY;
         bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
@@ -39,6 +43,10 @@
     function deleteV(){
         let deleteValue = document.getElementById("deleteValue").value;
         deleteValue = parseFloat(deleteValue);
+        if(bsTree.search(deleteValue)==null){
+            alert("数据不存在！");
+            return;
+        }
         bsTree.delete(deleteValue);
         let startSplitX = bsTree.getHeight() * startSplitY;
         bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
