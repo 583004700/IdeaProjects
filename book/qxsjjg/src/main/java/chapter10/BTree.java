@@ -137,7 +137,7 @@ public class BTree<T extends Comparable<T>> {
     }
 
     public static void main(String[] args) {
-        BTree<Integer> bTree = new BTree<Integer>(70);
+        /*BTree<Integer> bTree = new BTree<Integer>(70);
         Set<Integer> set = new HashSet<>();
         List<Integer> list = new ArrayList<>();
         Random r = new Random();
@@ -169,7 +169,33 @@ public class BTree<T extends Comparable<T>> {
         }
         System.out.println("删除后：");
         bTree.printTree();
-        System.out.println("查询数据："+bTree.search(list.get(0)));
+        System.out.println("查询数据："+bTree.search(list.get(0)));*/
+        BTree<Integer> bsTree = new BTree<>(4);
+        bsTree.add(9);
+        bsTree.add(1);
+        bsTree.add(3);
+        bsTree.add(5);
+        bsTree.add(8);
+        bsTree.add(98);
+        bsTree.add(34);
+        bsTree.add(43);
+        bsTree.printTree();
+        bsTree.delete(9);
+        bsTree.printTree();
+        bsTree.delete(1);
+        bsTree.printTree();
+        bsTree.delete(3);
+        bsTree.printTree();
+        bsTree.delete(5);
+        bsTree.printTree();
+        bsTree.delete(8);
+        bsTree.printTree();
+        bsTree.delete(98);
+        bsTree.printTree();
+        bsTree.delete(34);
+        bsTree.printTree();
+        bsTree.delete(43);
+        bsTree.printTree();
     }
 
     /**
@@ -384,6 +410,9 @@ public class BTree<T extends Comparable<T>> {
     }
 
     public void printTree() {
+        if(root == null){
+            return;
+        }
         Map<Integer, List<BTree.Node<T>>> map = new HashMap<Integer, List<BTree.Node<T>>>();
         List<BTree.Node<T>> first = new ArrayList<BTree.Node<T>>();
         first.add(root);

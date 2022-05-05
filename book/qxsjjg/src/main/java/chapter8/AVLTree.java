@@ -30,6 +30,9 @@ public class AVLTree<T extends Comparable<T>> {
 
 
     public void printTree() {
+        if(root == null){
+            return;
+        }
         Map<Integer, List<Node<T>>> map = new HashMap<Integer, List<Node<T>>>();
         List<Node<T>> first = new ArrayList<Node<T>>();
         first.add(root);
@@ -77,9 +80,13 @@ public class AVLTree<T extends Comparable<T>> {
         if(target != null) {
             Node<T> parent = searchParent(target.getData());
             if (target.getLeft() == null && target.getRight() == null) {
-                if(data.equals(parent.getLeft().getData())){
+                if(target == root){
+                    root = null;
+                    return;
+                }
+                if(parent.getLeft() != null && data.equals(parent.getLeft().getData())){
                     parent.setLeft(null);
-                }else if(data.equals(parent.getRight().getData())){
+                }else if(parent.getRight() != null && data.equals(parent.getRight().getData())){
                     parent.setRight(null);
                 }
                 route = parent;
@@ -389,8 +396,10 @@ public class AVLTree<T extends Comparable<T>> {
         bsTree.add(6);
         bsTree.add(7);
         bsTree.add(8);*/
-        bsTree.add(69);
-        bsTree.add(25);
+        bsTree.add(1);
+        bsTree.add(2);
+        bsTree.add(3);
+        /*bsTree.add(25);
         bsTree.add(80);
         bsTree.add(16);
         bsTree.add(60);
@@ -401,9 +410,8 @@ public class AVLTree<T extends Comparable<T>> {
         bsTree.add(85);
         bsTree.add(98);
         bsTree.add(82);
-        bsTree.printTree();
-        System.out.println("--------------删除节点16--------------");
-        bsTree.delete(16);
+        bsTree.printTree();*/
+        bsTree.delete(2);
         bsTree.printTree();
     }
 

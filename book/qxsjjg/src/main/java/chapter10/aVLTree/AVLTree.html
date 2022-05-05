@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>RBTree</title>
+    <title>AVLTree</title>
     <style type="text/css">
         html, body {
             height: 100%;
@@ -27,20 +27,21 @@
     let ctx = canvasEle.getContext("2d");
     let startX = window.innerWidth / 2;
     let startY = 30;
+    let startSplitY = 50;
     function addV() {
         let addValue = document.getElementById("addValue").value;
         addValue = parseFloat(addValue);
         bsTree.add(addValue);
-        let startW = bsTree.getHeight() * 50;
-        bsTree.drawTree(ctx, startX, startY, startW);
+        let startSplitX = bsTree.getHeight() * startSplitY;
+        bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
     }
 
     function deleteV(){
         let deleteValue = document.getElementById("deleteValue").value;
         deleteValue = parseFloat(deleteValue);
         bsTree.delete(deleteValue);
-        let startW = bsTree.getHeight() * 50;
-        bsTree.drawTree(ctx, startX, startY, startW);
+        let startSplitX = bsTree.getHeight() * startSplitY;
+        bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
     }
 </script>
 </body>

@@ -2,6 +2,9 @@ class AVLTree {
     // root
 
     printTree() {
+        if (!this.root) {
+            return;
+        }
         let map = {};
         let first = [];
         first.push(this.root);
@@ -38,40 +41,43 @@ class AVLTree {
         }
     }
 
-    drawTree(ctx,startX,startY,startW) {
-        ctx.clearRect(0, 0, 100000, 100000);
-        if(this.root) {
+    drawTree(ctx, startX, startY, startSplitX, startSplitY) {
+        ctx.clearRect(0, 0, 100000, 10000);
+        if (this.root) {
             ctx.beginPath();
-            this.drawNode(ctx, this.root, startX, startY, startW);
+            this.drawNode(ctx, this.root, startX, startY, startSplitX, startSplitY);
         }
     }
 
-    drawNode(ctx, node, x, y, w) {
+    drawNode(ctx, node, x, y, splitX, splitY) {
         ctx.save();
         ctx.beginPath();
-        ctx.arc(x, y, 15, 0, 2 * Math.PI);
+        let width = node.data.toString().length * 6;
+        width = Math.max(width, 15);
+        ctx.ellipse(x, y, width, 15, 0, 0, 2 * Math.PI);
         ctx.font = "15px 微软雅黑";
-        if(node.color) {
+        if (node.color) {
             ctx.strokeStyle = node.color;
-        }else{
+        } else {
             ctx.strokeStyle = "black";
         }
-        ctx.strokeText(node.data, x - 10, y + 6);
+        let sub = node.data.toString().length * 5;
+        ctx.strokeText(node.data, x - sub, y + 6);
         ctx.stroke();
         ctx.restore();
         ctx.beginPath();
-        w = w / 2;
+        splitX = splitX / 2;
         if (node.left) {
-            ctx.moveTo(x,y+13);
-            ctx.lineTo(x - w,y - 13 + 50);
+            ctx.moveTo(x, y + 13);
+            ctx.lineTo(x - splitX, y - 13 + splitY);
             ctx.stroke();
-            this.drawNode(ctx, node.left, x - w, y + 50, w);
+            this.drawNode(ctx, node.left, x - splitX, y + splitY, splitX, splitY);
         }
         if (node.right) {
-            ctx.moveTo(x,y+13);
-            ctx.lineTo(x + w,y - 13 + 50);
+            ctx.moveTo(x, y + 13);
+            ctx.lineTo(x + splitX, y - 13 + splitY);
             ctx.stroke();
-            this.drawNode(ctx, node.right, x + w, y + 50, w);
+            this.drawNode(ctx, node.right, x + splitX, y + splitY, splitX, splitY);
         }
     }
 
@@ -81,9 +87,13 @@ class AVLTree {
         if (target) {
             let parent = this.searchParent(target.data);
             if (target.left == null && target.right == null) {
-                if (data.compareTo(parent.left.data) === 0) {
+                if (target === this.root) {
+                    this.root = null;
+                    return;
+                }
+                if (parent.left && data.compareTo(parent.left.data) === 0) {
                     parent.left = null;
-                } else if (data.compareTo(parent.right.data) === 0) {
+                } else if (parent.right && data.compareTo(parent.right.data) === 0) {
                     parent.right = null;
                 }
                 route = parent;
@@ -96,7 +106,7 @@ class AVLTree {
                 }
             } else if (target.left != null) {
                 let leftMax = this.doSearchMax(target.left);
-                delete (leftMax.data);
+                this.delete(leftMax.data);
                 target.data = leftMax.data;
             } else {
                 let rightMin = this.doSearchMin(target.right);
@@ -171,7 +181,7 @@ class AVLTree {
         return null;
     }
 
-    getHeight(){
+    getHeight() {
         return this.doHeight(this.root);
     }
 
@@ -232,7 +242,7 @@ class AVLTree {
     }
 
     doSearch(node, data) {
-        if (!node) {
+        if (!node || !data) {
             return null;
         }
         if (data.compareTo(node.data) < 0) {
