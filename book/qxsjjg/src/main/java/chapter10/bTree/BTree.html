@@ -33,18 +33,32 @@
     let startY = 30;
     let startSplitY = 60;
 
-    function changeOrder(){
-        try {
-            let orderValue = parseInt(document.getElementById("orderValue").value);
-            if(orderValue < 3){
-                alert("阶数不小于3");
-                return;
-            }
-            order = orderValue;
-            alert("阶数设置成功！");
-        }catch (e){
-            alert("阶数必须是正整数！");
+    function isNumber(n){
+        return /^\d+\.?\d*$/.test(n);
+    }
+
+    function isInt(n){
+        return /^\d+?\d*$/.test(n);
+    }
+
+    function validate(){
+        let orderValue = document.getElementById("orderValue").value;
+        if(!isInt(orderValue) || parseInt(orderValue) < 3){
+            alert("阶数设置不正确!");
+            return false;
         }
+        return true;
+    }
+
+    function changeOrder(){
+        let orderValue = document.getElementById("orderValue").value;
+        if(!validate()){
+            return;
+        }
+        orderValue = parseInt(orderValue);
+        document.getElementById("orderValue").value = orderValue;
+        order = orderValue;
+        alert("阶数设置成功！");
         reset();
     }
 
@@ -57,14 +71,19 @@
         if(!bsTree){
             bsTree = new BTree(order);
         }
+        if(!validate()){
+            return;
+        }
         let addValue = document.getElementById("addValue").value;
+        if(!isNumber(addValue)){
+            alert("请输入数字!");
+            return;
+        }
         addValue = parseFloat(addValue);
-
         if(bsTree.search(addValue)!=null){
             alert("节点已经存在！");
             return;
         }
-
         bsTree.add(addValue);
         let startSplitX = bsTree.getHeight() * startSplitY * order;
         bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
@@ -74,7 +93,14 @@
         if(!bsTree){
             bsTree = new BTree(order);
         }
+        if(!validate()){
+            return;
+        }
         let deleteValue = document.getElementById("deleteValue").value;
+        if(!isNumber(deleteValue)){
+            alert("请输入数字!");
+            return;
+        }
         deleteValue = parseFloat(deleteValue);
         if(bsTree.search(deleteValue)==null){
             alert("节点不存在！");

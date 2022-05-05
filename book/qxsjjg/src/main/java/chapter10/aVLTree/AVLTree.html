@@ -28,8 +28,15 @@
     let startX = window.innerWidth / 2;
     let startY = 30;
     let startSplitY = 50;
+    function isNumber(n){
+        return /^\d+\.?\d*$/.test(n);
+    }
     function addV() {
         let addValue = document.getElementById("addValue").value;
+        if(!isNumber(addValue)){
+            alert("请输入数字!");
+            return;
+        }
         addValue = parseFloat(addValue);
         if(bsTree.search(addValue)!=null){
             alert("数据已经存在！");
@@ -42,6 +49,10 @@
 
     function deleteV(){
         let deleteValue = document.getElementById("deleteValue").value;
+        if(!isNumber(deleteValue)){
+            alert("请输入数字!");
+            return;
+        }
         deleteValue = parseFloat(deleteValue);
         if(bsTree.search(deleteValue)==null){
             alert("数据不存在！");
