@@ -1,3 +1,37 @@
+class Status {
+    setX(x) {
+        this.x = x;
+    }
+
+    getX() {
+        return this.x;
+    }
+
+    setMiddle(middle){
+        this.middle = middle;
+    }
+
+    getMiddle(){
+        return this.middle;
+    }
+
+    setY(y) {
+        this.y = y;
+    }
+
+    getY() {
+        return this.y;
+    }
+
+    setWidth(width) {
+        this.width = width;
+    }
+
+    getWidth() {
+        return this.width;
+    }
+}
+
 class BTree {
     constructor(order) {
         this.order = order;
@@ -33,20 +67,55 @@ class BTree {
         }
     }
 
-    drawTree(ctx, startX, startY, startSplitX, startSplitY) {
-        ctx.clearRect(0, 0, 100000, 10000);
+    // 优化画图逻辑，从最后一层开始画，节点不会再重叠在一起
+    drawTreeOptimize(ctx, startX, startY, startSplitY) {
+        ctx.clearRect(0, 0, 10000000, 1000000);
         if (this.root) {
-            ctx.beginPath();
-            this.drawNode(ctx, this.root, startX, startY, startSplitX, startSplitY);
+            this.drawNodeOptimize(ctx, this.root, startX, startY, startSplitY);
         }
     }
 
-    drawNode(ctx, node, x, y, splitX, splitY) {
+    drawNodeOptimize(ctx, node, x, y, splitY) {
+        let length = node.getChildrenList().length;
+        let statusList = [];
+        let allWidth = 0;
+        let splitX = 30;
+        for (let i = 0; i < length; i++) {
+            let childNode = node.getChildrenList()[i];
+            let pre = null;
+            let xx = x;
+            let width = 0;
+            if (i - 1 >= 0) {
+                pre = statusList.get(i - 1);
+                xx = pre.getX();
+                width = pre.getWidth();
+            }
+            let s = this.drawNodeOptimize(ctx, childNode, xx + width * 2 + splitX, y + splitY, splitY);
+            statusList.add(s);
+        }
+
+        let nodeWidth = node.getDataList().toString().length * 6;
+        nodeWidth = Math.max(nodeWidth, 15);
+        let height = 15;
+        let currentX = x + nodeWidth;
+        if (statusList.size() > 0) {
+            let first = statusList.get(0);
+            let last = statusList.get(statusList.size() - 1);
+            currentX = (first.getMiddle()+last.getMiddle()) / 2;
+            let currentY = y + height;
+            ctx.restore();
+            for (let i = 0; i < statusList.size(); i++) {
+                let s = statusList.get(i);
+                ctx.beginPath();
+                ctx.moveTo(currentX, currentY);
+                ctx.lineTo(s.getMiddle(), s.getY() - height);
+                ctx.stroke();
+                allWidth += s.getWidth() + splitX / 2;
+            }
+        }
         ctx.save();
         ctx.beginPath();
-        let width = node.getDataList().toString().length * 6;
-        width = Math.max(width, 15);
-        ctx.ellipse(x, y, width, 15, 0, 0, 2 * Math.PI);
+        ctx.ellipse(currentX, y, nodeWidth, height, 0, 0, 2 * Math.PI);
         ctx.font = "15px 微软雅黑";
         if (node.color) {
             ctx.strokeStyle = node.color;
@@ -54,30 +123,18 @@ class BTree {
             ctx.strokeStyle = "black";
         }
         let sub = node.getDataList().toString().length * 5;
-        ctx.strokeText(node.getDataList().toString(), x - sub, y + 6);
+        ctx.strokeText(node.getDataList().toString(), currentX - sub, y + 6);
         ctx.stroke();
-        ctx.restore();
-        ctx.beginPath();
-        let length = node.getChildrenList().length;
-        let leftPosition = -(splitX / 2);
-        splitX = splitX / (length - 1);
-        let preEndPosition = null;
-        for (let i = 0; i < length; i++) {
-            let p = leftPosition + i * splitX;
-            let childNode = node.getChildrenList()[i];
-            let childNodeWidth = childNode.getDataList().toString().length * 6;
-            childNodeWidth = Math.max(childNodeWidth, 15);
-            let xPosition = x + p;
-            if (xPosition < preEndPosition + childNodeWidth) {
-                //防止节点重叠在一起
-                xPosition = preEndPosition + childNodeWidth;
-            }
-            ctx.moveTo(x, y + 13);
-            ctx.lineTo(xPosition, y - 13 + splitY);
-            ctx.stroke();
-            preEndPosition = this.drawNode(ctx, childNode, xPosition, y + splitY, splitX / 2, splitY);
+        let status = new Status();
+        status.setX(x);
+        status.setY(y);
+        status.setMiddle(currentX);
+        if (statusList.size() === 0) {
+            status.setWidth(nodeWidth);
+        } else {
+            status.setWidth(allWidth);
         }
-        return width + x;
+        return status;
     }
 
     delete(data) {

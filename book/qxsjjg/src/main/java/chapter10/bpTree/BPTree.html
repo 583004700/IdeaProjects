@@ -15,10 +15,10 @@
 <input type="text" id="orderValue" style="position: fixed; top: 10px; right: 120px;" value="4"/>
 <button onclick="changeOrder()" style="position: fixed;right: 10px;top: 10px;">确定修改阶数</button>
 
-<input type="text" id="addValue" style="position: fixed; top: 40px; right: 60px;" />
+<input type="text" id="addValue" style="position: fixed; top: 40px; right: 60px;"/>
 <button onclick="addV()" style="position: fixed;right: 10px;top: 40px;">添加</button>
 
-<input type="text" id="deleteValue" style="position: fixed; top: 70px; right: 60px;" />
+<input type="text" id="deleteValue" style="position: fixed; top: 70px; right: 60px;"/>
 <button onclick="deleteV()" style="position: fixed;right: 10px;top: 70px;">删除</button>
 <script type="text/javascript" src="Node.js"></script>
 <script type="text/javascript" src="BPTree.js"></script>
@@ -26,35 +26,32 @@
     let order = 4;
     let bsTree = null;
     let canvasEle = document.getElementById("canvas");
-    canvasEle.width = window.innerWidth * order / 2;
-    canvasEle.height = window.innerHeight * order;
     let ctx = canvasEle.getContext("2d");
-    let startX = window.innerWidth / 2;
-    let startY = 30;
-    let startSplitY = 60;
     let orderValueEle = document.getElementById("orderValue");
     let addValueEle = document.getElementById("addValue");
     let deleteValueEle = document.getElementById("deleteValue");
-    function isNumber(n){
+    let splitY = 60;
+    canvasEle.width = 10000;
+    function isNumber(n) {
         return /^\d+\.?\d*$/.test(n);
     }
 
-    function isInt(n){
+    function isInt(n) {
         return /^\d+?\d*$/.test(n);
     }
 
-    function validate(){
+    function validate() {
         let orderValue = orderValueEle.value;
-        if(!isInt(orderValue) || parseInt(orderValue) < 3){
+        if (!isInt(orderValue) || parseInt(orderValue) < 3) {
             alert("阶数设置不正确!");
             return false;
         }
         return true;
     }
 
-    function changeOrder(){
+    function changeOrder() {
         let orderValue = orderValueEle.value;
-        if(!validate()){
+        if (!validate()) {
             return;
         }
         orderValue = parseInt(orderValue);
@@ -64,54 +61,56 @@
         reset();
     }
 
-    function reset(){
+    function reset() {
         bsTree = new BPTree(order);
-        bsTree.drawTree(ctx);
+        bsTree.drawTreeOptimize(ctx);
     }
 
     function addV() {
-        if(!bsTree){
+        if (!bsTree) {
             bsTree = new BPTree(order);
         }
-        if(!validate()){
+        if (!validate()) {
             return;
         }
         let addValue = addValueEle.value;
-        if(!isNumber(addValue)){
+        if (!isNumber(addValue)) {
             alert("请输入数字!");
             return;
         }
         addValue = parseFloat(addValue);
-        if(bsTree.search(addValue)!=null){
+        if (bsTree.search(addValue) != null) {
             alert("节点已经存在！");
             return;
         }
         bsTree.add(addValue);
-        let startSplitX = bsTree.getHeight() * startSplitY * order;
-        bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
+        let treeHeight = bsTree.getHeight();
+        canvasEle.height = treeHeight * splitY + 1000;
+        bsTree.drawTreeOptimize(ctx, 100, 100, splitY);
         addValueEle.value = "";
     }
 
-    function deleteV(){
-        if(!bsTree){
+    function deleteV() {
+        if (!bsTree) {
             bsTree = new BPTree(order);
         }
-        if(!validate()){
+        if (!validate()) {
             return;
         }
         let deleteValue = deleteValueEle.value;
-        if(!isNumber(deleteValue)){
+        if (!isNumber(deleteValue)) {
             alert("请输入数字!");
             return;
         }
         deleteValue = parseFloat(deleteValue);
-        if(bsTree.search(deleteValue)==null){
+        if (bsTree.search(deleteValue) == null) {
             alert("节点不存在！");
             return;
         }
         bsTree.delete(deleteValue);
-        let startSplitX = bsTree.getHeight() * startSplitY * order;
-        bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
+        let treeHeight = bsTree.getHeight();
+        canvasEle.height = treeHeight * splitY + 1000;
+        bsTree.drawTreeOptimize(ctx, 100, 100, splitY);
         deleteValueEle.value = "";
     }
 </script>

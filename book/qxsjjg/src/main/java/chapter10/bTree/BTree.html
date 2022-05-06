@@ -26,15 +26,12 @@
     let order = 4;
     let bsTree = null;
     let canvasEle = document.getElementById("canvas");
-    canvasEle.width = window.innerWidth * order / 2;
-    canvasEle.height = window.innerHeight * order;
     let ctx = canvasEle.getContext("2d");
-    let startX = window.innerWidth / 2;
-    let startY = 30;
-    let startSplitY = 60;
     let orderValueEle = document.getElementById("orderValue");
     let addValueEle = document.getElementById("addValue");
     let deleteValueEle = document.getElementById("deleteValue");
+    let splitY = 60;
+    canvasEle.width = 10000;
     function isNumber(n){
         return /^\d+\.?\d*$/.test(n);
     }
@@ -66,7 +63,7 @@
 
     function reset(){
         bsTree = new BTree(order);
-        bsTree.drawTree(ctx);
+        bsTree.drawTreeOptimize(ctx);
     }
 
     function addV() {
@@ -87,8 +84,9 @@
             return;
         }
         bsTree.add(addValue);
-        let startSplitX = bsTree.getHeight() * startSplitY * order;
-        bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
+        let treeHeight = bsTree.getHeight();
+        canvasEle.height = treeHeight * splitY + 1000;
+        bsTree.drawTreeOptimize(ctx, 100, 100, splitY);
         addValueEle.value = "";
     }
 
@@ -110,8 +108,9 @@
             return;
         }
         bsTree.delete(deleteValue);
-        let startSplitX = bsTree.getHeight() * startSplitY * order;
-        bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
+        let treeHeight = bsTree.getHeight();
+        canvasEle.height = treeHeight * splitY + 1000;
+        bsTree.drawTreeOptimize(ctx, 100, 100, splitY);
         deleteValueEle.value = "";
     }
 </script>

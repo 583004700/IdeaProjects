@@ -47,6 +47,36 @@ Array.prototype.addAll = function (data) {
     }
 }
 
+Array.prototype.size = function () {
+    return this.length;
+}
+
+Array.prototype.contains = function (data) {
+    for (let i = 0; i < this.length; i++) {
+        let t = this[i];
+        if (t === data) {
+            return true;
+        }
+    }
+    return false;
+}
+
+Array.prototype.set = function (index, data) {
+    this[index] = data;
+}
+
+Object.prototype.get = function (key) {
+    return this[key];
+}
+
+Object.prototype.put = function (key, value) {
+    this[key] = value;
+}
+
+Object.prototype.containsKey = function (key) {
+    return typeof this.get(key) === "undefined";
+}
+
 class Up {
 
     constructor() {
