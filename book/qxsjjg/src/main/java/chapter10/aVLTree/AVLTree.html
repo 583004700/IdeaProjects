@@ -28,11 +28,13 @@
     let startX = window.innerWidth / 2;
     let startY = 30;
     let startSplitY = 50;
+    let addValueEle =document.getElementById("addValue");
+    let deleteValueEle = document.getElementById("deleteValue");
     function isNumber(n){
         return /^\d+\.?\d*$/.test(n);
     }
     function addV() {
-        let addValue = document.getElementById("addValue").value;
+        let addValue = addValueEle.value;
         if(!isNumber(addValue)){
             alert("请输入数字!");
             return;
@@ -45,10 +47,11 @@
         bsTree.add(addValue);
         let startSplitX = bsTree.getHeight() * startSplitY;
         bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
+        addValueEle.value = "";
     }
 
     function deleteV(){
-        let deleteValue = document.getElementById("deleteValue").value;
+        let deleteValue = deleteValueEle.value;
         if(!isNumber(deleteValue)){
             alert("请输入数字!");
             return;
@@ -61,6 +64,7 @@
         bsTree.delete(deleteValue);
         let startSplitX = bsTree.getHeight() * startSplitY;
         bsTree.drawTree(ctx, startX, startY, startSplitX,startSplitY);
+        deleteValueEle.value = "";
     }
 </script>
 </body>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>BTree</title>
+    <title>B+Tree</title>
     <style type="text/css">
         html, body {
             height: 100%;
@@ -21,7 +21,7 @@
 <input type="text" id="deleteValue" style="position: fixed; top: 70px; right: 60px;" />
 <button onclick="deleteV()" style="position: fixed;right: 10px;top: 70px;">删除</button>
 <script type="text/javascript" src="Node.js"></script>
-<script type="text/javascript" src="BTree.js"></script>
+<script type="text/javascript" src="BPTree.js"></script>
 <script type="text/javascript">
     let order = 4;
     let bsTree = null;
@@ -65,13 +65,13 @@
     }
 
     function reset(){
-        bsTree = new BTree(order);
+        bsTree = new BPTree(order);
         bsTree.drawTree(ctx);
     }
 
     function addV() {
         if(!bsTree){
-            bsTree = new BTree(order);
+            bsTree = new BPTree(order);
         }
         if(!validate()){
             return;
@@ -94,7 +94,7 @@
 
     function deleteV(){
         if(!bsTree){
-            bsTree = new BTree(order);
+            bsTree = new BPTree(order);
         }
         if(!validate()){
             return;
