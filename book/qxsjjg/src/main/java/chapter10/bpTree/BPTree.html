@@ -32,6 +32,13 @@
     let deleteValueEle = document.getElementById("deleteValue");
     let splitY = 60;
     canvasEle.width = 10000;
+
+    window.onload = function(){
+        setTimeout(function(){
+            window.scrollTo({"top": 0, "left": 0, "behavior": 'smooth'});
+        },1000);
+    }
+
     function isNumber(n) {
         return /^\d+\.?\d*$/.test(n);
     }

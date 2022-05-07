@@ -1,3 +1,45 @@
+class Status {
+    setX(x) {
+        this.x = x;
+    }
+
+    getX() {
+        return this.x;
+    }
+
+    setMiddle(middle) {
+        this.middle = middle;
+    }
+
+    getMiddle() {
+        return this.middle;
+    }
+
+    setY(y) {
+        this.y = y;
+    }
+
+    getY() {
+        return this.y;
+    }
+
+    setWidth(width) {
+        this.width = width;
+    }
+
+    getWidth() {
+        return this.width;
+    }
+
+    setNode(node) {
+        this.node = node;
+    }
+
+    getNode() {
+        return this.node;
+    }
+}
+
 class AVLTree {
     // root
 
@@ -41,20 +83,73 @@ class AVLTree {
         }
     }
 
-    drawTree(ctx, startX, startY, startSplitX, startSplitY) {
-        ctx.clearRect(0, 0, 100000, 10000);
+    // 优化画图逻辑，从最后一层开始画，节点不会再重叠在一起
+    drawTreeOptimize(ctx, startX, startY, startSplitY) {
+        ctx.clearRect(0, 0, 10000000, 1000000);
         if (this.root) {
-            ctx.beginPath();
-            this.drawNode(ctx, this.root, startX, startY, startSplitX, startSplitY);
+            this.drawNodeOptimize(ctx, this.root, startX, startY, startSplitY);
         }
     }
 
-    drawNode(ctx, node, x, y, splitX, splitY) {
+    drawNodeOptimize(ctx, node, x, y, splitY) {
+        let childrenList = [];
+        if (node.left != null) {
+            childrenList.add(node.left);
+        }
+        if (node.right != null) {
+            childrenList.add(node.right);
+        }
+
+        let length = childrenList.length;
+        let statusList = [];
+        let allWidth = 0;
+        let splitX = 30;
+        for (let i = 0; i < length; i++) {
+            let childNode = childrenList[i];
+            let pre = null;
+            let xx = x;
+            let width = 0;
+            if (i - 1 >= 0) {
+                pre = statusList.get(i - 1);
+                xx = pre.getX();
+                width = pre.getWidth();
+            }
+            let s = this.drawNodeOptimize(ctx, childNode, xx + width * 2 + splitX, y + splitY, splitY);
+            statusList.add(s);
+        }
+
+        let nodeWidth = node.data.toString().length * 6;
+        nodeWidth = Math.max(nodeWidth, 15);
+        let height = 15;
+        let currentX = x + nodeWidth;
+        if (statusList.size() > 0) {
+            let first = statusList.get(0);
+            let last = statusList.get(statusList.size() - 1);
+            if (first.getNode() === last.getNode()) {
+                // 只有一个结点时
+                if (first.getNode() === node.left) {
+                    currentX = first.getMiddle() + splitX;
+                } else if (first.getNode() === node.right) {
+                    currentX = first.getMiddle() - splitX;
+                }
+            } else {
+                // 有两个以上结点时
+                currentX = (first.getMiddle() + last.getMiddle()) / 2;
+            }
+            let currentY = y + height;
+            ctx.restore();
+            for (let i = 0; i < statusList.size(); i++) {
+                let s = statusList.get(i);
+                ctx.beginPath();
+                ctx.moveTo(currentX, currentY);
+                ctx.lineTo(s.getMiddle(), s.getY() - height);
+                ctx.stroke();
+                allWidth += s.getWidth() + splitX / 2;
+            }
+        }
         ctx.save();
         ctx.beginPath();
-        let width = node.data.toString().length * 6;
-        width = Math.max(width, 15);
-        ctx.ellipse(x, y, width, 15, 0, 0, 2 * Math.PI);
+        ctx.ellipse(currentX, y, nodeWidth, height, 0, 0, 2 * Math.PI);
         ctx.font = "15px 微软雅黑";
         if (node.color) {
             ctx.strokeStyle = node.color;
@@ -62,23 +157,19 @@ class AVLTree {
             ctx.strokeStyle = "black";
         }
         let sub = node.data.toString().length * 5;
-        ctx.strokeText(node.data, x - sub, y + 6);
+        ctx.strokeText(node.data.toString(), currentX - sub, y + 6);
         ctx.stroke();
-        ctx.restore();
-        ctx.beginPath();
-        splitX = splitX / 2;
-        if (node.left) {
-            ctx.moveTo(x, y + 13);
-            ctx.lineTo(x - splitX, y - 13 + splitY);
-            ctx.stroke();
-            this.drawNode(ctx, node.left, x - splitX, y + splitY, splitX, splitY);
+        let status = new Status();
+        status.setX(x);
+        status.setY(y);
+        status.setMiddle(currentX);
+        status.setNode(node);
+        if (statusList.size() === 0) {
+            status.setWidth(nodeWidth);
+        } else {
+            status.setWidth(allWidth);
         }
-        if (node.right) {
-            ctx.moveTo(x, y + 13);
-            ctx.lineTo(x + splitX, y - 13 + splitY);
-            ctx.stroke();
-            this.drawNode(ctx, node.right, x + splitX, y + splitY, splitX, splitY);
-        }
+        return status;
     }
 
     delete(data) {
