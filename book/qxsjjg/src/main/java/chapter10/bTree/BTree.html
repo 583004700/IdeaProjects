@@ -15,10 +15,10 @@
 <input type="text" id="orderValue" style="position: fixed; top: 10px; right: 120px;" value="4"/>
 <button onclick="changeOrder()" style="position: fixed;right: 10px;top: 10px;">确定修改阶数</button>
 
-<input type="text" id="addValue" style="position: fixed; top: 40px; right: 60px;" />
+<input type="text" id="addValue" style="position: fixed; top: 40px; right: 60px;"/>
 <button onclick="addV()" style="position: fixed;right: 10px;top: 40px;">添加</button>
 
-<input type="text" id="deleteValue" style="position: fixed; top: 70px; right: 60px;" />
+<input type="text" id="deleteValue" style="position: fixed; top: 70px; right: 60px;"/>
 <button onclick="deleteV()" style="position: fixed;right: 10px;top: 70px;">删除</button>
 <script type="text/javascript" src="Node.js"></script>
 <script type="text/javascript" src="BTree.js"></script>
@@ -33,32 +33,32 @@
     let splitY = 60;
     canvasEle.width = 10000;
 
-    window.onload = function(){
-        setTimeout(function(){
+    window.onload = function () {
+        setTimeout(function () {
             window.scrollTo({"top": 0, "left": 0, "behavior": 'smooth'});
-        },1000);
+        }, 1000);
     }
 
-    function isNumber(n){
+    function isNumber(n) {
         return /^\d+\.?\d*$/.test(n);
     }
 
-    function isInt(n){
+    function isInt(n) {
         return /^\d+?\d*$/.test(n);
     }
 
-    function validate(){
+    function validate() {
         let orderValue = orderValueEle.value;
-        if(!isInt(orderValue) || parseInt(orderValue) < 3){
+        if (!isInt(orderValue) || parseInt(orderValue) < 3) {
             alert("阶数设置不正确!");
             return false;
         }
         return true;
     }
 
-    function changeOrder(){
+    function changeOrder() {
         let orderValue = orderValueEle.value;
-        if(!validate()){
+        if (!validate()) {
             return;
         }
         orderValue = parseInt(orderValue);
@@ -68,56 +68,56 @@
         reset();
     }
 
-    function reset(){
+    function reset() {
         bsTree = new BTree(order);
         bsTree.drawTreeOptimize(ctx);
     }
 
     function addV() {
-        if(!bsTree){
+        if (!bsTree) {
             bsTree = new BTree(order);
         }
-        if(!validate()){
+        if (!validate()) {
             return;
         }
         let addValue = addValueEle.value;
-        if(!isNumber(addValue)){
+        if (!isNumber(addValue)) {
             alert("请输入数字!");
             return;
         }
         addValue = parseFloat(addValue);
-        if(bsTree.search(addValue)!=null){
+        if (bsTree.search(addValue) != null) {
             alert("节点已经存在！");
             return;
         }
         bsTree.add(addValue);
         let treeHeight = bsTree.getHeight();
-        canvasEle.height = treeHeight * splitY + 1000;
-        bsTree.drawTreeOptimize(ctx, 100, 100, splitY);
+        canvasEle.height = treeHeight * splitY + window.innerHeight;
+        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
         addValueEle.value = "";
     }
 
-    function deleteV(){
-        if(!bsTree){
+    function deleteV() {
+        if (!bsTree) {
             bsTree = new BTree(order);
         }
-        if(!validate()){
+        if (!validate()) {
             return;
         }
         let deleteValue = deleteValueEle.value;
-        if(!isNumber(deleteValue)){
+        if (!isNumber(deleteValue)) {
             alert("请输入数字!");
             return;
         }
         deleteValue = parseFloat(deleteValue);
-        if(bsTree.search(deleteValue)==null){
+        if (bsTree.search(deleteValue) == null) {
             alert("节点不存在！");
             return;
         }
         bsTree.delete(deleteValue);
         let treeHeight = bsTree.getHeight();
-        canvasEle.height = treeHeight * splitY + 1000;
-        bsTree.drawTreeOptimize(ctx, 100, 100, splitY);
+        canvasEle.height = treeHeight * splitY + window.innerHeight;
+        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
         deleteValueEle.value = "";
     }
 </script>

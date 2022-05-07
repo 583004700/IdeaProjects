@@ -30,10 +30,10 @@
     let splitY = 60;
     canvasEle.width = 10000;
 
-    window.onload = function(){
-        setTimeout(function(){
+    window.onload = function () {
+        setTimeout(function () {
             window.scrollTo({"top": 0, "left": 0, "behavior": 'smooth'});
-        },1000);
+        }, 1000);
     }
 
     function isNumber(n) {
@@ -53,8 +53,8 @@
         }
         bsTree.add(addValue);
         let treeHeight = bsTree.getHeight();
-        canvasEle.height = treeHeight * splitY + 1000;
-        bsTree.drawTreeOptimize(ctx, 100, 100, splitY);
+        canvasEle.height = treeHeight * splitY + window.innerHeight;
+        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
         addValueEle.value = "";
     }
 
@@ -71,8 +71,8 @@
         }
         bsTree.delete(deleteValue);
         let treeHeight = bsTree.getHeight();
-        canvasEle.height = treeHeight * splitY + 1000;
-        bsTree.drawTreeOptimize(ctx, 100, 100, splitY);
+        canvasEle.height = treeHeight * splitY + window.innerHeight;
+        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
         deleteValueEle.value = "";
     }
 </script>

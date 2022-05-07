@@ -304,7 +304,7 @@ class AVLTree {
         }
         let min = node;
         while (min.left) {
-            min = node.left;
+            min = min.left;
         }
         return min;
     }
@@ -319,7 +319,7 @@ class AVLTree {
         }
         let max = node;
         while (max.right) {
-            max = node.right;
+            max = max.right;
         }
         return max;
     }
