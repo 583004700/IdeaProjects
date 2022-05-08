@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <title>AVLTree</title>
+    <title>红黑树</title>
     <style type="text/css">
         html, body {
             height: 100%;
@@ -15,13 +15,15 @@
 <button onclick="addV()" style="position: fixed;right: 10px;top: 10px;">添加</button>
 
 <input type="text" id="deleteValue" style="position: fixed; top: 40px; right: 60px;"/>
-<button onclick="deleteV()" style="position: fixed;right: 10px;top: 40px;">删除</button>
+<button onclick="deleteV()" style="position: fixed;right: 10px;top: 40px;display: none">删除</button>
 <script type="text/javascript" src="Comparable.js"></script>
 <script type="text/javascript" src="Node.js"></script>
-<script type="text/javascript" src="AVLTree.js"></script>
+<script type="text/javascript" src="rbTree.js"></script>
 <script type="text/javascript">
-    let bsTree = new AVLTree();
+    let bsTree = new RBTree();
     let canvasEle = document.getElementById("canvas");
+    canvasEle.width = window.innerWidth;
+    canvasEle.height = window.innerHeight * 4;
     let ctx = canvasEle.getContext("2d");
     let addValueEle = document.getElementById("addValue");
     let deleteValueEle = document.getElementById("deleteValue");

@@ -40,7 +40,7 @@ class Status {
     }
 }
 
-class AVLTree {
+class RBTree {
     // root
 
     printTree() {
@@ -92,6 +92,7 @@ class AVLTree {
     }
 
     drawNodeOptimize(ctx, node, x, y, splitY) {
+        ctx.save();
         let childrenList = [];
         if (node.left != null) {
             childrenList.add(node.left);
@@ -137,17 +138,16 @@ class AVLTree {
                 currentX = (first.getMiddle() + last.getMiddle()) / 2;
             }
             let currentY = y + height;
-            ctx.restore();
             for (let i = 0; i < statusList.size(); i++) {
                 let s = statusList.get(i);
                 ctx.beginPath();
                 ctx.moveTo(currentX, currentY);
                 ctx.lineTo(s.getMiddle(), s.getY() - height);
+                ctx.strokeStyle = s.getNode().color;
                 ctx.stroke();
                 allWidth += s.getWidth() + splitX / 2;
             }
         }
-        ctx.save();
         ctx.beginPath();
         ctx.ellipse(currentX, y, nodeWidth, height, 0, 0, 2 * Math.PI);
         ctx.font = "15px 微软雅黑";
@@ -159,6 +159,7 @@ class AVLTree {
         let sub = node.data.toString().length * 5;
         ctx.strokeText(node.data.toString(), currentX - sub, y + 6);
         ctx.stroke();
+        ctx.restore();
         let status = new Status();
         status.setX(x);
         status.setY(y);
@@ -361,6 +362,7 @@ class AVLTree {
         if (this.root == null) {
             let temp = new Node();
             temp.data = data;
+            temp.setBlack();
             this.root = temp;
         } else {
             let temp = null;
@@ -369,7 +371,6 @@ class AVLTree {
                     this.doAdd(node.left, data);
                 } else {
                     temp = new Node();
-                    temp.data = data;
                     node.left = temp;
                 }
             } else if (data.compareTo(node.data) > 0) {
@@ -377,23 +378,47 @@ class AVLTree {
                     this.doAdd(node.right, data);
                 } else {
                     temp = new Node();
-                    temp.data = data;
                     node.right = temp;
                 }
             }
             if (temp != null) {
-                let parent = null;
-                while ((parent = this.searchParent(temp.data)) != null) {
-                    let leftHeight = this.doHeight(parent.left);
-                    let rightHeight = this.doHeight(parent.right);
-                    if (Math.abs(leftHeight - rightHeight) > 1) {
+                temp.data = data;
+                temp.setRed();
+                // 父节点
+                let parent = this.searchParent(temp.data);
+                // 祖父节点
+                let grandParent = this.searchParent(parent.data);
+                while(temp.isRed() && parent.isRed() && grandParent != null){
+                    let uncle = grandParent.left === parent ? grandParent.right : grandParent.left;
+                    if(uncle === null || uncle.isBlack()) { // 如果是黑节点
+                        let balanceType = this.isBalance(grandParent,parent,temp);
+                        // 旋转之后的跟节点
+                        let routeRoot = this.balance(balanceType);
+                        routeRoot.setBlack();
+                        // 把孩子染红
+                        if(routeRoot.left != null){
+                            routeRoot.left.setRed();
+                        }
+                        if(routeRoot.right != null){
+                            routeRoot.right.setRed();
+                        }
                         break;
+                    }else if(uncle.isRed()){
+                        parent.setBlack();
+                        uncle.setBlack();
+                        if(grandParent === this.root){
+                            grandParent.setBlack();
+                        }else{
+                            grandParent.setRed();
+                        }
+                        temp = grandParent;
+                        parent = this.searchParent(temp.data);
+                        if(parent) {
+                            grandParent = this.searchParent(parent.data);
+                        }else{
+                            grandParent = null;
+                        }
                     }
-                    temp = parent;
-                }
-                if (parent != null) {
-                    let balance = this.isBalance(temp);
-                    this.balance(balance);
                 }
             }
         }
@@ -401,61 +426,33 @@ class AVLTree {
 
     balance(balance) {
         let type = balance.type;
-        // 不平衡的点
         let parent = balance.node;
         if ("LL" === type) {
-            this.LL(parent);
+            return this.LL(parent);
         } else if ("RR" === type) {
-            this.RR(parent);
+            return this.RR(parent);
         } else if ("LR" === type) {
             this.RR(parent.left);
-            this.LL(parent);
+            return this.LL(parent);
         } else if ("RL" === type) {
             this.LL(parent.right);
-            this.RR(parent);
+            return this.RR(parent);
         }
     }
 
-    isBalance(temp) {
+    // 判断类型
+    isBalance(grandParent,parent,temp) {
         if (temp != null) {
             let first = null;
             let second = null;
             let current = temp;
-            while (current != null) {
-                let leftHeight = this.doHeight(current.left);
-                let rightHeight = this.doHeight(current.right);
-                if (Math.abs(leftHeight - rightHeight) > 1) {
-                    break;
-                }
-                current = this.searchParent(current.data);
-            }
             if (current != null) {
-                let leftHeight = this.doHeight(current.left);
-                let rightHeight = this.doHeight(current.right);
-                if (leftHeight < rightHeight) {
-                    first = "R";
-                    let secondLeftHeight = this.doHeight(current.right.left);
-                    let secondRightHeight = this.doHeight(current.right.right);
-                    if (secondLeftHeight < secondRightHeight) {
-                        second = "R";
-                    } else {
-                        second = "L";
-                    }
-                } else {
-                    first = "L";
-                    let secondLeftHeight = this.doHeight(current.left.left);
-                    let secondRightHeight = this.doHeight(current.left.right);
-                    if (secondLeftHeight < secondRightHeight) {
-                        second = "R";
-                    } else {
-                        second = "L";
-                    }
-                }
+                second = parent.left === temp ? "L" : "R";
+                first = grandParent.left === parent ? "L" : "R";
                 let type = first + second;
-                console.log("不平衡点为：" + current.data + ",类型为：" + type);
                 let balance = {};
                 balance.type = type;
-                balance.node = current;
+                balance.node = grandParent;
                 return balance;
             }
         }
