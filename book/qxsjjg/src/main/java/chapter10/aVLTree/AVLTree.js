@@ -197,12 +197,14 @@ class AVLTree {
                 }
             } else if (target.left != null) {
                 let leftMax = this.doSearchMax(target.left);
-                this.delete(leftMax.data);
-                target.data = leftMax.data;
+                let leftMaxData = leftMax.data;
+                this.delete(leftMaxData);
+                target.data = leftMaxData;
             } else {
                 let rightMin = this.doSearchMin(target.right);
-                this.delete(rightMin.data);
-                target.data = rightMin.data;
+                let rightMinData = rightMin.data;
+                this.delete(rightMinData);
+                target.data = rightMinData;
             }
         }
     }

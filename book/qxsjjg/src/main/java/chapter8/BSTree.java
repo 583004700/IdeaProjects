@@ -37,12 +37,14 @@ public class BSTree<T extends Comparable> {
                 }
             }else if(target.getLeft() != null){
                 Node<T> leftMax = doSearchMax(target.getLeft());
-                delete(leftMax.getData());
-                target.setData(leftMax.getData());
+                T leftMaxData = leftMax.getData();
+                delete(leftMaxData);
+                target.setData(leftMaxData);
             }else{
                 Node<T> rightMin = doSearchMin(target.getRight());
-                delete(rightMin.getData());
-                target.setData(rightMin.getData());
+                T rightMinData = rightMin.getData();
+                delete(rightMinData);
+                target.setData(rightMinData);
             }
         }
     }
