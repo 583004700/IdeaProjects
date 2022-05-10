@@ -73,6 +73,9 @@
         bsTree.drawTreeOptimize(ctx);
     }
 
+    let startX = 50;
+    let startY = 100;
+
     function addV() {
         if (!bsTree) {
             bsTree = new BTree(order);
@@ -93,7 +96,7 @@
         bsTree.add(addValue);
         let treeHeight = bsTree.getHeight();
         canvasEle.height = treeHeight * splitY + window.innerHeight;
-        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
+        bsTree.drawTreeOptimize(ctx, startX, startY, splitY);
         addValueEle.value = "";
     }
 
@@ -117,7 +120,7 @@
         bsTree.delete(deleteValue);
         let treeHeight = bsTree.getHeight();
         canvasEle.height = treeHeight * splitY + window.innerHeight;
-        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
+        bsTree.drawTreeOptimize(ctx, startX, startY, splitY);
         deleteValueEle.value = "";
     }
 </script>

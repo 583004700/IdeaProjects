@@ -1,3 +1,11 @@
+class CheckResult {
+    constructor() {
+        this.doubleRedResult = true;
+        this.blackHeightResultCount = 0;
+        this.blackHeightResult = true;
+    }
+}
+
 class Status {
     setX(x) {
         this.x = x;
@@ -83,6 +91,71 @@ class RBTree {
         }
     }
 
+    /**
+     * 判断树是否符合要求，验证添加和删除后，是否正确
+     */
+    isCorrect() {
+        let b = true;
+        if (this.root) {
+            if (!this.root.isBlack()) {
+                console.log("根节点不是黑色");
+                b = false;
+            }
+            let result = this.doubleRedAndBlackHeightCheck(this.root);
+            if (!result.doubleRedResult) {
+                console.log("有相同的红节点");
+                b = false;
+            }
+            if (!result.blackHeightResult) {
+                console.log("黑高不相同");
+                b = false;
+            }
+            return b;
+        }
+        return b;
+    }
+
+
+    doubleRedAndBlackHeightCheck(node) {
+        let checkResult = new CheckResult();
+        if (node.isBlack()) {
+            checkResult.blackHeightResultCount = 1;
+        }
+        let leftCheck = null;
+        let rightCheck = null;
+        let leftBlackHeightResultCount = 0;
+        let rightBlackHeightResultCount = 0;
+        if (node.left) {
+            if (node.left.isRed() && node.isRed()) {
+                checkResult.doubleRedResult = false;
+            }
+            leftCheck = this.doubleRedAndBlackHeightCheck(node.left);
+            leftBlackHeightResultCount = leftCheck.blackHeightResultCount;
+        }
+        if (node.right) {
+            if (node.right.isRed() && node.isRed()) {
+                checkResult.doubleRedResult = false;
+            }
+            rightCheck = this.doubleRedAndBlackHeightCheck(node.right);
+            rightBlackHeightResultCount = rightCheck.blackHeightResultCount;
+        }
+        if (leftBlackHeightResultCount === rightBlackHeightResultCount) {
+            checkResult.blackHeightResultCount += leftBlackHeightResultCount;
+            checkResult.blackHeightResult = true;
+        }else{
+            checkResult.blackHeightResult = false;
+        }
+        let doubleRedResult = checkResult.doubleRedResult;
+        if(leftCheck != null){
+            doubleRedResult = doubleRedResult && leftCheck.doubleRedResult;
+        }
+        if(rightCheck != null){
+            doubleRedResult = doubleRedResult && rightCheck.doubleRedResult;
+        }
+        checkResult.doubleRedResult = doubleRedResult;
+        return checkResult;
+    }
+
     // 优化画图逻辑，从最后一层开始画，节点不会再重叠在一起
     drawTreeOptimize(ctx, startX, startY, startSplitY) {
         ctx.clearRect(0, 0, 10000000, 1000000);
@@ -92,6 +165,7 @@ class RBTree {
     }
 
     drawNodeOptimize(ctx, node, x, y, splitY) {
+        // x,y代表椭圆圆心
         ctx.save();
         let childrenList = [];
         if (node.left != null) {
@@ -175,35 +249,109 @@ class RBTree {
 
     delete(data) {
         let target = this.search(data);
-        let route = null;
         if (target) {
             let parent = this.searchParent(target.data);
-            if (target.left == null && target.right == null) {
-                if (target === this.root) {
-                    this.root = null;
-                    return;
-                }
+            if (target.left == null && target.right == null && target === this.root) {
+                this.root = null;
+            } else if (target.left == null && target.right == null && target.isRed()) {
+                // 如果是最后一层非空节点且是红色，可以直接删除
                 if (parent.left && data.compareTo(parent.left.data) === 0) {
                     parent.left = null;
                 } else if (parent.right && data.compareTo(parent.right.data) === 0) {
                     parent.right = null;
                 }
-                route = parent;
-                while (route != null) {
-                    let balance = this.isBalance(route);
-                    if (balance != null) {
-                        this.balance(balance);
-                    }
-                    route = this.searchParent(route.data);
+                console.log("删除类型1");
+            } else if (target.left != null || target.right != null || target.isBlack()) {
+                let s = target; // 实际被删除的点
+                let r = null; // s的子节点，接替者
+                let sData = null;
+                let p = null;
+                if (target.left != null) {
+                    s = this.doSearchMax(target.left);
+                    r = s.left;
+                } else if (target.right != null) {
+                    s = this.doSearchMin(target.right);
+                    r = s.right;
                 }
-            } else if (target.left != null) {
-                let leftMax = this.doSearchMax(target.left);
-                this.delete(leftMax.data);
-                target.data = leftMax.data;
-            } else {
-                let rightMin = this.doSearchMin(target.right);
-                this.delete(rightMin.data);
-                target.data = rightMin.data;
+                sData = s.data;
+                let b = this.getBrother(sData);
+                p = this.searchParent(sData);
+                if (p.right === s) {
+                    p.right = r;
+                } else {
+                    p.left = r;
+                }
+                target.data = sData;
+                this.xz(s, r, p, b);
+            }
+        }
+    }
+
+    xz(s, r, p, b) {
+        let sData = s.data;
+        // 实际删除的节点为红色时
+        if (s.isRed()) {
+            console.log("删除类型2");
+        } else if (s.isBlack() && r != null && r.isRed()) {
+            r.setBlack();
+            console.log("删除类型3");
+        } else if (s.isBlack()) {
+            // 兄弟节点是黑色且有红孩子
+            let redChild = b.left != null && b.left.isRed() ? b.left : b.right != null && b.right.isRed() ? b.right : null;
+            if (b.isBlack() && redChild != null) {
+                let pColor = p.color; // 先保存原来的颜色
+                // 判断 p b 红孩子之间的旋转类型
+                let balanceType = this.isBalance(p, b, redChild);
+                // 旋转之后的跟节点
+                let routeRoot = this.balance(balanceType);
+                //因为旋转后，节点变了，需要保持原来的颜色不变
+                routeRoot.color = pColor;
+                // 把孩子染红
+                if (routeRoot.left != null) {
+                    routeRoot.left.setBlack();
+                }
+                if (routeRoot.right != null) {
+                    routeRoot.right.setBlack();
+                }
+                console.log("删除类型4");
+            } else if (b.isBlack() && redChild == null && p.isRed()) {
+                // b p 直接换色
+                let temp = b.color;
+                b.color = p.color;
+                p.color = temp;
+                console.log("删除类型5");
+            } else if (b.isBlack() && redChild == null && p.isBlack()) {
+                // 直接变色，但要继续修正
+                b.setRed();
+                let pParent = this.searchParent(p.data);
+                if (pParent != null) {
+                    let pb = this.getBrother(p.data);
+                    let s = new Node();
+                    s.setBlack();
+                    this.xz(s, null, pParent, pb);
+                }
+                console.log("删除类型6");
+            } else if (b.isRed()) {
+                let balanceType = null;
+                let newB = null;
+                if (b === p.left) {
+                    //LL
+                    balanceType = this.isBalance(p, b, b.left);
+                    this.balance(balanceType);
+                    newB = p.left;
+                } else {
+                    //RR
+                    balanceType = this.isBalance(p, b, b.right);
+                    this.balance(balanceType);
+                    newB = p.right;
+                }
+                let temp = b.color;
+                b.color = p.color;
+                p.color = temp;
+                let s = new Node();
+                s.setBlack();
+                this.xz(s, null, p, newB);
+                console.log("删除类型7");
             }
         }
     }
@@ -358,6 +506,19 @@ class RBTree {
         this.doAdd(this.root, data);
     }
 
+    getBrother(data) {
+        let node = this.search(data);
+        if (node != null) {
+            let p = this.searchParent(node.data);
+            if (p.left === node) {
+                return p.right;
+            } else if (p.right === node) {
+                return p.left;
+            }
+        }
+        return null;
+    }
+
     doAdd(node, data) {
         if (this.root == null) {
             let temp = new Node();
@@ -388,34 +549,34 @@ class RBTree {
                 let parent = this.searchParent(temp.data);
                 // 祖父节点
                 let grandParent = this.searchParent(parent.data);
-                while(temp.isRed() && parent.isRed() && grandParent != null){
+                while (temp.isRed() && parent.isRed() && grandParent != null) {
                     let uncle = grandParent.left === parent ? grandParent.right : grandParent.left;
-                    if(uncle === null || uncle.isBlack()) { // 如果是黑节点
-                        let balanceType = this.isBalance(grandParent,parent,temp);
+                    if (uncle === null || uncle.isBlack()) { // 如果是黑节点
+                        let balanceType = this.isBalance(grandParent, parent, temp);
                         // 旋转之后的跟节点
                         let routeRoot = this.balance(balanceType);
                         routeRoot.setBlack();
                         // 把孩子染红
-                        if(routeRoot.left != null){
+                        if (routeRoot.left != null) {
                             routeRoot.left.setRed();
                         }
-                        if(routeRoot.right != null){
+                        if (routeRoot.right != null) {
                             routeRoot.right.setRed();
                         }
                         break;
-                    }else if(uncle.isRed()){
+                    } else if (uncle.isRed()) {
                         parent.setBlack();
                         uncle.setBlack();
-                        if(grandParent === this.root){
+                        if (grandParent === this.root) {
                             grandParent.setBlack();
-                        }else{
+                        } else {
                             grandParent.setRed();
                         }
                         temp = grandParent;
                         parent = this.searchParent(temp.data);
-                        if(parent) {
+                        if (parent) {
                             grandParent = this.searchParent(parent.data);
-                        }else{
+                        } else {
                             grandParent = null;
                         }
                     }
@@ -441,7 +602,7 @@ class RBTree {
     }
 
     // 判断类型
-    isBalance(grandParent,parent,temp) {
+    isBalance(grandParent, parent, temp) {
         if (temp != null) {
             let first = null;
             let second = null;

@@ -38,6 +38,9 @@
         return /^\d+\.?\d*$/.test(n);
     }
 
+    let startX = 50;
+    let startY = 100;
+
     function addV() {
         let addValue = addValueEle.value;
         if (!isNumber(addValue)) {
@@ -52,7 +55,7 @@
         bsTree.add(addValue);
         let treeHeight = bsTree.getHeight();
         canvasEle.height = treeHeight * splitY + window.innerHeight;
-        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
+        bsTree.drawTreeOptimize(ctx, startX, startY, splitY);
         addValueEle.value = "";
     }
 
@@ -70,7 +73,7 @@
         bsTree.delete(deleteValue);
         let treeHeight = bsTree.getHeight();
         canvasEle.height = treeHeight * splitY + window.innerHeight;
-        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
+        bsTree.drawTreeOptimize(ctx, startX, startY, splitY);
         deleteValueEle.value = "";
     }
 </script>

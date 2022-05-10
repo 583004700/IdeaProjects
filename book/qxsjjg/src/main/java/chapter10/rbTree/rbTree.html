@@ -15,7 +15,7 @@
 <button onclick="addV()" style="position: fixed;right: 10px;top: 10px;">添加</button>
 
 <input type="text" id="deleteValue" style="position: fixed; top: 40px; right: 60px;"/>
-<button onclick="deleteV()" style="position: fixed;right: 10px;top: 40px;display: none">删除</button>
+<button onclick="deleteV()" style="position: fixed;right: 10px;top: 40px;">删除</button>
 <script type="text/javascript" src="Comparable.js"></script>
 <script type="text/javascript" src="Node.js"></script>
 <script type="text/javascript" src="rbTree.js"></script>
@@ -40,6 +40,9 @@
         return /^\d+\.?\d*$/.test(n);
     }
 
+    let startX = 50;
+    let startY = 100;
+
     function addV() {
         let addValue = addValueEle.value;
         if (!isNumber(addValue)) {
@@ -52,9 +55,12 @@
             return;
         }
         bsTree.add(addValue);
+        if(!bsTree.isCorrect()){
+            alert("红黑树不正确！");
+        }
         let treeHeight = bsTree.getHeight();
         canvasEle.height = treeHeight * splitY + window.innerHeight;
-        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
+        bsTree.drawTreeOptimize(ctx, startX, startY, splitY);
         addValueEle.value = "";
     }
 
@@ -70,9 +76,12 @@
             return;
         }
         bsTree.delete(deleteValue);
+        if(!bsTree.isCorrect()){
+            alert("红黑树不正确！");
+        }
         let treeHeight = bsTree.getHeight();
         canvasEle.height = treeHeight * splitY + window.innerHeight;
-        bsTree.drawTreeOptimize(ctx, 50, 50, splitY);
+        bsTree.drawTreeOptimize(ctx, startX, startY, splitY);
         deleteValueEle.value = "";
     }
 </script>
