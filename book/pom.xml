@@ -10,10 +10,11 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>dataStructureAlgorithmVisualization</module>
+
         <module>stone</module>
         <module>qxsjjg</module>
         <module>gxnmysql</module>
-        <module>dataStructureAlgorithmVisualization</module>
     </modules>
 
     <properties>
