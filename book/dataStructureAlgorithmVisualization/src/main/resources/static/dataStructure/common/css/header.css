@@ -1,0 +1,52 @@
+html, body {
+    height: 100%;
+    font:normal 100% Helvetica,Arial,sans-serif;
+}
+
+button {
+    color: #fff;
+    background-color: #3378ff;
+    border-color: #3378ff;
+    box-shadow: 0 4px 8px 0 hsla(0, 0%, 100%, .05);
+    cursor: pointer;
+    border-radius: 5px;
+    height: 30px;
+    width: 100px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+button:hover{
+    background-color: #0d5fff;
+    border-color: #0d5fff;
+}
+
+#delBtn {
+    background: #f42b3d;
+    border-color: #f42b3d;
+}
+
+#delBtn:hover{
+    background: #e00c1f;
+    border-color: #e00c1f;
+}
+
+input {
+    height: 30px;
+    line-height: 30px;
+    background: #fff;
+    border: 1px solid #ccc;
+    font-size: 18px;
+    color: #324253;
+    border-radius: 5px;
+    box-shadow: none;
+    width: 200px;
+}
+
+input:focus {
+    outline: 1px solid #3378ff;
+}
+
+#deleteValue:focus {
+    outline: 1px solid #f42b3d;
+}
