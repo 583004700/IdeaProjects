@@ -1,5 +1,5 @@
 {
-  "name": "webpack",
+  "name": "ideaprojects",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -38,6 +38,7 @@
     "webpack": "^4.41.6",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3",
+    "webpack-obfuscator": "^1.8.0",
     "workbox-webpack-plugin": "^5.0.0"
   },
   "dependencies": {
