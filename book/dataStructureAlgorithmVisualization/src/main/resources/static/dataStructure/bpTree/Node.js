@@ -274,7 +274,7 @@ class Node {
         let i = this.searchInsertIndex(data);
         this.dataList.add(data, i);
         let up = null;
-        if (this.dataList.size() > order) {
+        if (this.dataList.size() > this.order) {
             up = new Up();
             let middle = (this.dataList.size() - 1) / 2;
             middle = Math.floor(middle);
@@ -379,3 +379,5 @@ class Node {
         }
     }
 }
+
+export default Node;

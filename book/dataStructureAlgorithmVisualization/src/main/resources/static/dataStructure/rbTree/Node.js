@@ -1,3 +1,13 @@
+Number.prototype.compareTo = function (other) {
+    if (this < other) {
+        return -1;
+    } else if (this > other) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
 Array.prototype.remove = function (data) {
     this.forEach(function (item, index, arr) {
         if (item === data) {
@@ -95,3 +105,5 @@ class Node {
         return this.color === "black";
     }
 }
+
+export default Node;

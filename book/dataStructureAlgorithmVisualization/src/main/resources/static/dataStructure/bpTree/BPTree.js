@@ -1,3 +1,5 @@
+import Node from "./Node"
+
 class Status {
     setX(x) {
         this.x = x;
@@ -45,7 +47,7 @@ class BPTree {
             return;
         }
         if (this.root == null) {
-            let node = Node.getInstance(data, order);
+            let node = Node.getInstance(data, this.order);
             this.root = node;
         } else {
             let tNode = this.searchInsertNode(data);
@@ -516,3 +518,5 @@ class BPTree {
         }
     }
 }
+
+export default BPTree;

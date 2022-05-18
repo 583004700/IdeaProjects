@@ -1,3 +1,5 @@
+import Node from './Node'
+
 class Status {
     setX(x) {
         this.x = x;
@@ -464,3 +466,4 @@ class AVLTree {
         return null;
     }
 }
+export default AVLTree;

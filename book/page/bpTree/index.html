@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=0,maximum-scale=1"/>
-    <title>AVLTree</title>
-</head>
+    <title>B+树</title>
+<link href="css/built.css" rel="stylesheet"></head>
 <body>
 <div style="text-align: center">
-    <span style="margin-bottom: 15px;display: block;font-size: 20px">平衡二叉树</span>
+    <span style="margin-bottom: 15px;display: block;font-size: 20px">B+树</span>
+    <input type="text" id="orderValue" value="4"/>
+    <button onclick="changeOrder()">确定修改阶数</button>
+
     <input type="text" id="addValue"/>
     <button onclick="addV()">添&nbsp;加</button>
 
@@ -15,5 +18,5 @@
     <button onclick="deleteV()" id="delBtn">删&nbsp;除</button>
 </div>
 <canvas id="canvas" width="100%" height="100%"></canvas>
-</body>
+<script type="text/javascript" src="js/built.js"></script></body>
 </html>

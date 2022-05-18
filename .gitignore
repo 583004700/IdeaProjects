@@ -6,3 +6,4 @@
 *.log
 *.iml
 **/rebel.xml
+*node_modules/

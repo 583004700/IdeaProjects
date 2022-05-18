@@ -318,3 +318,5 @@ class Node {
         return this.getDataList().get(0).compareTo(o.getDataList().get(0));
     }
 }
+
+export default Node;

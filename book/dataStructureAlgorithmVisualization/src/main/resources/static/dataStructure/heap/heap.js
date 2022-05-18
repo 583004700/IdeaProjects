@@ -1,3 +1,5 @@
+import Node from './Node';
+
 class Status {
     setX(x) {
         this.x = x;
@@ -214,3 +216,5 @@ class Heap {
         this.arr[j] = temp;
     }
 }
+
+export default Heap;

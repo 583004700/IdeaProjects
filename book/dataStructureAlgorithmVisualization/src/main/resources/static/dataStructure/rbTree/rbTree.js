@@ -1,3 +1,5 @@
+import Node from "./Node";
+
 class CheckResult {
     constructor() {
         this.doubleRedResult = true;
@@ -620,3 +622,5 @@ class RBTree {
         return null;
     }
 }
+
+export default RBTree;

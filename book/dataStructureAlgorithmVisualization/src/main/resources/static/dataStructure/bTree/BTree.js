@@ -1,3 +1,5 @@
+import Node from './Node';
+
 class Status {
     setX(x) {
         this.x = x;
@@ -419,3 +421,5 @@ class BTree {
     }
 
 }
+
+export default BTree;
