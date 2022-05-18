@@ -7,7 +7,7 @@ module.exports = {
     entry: './start.js',
     output: {
         filename: 'js/built.js',
-        path: resolve(__dirname, '../../../../../../../page/aVLTree')
+        path: resolve(__dirname, '../../../../../../../../page/dataStructureAlgorithmVisualization/aVLTree')
     },
     module: {
         rules: [
