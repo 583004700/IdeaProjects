@@ -5,10 +5,29 @@ const optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plug
 const JavaScriptObfuscator = require('webpack-obfuscator');
 
 module.exports = {
-    entry: './start.js',
+    entry: {
+        'aVLTree': './aVLTree/start.js',
+        'bpTree': './bpTree/start.js',
+        'bTree': './bTree/start.js',
+        'heap': './heap/start.js',
+        'rbTree': './rbTree/start.js',
+    },
     output: {
-        filename: 'js/built.js',
-        path: resolve(__dirname, '../../../../../../../../page/dataStructureAlgorithmVisualization/heap')
+        filename: '[name]/js/bundle.js',
+        path: resolve(__dirname, '../../../../../../../page/dataStructureAlgorithmVisualization')
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                //打包公共模块
+                commons: {
+                    chunks: 'initial', //initial表示提取入口文件的公共部分
+                    minChunks: 2, //表示提取公共部分最少的文件数
+                    minSize: 0, //表示提取公共部分最小的大小
+                    name: 'commons' //提取出来的文件命名
+                }
+            }
+        }
     },
     module: {
         rules: [
@@ -66,12 +85,44 @@ module.exports = {
         ]
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: './heap.html'
-        }),
+        new HtmlWebpackPlugin(
+            {
+                template: './aVLTree/AVLTree.html',
+                chunks: ['commons','aVLTree'],
+                filename: 'aVLTree/index.html'
+            }
+        ),
+        new HtmlWebpackPlugin(
+            {
+                template: './bpTree/BPTree.html',
+                chunks: ['commons','bpTree'],
+                filename: 'bpTree/index.html'
+            }
+        ),
+        new HtmlWebpackPlugin(
+            {
+                template: './bTree/BTree.html',
+                chunks: ['commons','bTree'],
+                filename: 'bTree/index.html'
+            }
+        ),
+        new HtmlWebpackPlugin(
+            {
+                template: './heap/heap.html',
+                chunks: ['commons','heap'],
+                filename: 'heap/index.html'
+            }
+        ),
+        new HtmlWebpackPlugin(
+            {
+                template: './rbTree/rbTree.html',
+                chunks: ['commons','rbTree'],
+                filename: 'rbTree/index.html'
+            }
+        ),
         new MiniCssExtractPlugin({
             //对输出的文件重命名
-            filename: 'css/built.css'
+            filename: '[name]/css/bundle.css'
         }),
         //压缩css
         new optimizeCssAssetsWebpackPlugin(),
