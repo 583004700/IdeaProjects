@@ -72,6 +72,7 @@ class Heap {
         let statusList = [];
         let allWidth = 0;
         let splitX = 30;
+        let splitXFinal = splitX;
         for (let i = 0; i < length; i++) {
             let childIndex = childrenList[i];
             let pre = null;
@@ -81,6 +82,9 @@ class Heap {
                 pre = statusList.get(i - 1);
                 xx = pre.getX();
                 width = pre.getWidth();
+                splitX = splitXFinal;
+            } else {
+                splitX = 0;
             }
             let s = this.drawNodeOptimize(ctx, childIndex, xx + width * 2 + splitX, y + splitY, splitY);
             statusList.add(s);
@@ -96,7 +100,7 @@ class Heap {
             let first = statusList.get(0);
             let last = statusList.get(statusList.size() - 1);
             if (first.getNode() === last.getNode()) {
-                currentX = first.getMiddle() + splitX / 2;
+                currentX = first.getMiddle() + splitXFinal / 2;
             } else {
                 // 有两个以上结点时
                 currentX = (first.getMiddle() + last.getMiddle()) / 2;
@@ -111,6 +115,7 @@ class Heap {
                 ctx.stroke();
                 allWidth += s.getWidth() + splitX / 2;
             }
+            allWidth -= splitX / 2;
         }
         ctx.save();
         ctx.beginPath();
@@ -125,14 +130,15 @@ class Heap {
         ctx.strokeText(node.data.toString(), currentX - sub, y + 6);
         ctx.stroke();
         let status = new Status();
-        status.setX(x);
         status.setY(y);
         status.setMiddle(currentX);
         status.setNode(node);
         if (statusList.size() === 0) {
             status.setWidth(nodeWidth);
+            status.setX(x);
         } else {
             status.setWidth(allWidth);
+            status.setX(statusList[0].getX());
         }
         return status;
     }

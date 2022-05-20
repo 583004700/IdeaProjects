@@ -1,5 +1,12 @@
 import '../common/css/header.css';
+import ArrayExtend from "../common/js/extends/ArrayExtend";
+import NumberExtend from "../common/js/extends/NumberExtend";
+import ObjectExtend from "../common/js/extends/ObjectExtend";
 import AVLTree from "./AVLTree";
+
+ArrayExtend.exec();
+NumberExtend.exec();
+ObjectExtend.exec();
 
 let bsTree = new AVLTree();
 let canvasEle = document.getElementById("canvas");

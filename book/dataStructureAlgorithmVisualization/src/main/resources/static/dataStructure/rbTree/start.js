@@ -1,5 +1,12 @@
 import '../common/css/header.css';
 import RBTree from "./rbTree";
+import ArrayExtend from "../common/js/extends/ArrayExtend";
+import NumberExtend from "../common/js/extends/NumberExtend";
+import ObjectExtend from "../common/js/extends/ObjectExtend";
+
+ArrayExtend.exec();
+NumberExtend.exec();
+ObjectExtend.exec();
 
 let bsTree = new RBTree();
 let canvasEle = document.getElementById("canvas");

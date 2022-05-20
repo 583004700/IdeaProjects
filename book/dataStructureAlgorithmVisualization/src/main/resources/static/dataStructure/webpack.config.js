@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const JavaScriptObfuscator = require('webpack-obfuscator');
+const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -27,7 +28,18 @@ module.exports = {
                     name: 'commons' //提取出来的文件命名
                 }
             }
-        }
+        },
+        minimizer: [
+            // 配置生产环境的压缩方案：js和css
+            new TerserWebpackPlugin({
+                // 开启缓存
+                cache: true,
+                // 开启多进程打包
+                parallel: true,
+                // 启用source-map
+                sourceMap: true
+            })
+        ]
     },
     module: {
         rules: [
@@ -148,5 +160,10 @@ module.exports = {
         }, [])
     ],
     //生产环境下会自动压缩js代码
-    mode: 'production'
+    mode: 'production',
+    //mode: 'development',
+    //devtool: 'source-map'
 }
+
+//webpack serve --mode=development //开启服务器
+//npx webpack //打包

@@ -1,38 +1,5 @@
 import Node from "./Node"
-
-class Status {
-    setX(x) {
-        this.x = x;
-    }
-
-    getX() {
-        return this.x;
-    }
-
-    setMiddle(middle){
-        this.middle = middle;
-    }
-
-    getMiddle(){
-        return this.middle;
-    }
-
-    setY(y) {
-        this.y = y;
-    }
-
-    getY() {
-        return this.y;
-    }
-
-    setWidth(width) {
-        this.width = width;
-    }
-
-    getWidth() {
-        return this.width;
-    }
-}
+import DrawTree from "../common/js/draw/tree/DrawTree";
 
 class BPTree {
     constructor(order) {
@@ -85,95 +52,8 @@ class BPTree {
     drawTreeOptimize(ctx, startX, startY, startSplitY) {
         ctx.clearRect(0, 0, 10000000, 1000000);
         if (this.root) {
-            this.drawNodeOptimize(ctx, this.root, startX, startY, startSplitY);
+            DrawTree.drawNodeOptimize(ctx, this.root, startX, startY, startSplitY);
         }
-    }
-
-    drawNodeOptimize(ctx, node, x, y, splitY) {
-        let length = node.getChildrenList().length;
-        let statusList = [];
-        let allWidth = 0;
-        let splitX = 30;
-        for (let i = 0; i < length; i++) {
-            let childNode = node.getChildrenList()[i];
-            let pre = null;
-            let xx = x;
-            let width = 0;
-            if (i - 1 >= 0) {
-                pre = statusList.get(i - 1);
-                xx = pre.getX();
-                width = pre.getWidth();
-            }
-            let s = this.drawNodeOptimize(ctx, childNode, xx + width * 2 + splitX, y + splitY, splitY);
-            statusList.add(s);
-        }
-
-        let nodeWidth = node.getDataList().toString().length * 6;
-        nodeWidth = Math.max(nodeWidth, 15);
-        let height = 15;
-        let currentX = x + nodeWidth;
-        if (statusList.size() > 0) {
-            let first = statusList.get(0);
-            let last = statusList.get(statusList.size() - 1);
-            currentX = (first.getMiddle()+last.getMiddle()) / 2;
-            let currentY = y + height;
-            ctx.restore();
-            for (let i = 0; i < statusList.size(); i++) {
-                let s = statusList.get(i);
-                ctx.beginPath();
-                ctx.moveTo(currentX, currentY);
-                ctx.lineTo(s.getMiddle(), s.getY() - height);
-                ctx.stroke();
-                allWidth += s.getWidth() + splitX / 2;
-            }
-        }
-
-        node.x = currentX;
-        node.y = y;
-        node.width = nodeWidth;
-        node.height = height;
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.ellipse(currentX, y, nodeWidth, height, 0, 0, 2 * Math.PI);
-        ctx.font = "15px 微软雅黑";
-        if (node.color) {
-            ctx.strokeStyle = node.color;
-        } else {
-            ctx.strokeStyle = "black";
-        }
-        let sub = node.getDataList().toString().length * 5;
-        ctx.strokeText(node.getDataList().toString(), currentX - sub, y + 6);
-        ctx.stroke();
-
-        if (node.getPre()) {
-            ctx.save();
-            ctx.strokeStyle = "red";
-            let pre = node.getPre();
-            ctx.beginPath();
-            ctx.moveTo(pre.x + pre.width, y);
-            ctx.lineTo(node.x - node.width, y);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(node.x - node.width - 12, y + 5);
-            ctx.lineTo(node.x - node.width, y);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(node.x - node.width - 12, y - 5);
-            ctx.lineTo(node.x - node.width, y);
-            ctx.stroke();
-            ctx.restore();
-        }
-        let status = new Status();
-        status.setX(x);
-        status.setY(y);
-        status.setMiddle(currentX);
-        if (statusList.size() === 0) {
-            status.setWidth(nodeWidth);
-        } else {
-            status.setWidth(allWidth);
-        }
-        return status;
     }
 
     delete(data) {
