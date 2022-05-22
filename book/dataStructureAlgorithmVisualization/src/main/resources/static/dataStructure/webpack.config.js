@@ -12,6 +12,7 @@ module.exports = {
         'bTree': './bTree/start.js',
         'heap': './heap/start.js',
         'rbTree': './rbTree/start.js',
+        'hfmTree': './hfmTree/start.js'
     },
     output: {
         filename: '[name]/js/bundle.js',
@@ -130,6 +131,13 @@ module.exports = {
                 template: './rbTree/rbTree.html',
                 chunks: ['commons','rbTree'],
                 filename: 'rbTree/index.html'
+            }
+        ),
+        new HtmlWebpackPlugin(
+            {
+                template: './hfmTree/hfmTree.html',
+                chunks: ['commons','hfmTree'],
+                filename: 'hfmTree/index.html'
             }
         ),
         new MiniCssExtractPlugin({

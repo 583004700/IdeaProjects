@@ -1,5 +1,5 @@
-class ArrayExtend{
-    static exec(){
+class ArrayExtend {
+    static exec() {
         Array.prototype.remove = function (data) {
             this.forEach(function (item, index, arr) {
                 if (item === data) {
@@ -9,7 +9,10 @@ class ArrayExtend{
         }
 
         Array.prototype.removeIndex = function (index) {
-            this.splice(index, 1);
+            let arr = this.splice(index, 1);
+            if (arr.length > 0) {
+                return arr[0];
+            }
         }
 
         Array.prototype.add = function (data, index) {
@@ -37,6 +40,7 @@ class ArrayExtend{
             for (let i = 0; i < data.length; i++) {
                 this.push(data[i]);
             }
+            return this;
         }
 
         Array.prototype.size = function () {
