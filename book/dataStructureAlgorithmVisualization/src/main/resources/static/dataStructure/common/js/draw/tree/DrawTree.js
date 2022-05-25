@@ -97,6 +97,12 @@ class DrawTree {
             }
             allWidth -= splitX / 2;
         }
+
+        node.x = currentX;
+        node.y = y;
+        node.width = nodeWidth;
+        node.height = height;
+
         ctx.save();
         ctx.beginPath();
         ctx.ellipse(currentX, y, nodeWidth, height, 0, 0, 2 * Math.PI);
@@ -109,6 +115,26 @@ class DrawTree {
         let sub = node.getDataList().toString().length * 5;
         ctx.strokeText(node.getDataList().toString(), currentX - sub, y + 6);
         ctx.stroke();
+
+        if (node.getPre && node.getPre()) {
+            ctx.save();
+            ctx.strokeStyle = "red";
+            let pre = node.getPre();
+            ctx.beginPath();
+            ctx.moveTo(pre.x + pre.width, y);
+            ctx.lineTo(node.x - node.width, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(node.x - node.width - 12, y + 5);
+            ctx.lineTo(node.x - node.width, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(node.x - node.width - 12, y - 5);
+            ctx.lineTo(node.x - node.width, y);
+            ctx.stroke();
+            ctx.restore();
+        }
+
         let status = new Status();
         status.setY(y);
         status.setMiddle(currentX);

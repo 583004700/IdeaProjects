@@ -1,8 +1,8 @@
-import '../common/css/header.css';
+import '../../common/css/header.css';
 import BPTree from "./BPTree";
-import ArrayExtend from "../common/js/extends/ArrayExtend";
-import NumberExtend from "../common/js/extends/NumberExtend";
-import ObjectExtend from "../common/js/extends/ObjectExtend";
+import ArrayExtend from "../../common/js/extends/ArrayExtend";
+import NumberExtend from "../../common/js/extends/NumberExtend";
+import ObjectExtend from "../../common/js/extends/ObjectExtend";
 
 ArrayExtend.exec();
 NumberExtend.exec();
