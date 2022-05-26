@@ -185,8 +185,8 @@ module.exports = {
     ],
     //生产环境下会自动压缩js代码
     mode: 'production',
-    //mode: 'development',
-    //devtool: 'source-map'
+    /*mode: 'development',
+    devtool: 'source-map'*/
 }
 
 //webpack serve --mode=development //开启服务器

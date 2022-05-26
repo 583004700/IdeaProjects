@@ -211,7 +211,7 @@ class DFS{
             if(that.stepIndex<that.goEd.length){
                 that.play(callback);
             }else{
-                this.finish = true;
+                that.finish = true;
                 callback();
             }
         },1000);
