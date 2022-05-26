@@ -19,10 +19,14 @@ class DFS{
         this.person = {row:1,col:1};
         // 人物颜色
         this.personColor = "red";
-        this.liEles = document.getElementsByTagName("li");
+        // 空地颜色
+        this.spaceColor = "pink";
+        this.liEles = [];
         // 已经走过的点
         this.goEd = [];
         this.stepIndex = 0;
+        this.count = 70;
+        this.finish = true;
     }
 
     startGo(){
@@ -62,9 +66,11 @@ class DFS{
             if(that.go(left.row, left.col)){
                 return true;
             }
-            that.goEd.remove(current);
-            let pre = {row:this.goEd[this.goEd.length-1].row,col:this.goEd[this.goEd.length-1].col};
-            this.setPersonPosition(pre.row,pre.col);
+            if(current !== this.goEd[0]) {
+                that.goEd.remove(current);
+                let pre = {row: this.goEd[this.goEd.length - 1].row, col: this.goEd[this.goEd.length - 1].col};
+                this.setPersonPosition(pre.row, pre.col);
+            }
         }
         return false;
     }
@@ -109,7 +115,19 @@ class DFS{
             return;
         }
         this.barrier.push({row,col});
-        this.initBarrier();
+        this.getLiEle(row,col).style.backgroundColor = this.barrierColor;
+    }
+    // 删除障碍物
+    deleteBarrier(row,col){
+        for (let i = 0; i < this.barrier.length; i++) {
+            let l = this.barrier[i];
+            if(l.row === row && l.col === col){
+                this.barrier.removeIndex(i);
+                this.getLiEle(row,col).style.backgroundColor = this.spaceColor;
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -135,6 +153,29 @@ class DFS{
             return this.liEles[index];
         }
         return null;
+    }
+
+    initGraph(){
+        let ulEle = document.getElementById("graphUl");
+        let that = this;
+        if(this.liEles.length === 0) {
+            for (let i = 0; i < this.count; i++) {
+                let liEle = document.createElement("li");
+                let row = Math.floor(i / 10);
+                let col = i % 10;
+                liEle.setAttribute("onclick", "toggleBarrier(" + row + "," + col + ")");
+                ulEle.appendChild(liEle);
+            }
+        }
+        this.liEles = document.getElementsByTagName("li");
+    }
+
+    toggleBarrier(row,col){
+        if(this.finish) {
+            if (!this.deleteBarrier(row, col)) {
+                this.addBarrier(row, col);
+            }
+        }
     }
 
     initBarrier(){
@@ -170,6 +211,7 @@ class DFS{
             if(that.stepIndex<that.goEd.length){
                 that.play(callback);
             }else{
+                this.finish = true;
                 callback();
             }
         },1000);
@@ -183,6 +225,7 @@ class DFS{
     }
 
     init(){
+        this.initGraph();
         this.initBarrier();
         this.initDist();
         this.setPersonPositionAndDraw(this.person.row,this.person.col);

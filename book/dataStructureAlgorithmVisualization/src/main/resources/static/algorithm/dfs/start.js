@@ -90,6 +90,10 @@ window.setDistPosition = function(){
     dfs.init();
 }
 
+window.toggleBarrier = function(row,col){
+    dfs.toggleBarrier(row,col);
+}
+
 window.startDfs = function (){
     if(!dfs.startGo()){
         alert("无法到达目的地！");
@@ -98,6 +102,7 @@ window.startDfs = function (){
         for (let i = 0; i < buttons.length; i++) {
             buttons[i].disabled = true;
         }
+        dfs.finish = false;
         dfs.play(function(){
             for (let i = 0; i < buttons.length; i++) {
                 buttons[i].disabled = false;

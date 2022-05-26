@@ -7,12 +7,12 @@ const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: {
-        'dataStructure/aVLTree': './dataStructure/aVLTree/start.js',
+        /*'dataStructure/aVLTree': './dataStructure/aVLTree/start.js',
         'dataStructure/bpTree': './dataStructure/bpTree/start.js',
         'dataStructure/bTree': './dataStructure/bTree/start.js',
         'dataStructure/heap': './dataStructure/heap/start.js',
         'dataStructure/rbTree': './dataStructure/rbTree/start.js',
-        'dataStructure/hfmTree': './dataStructure/hfmTree/start.js',
+        'dataStructure/hfmTree': './dataStructure/hfmTree/start.js',*/
         /**
          * 算法
          */
@@ -102,7 +102,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new HtmlWebpackPlugin(
+        /*new HtmlWebpackPlugin(
             {
                 template: './dataStructure/aVLTree/AVLTree.html',
                 chunks: ['commons','dataStructure/aVLTree'],
@@ -143,7 +143,7 @@ module.exports = {
                 chunks: ['commons','dataStructure/hfmTree'],
                 filename: 'dataStructure/hfmTree/index.html'
             }
-        ),
+        ),*/
 
         /**
          * 算法
@@ -164,12 +164,12 @@ module.exports = {
         new optimizeCssAssetsWebpackPlugin(),
         new JavaScriptObfuscator({
             compact: true,//压缩代码
-            controlFlowFlattening: true,//是否启用控制流扁平化(降低1.5倍的运行速度)
+            controlFlowFlattening: false,//是否启用控制流扁平化(降低1.5倍的运行速度)
             controlFlowFlatteningThreshold: 1,//应用概率;在较大的代码库中，建议降低此值，因为大量的控制流转换可能会增加代码的大小并降低代码的速度。
-            deadCodeInjection: true,//随机的死代码块(增加了混淆代码的大小)
+            deadCodeInjection: false,//随机的死代码块(增加了混淆代码的大小)
             deadCodeInjectionThreshold: 1,//死代码块的影响概率
             debugProtection: true,//此选项几乎不可能使用开发者工具的控制台选项卡
-            debugProtectionInterval: true,//如果选中，则会在“控制台”选项卡上使用间隔强制调试模式，从而更难使用“开发人员工具”的其他功能。
+            debugProtectionInterval: false,//如果选中，则会在“控制台”选项卡上使用间隔强制调试模式，从而更难使用“开发人员工具”的其他功能。
             disableConsoleOutput: true,//通过用空函数替换它们来禁用console.log，console.info，console.error和console.warn。这使得调试器的使用更加困难。
             identifierNamesGenerator: 'hexadecimal',//标识符的混淆方式 hexadecimal(十六进制) mangled(短标识符)
             log: false,

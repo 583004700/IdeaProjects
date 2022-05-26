@@ -37,11 +37,12 @@
 <div style="text-align: center">
     <span style="margin-bottom: 15px;display: block;font-size: 20px">深度优先搜索</span>
     <span>
-        粉红色的为可以走的区域，黑色为障碍物，绿色的为目标位置，红色为小人,如果最终没有办法到达终点，需要尝试所有的路径，可能会计算时间太长
+        粉红色的为可以走的区域，黑色为障碍物，绿色的为目标位置，红色为小人。
+        <span style="color: red;font-weight: bold">单点方块可以切换障碍物和可以走的区域。</span>
     </span><br/><br/>
-    row:<input type="text" id="addRow" style="width: 100px;margin-right: 10px;"/>
+    <!--row:<input type="text" id="addRow" style="width: 100px;margin-right: 10px;"/>
     col:<input type="text" id="addCol" style="width: 100px"/>
-    <button onclick="addV()">添加障碍物</button>
+    <button onclick="addV()">添加障碍物</button>-->
     row:<input type="text" id="setPersonRow" style="width: 100px;margin-right: 10px;"/>
     col:<input type="text" id="setPersonCol" style="width: 100px"/>
     <button onclick="setPersonPosition()">设置人物位置</button>
@@ -54,77 +55,8 @@
     <div style="width: 500px;height: 660px;position: relative;margin-top: 10px;">
         <div id="person" style="width: 45px;height: 45px;background-color: red;transition: 1s all linear;
         position: absolute;left:0;top:0;border: 2px solid beige;"></div>
-        <ul class="clearfix">
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
+        <ul class="clearfix" id="graphUl">
+
         </ul>
     </div>
 </div>
