@@ -1,18 +1,14 @@
 package chapter7;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
-/**
- * 单源最短路径的算法实现（从某个点到其它各点最短路径）
- * 和 bellman-ford 算法思想非常像，数据结构的表示和松驰次数有点不同
- */
 public class Dijkstra {
+    static int maxValue = 99999;
 
     public static void main(String[] args) {
-        int maxValue = 99999;
-        
         int[][] graph = new int[6][6];
-
         for (int i = 0; i < graph.length; i++) {
             for (int j = 0; j < graph[i].length; j++) {
                 graph[i][j] = maxValue;
@@ -28,30 +24,35 @@ public class Dijkstra {
         graph[4][3] = 2;
         graph[4][5] = 4;
 
+        int distV = 1;
         // 求顶点1到其它各顶点最短路径
-        int[] dist = new int[]{-1,0,2,5,maxValue,maxValue};
+        int[] dist = new int[]{-1, 0, 2, 5, maxValue, maxValue};
         // 经过的路线
-        int[] line = new int[]{-1,1,2,3,-1,-1};
-        for (int i = 1; i < graph.length; i++) {
-            for (int j = 1; j < graph[i].length; j++) {
-                if(dist[i]+graph[i][j] < dist[j]){
-                    dist[j] = dist[i]+graph[i][j];
-                    line[j] = i;
+        int[] line = new int[]{-1, 1, 2, 3, -1, -1};
+        Set<Integer> excludeIndex = new HashSet<Integer>();
+        for (int i = 1; i < dist.length; i++) {
+            // 每次都找距离最近的点
+            Integer minIndex = getMinIndex(dist, excludeIndex);
+            if(minIndex != null) {
+                excludeIndex.add(minIndex);
+                for (int j = 0; j < graph[distV].length; j++) {
+                    int v = dist[minIndex] + graph[minIndex][j];
+                    if (v < dist[j]) {
+                        dist[j] = v;
+                        line[j] = minIndex;
+                    }
                 }
             }
         }
 
-        for (int i = 0; i < dist.length; i++) {
-            System.out.println(dist[i]);
+        for (int i : dist) {
+            System.out.println(i);
         }
-        System.out.println("----------------------------");
-
+        System.out.println("-------------------");
         for (int i = 0; i < line.length; i++) {
             System.out.println(line[i]);
         }
-
-        System.out.println("----------------------------");
-
+        System.out.println("--------------------");
         // 求1到5最短的路径
         LinkedList<Integer> linkedList = new LinkedList<Integer>();
         int l = 5;
@@ -63,4 +64,15 @@ public class Dijkstra {
         System.out.println(linkedList);
     }
 
+    private static Integer getMinIndex(int[] arr, Set<Integer> excludeIndex) {
+        Integer result = null;
+        int min = maxValue + 1;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] < min && arr[i] > 0 && !excludeIndex.contains(i)) {
+                min = arr[i];
+                result = i;
+            }
+        }
+        return result;
+    }
 }
