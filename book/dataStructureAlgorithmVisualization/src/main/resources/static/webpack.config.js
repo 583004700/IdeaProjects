@@ -16,7 +16,8 @@ module.exports = {
         /**
          * 算法
          */
-        'algorithm/dfs': './algorithm/dfs/start.js'
+        //'algorithm/dfs': './algorithm/dfs/start.js',
+        'algorithm/bfs': './algorithm/bfs/start.js'
     },
     output: {
         filename: '[name]/js/bundle.js',
@@ -148,11 +149,18 @@ module.exports = {
         /**
          * 算法
          */
-        new HtmlWebpackPlugin(
+        /*new HtmlWebpackPlugin(
             {
                 template: './algorithm/dfs/DFS.html',
                 chunks: ['commons','algorithm/dfs'],
                 filename: 'algorithm/dfs/index.html'
+            }
+        ),*/
+        new HtmlWebpackPlugin(
+            {
+                template: './algorithm/bfs/BFS.html',
+                chunks: ['commons','algorithm/bfs'],
+                filename: 'algorithm/bfs/index.html'
             }
         ),
 
@@ -185,9 +193,9 @@ module.exports = {
     ],
     //生产环境下会自动压缩js代码
     mode: 'production',
-    /*mode: 'development',
-    devtool: 'source-map'*/
+    //mode: 'development',
+    //devtool: 'source-map'
 }
 
-//webpack serve --mode=development //开启服务器
+//webpack serve --mode=development //开启服务器  要先安装 webpack-cli，命令为：npm install -g webpack-cli@4.5.0
 //npx webpack //打包

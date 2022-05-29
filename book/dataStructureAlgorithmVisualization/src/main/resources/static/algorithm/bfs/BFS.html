@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=0,maximum-scale=1"/>
+    <title>广度优先搜索</title>
+    <style>
+        ul {
+            width: 500px;
+            height: 660px;
+            margin: 10px 10px;
+            float: left;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0;
+            margin-inline-end: 0;
+            padding-inline-start: 0;
+        }
+
+        ul li {
+            width: 45px;
+            height: 45px;
+            float: left;
+            background-color: pink;
+            list-style: none;
+            border: 2px solid beige;
+            line-height: 45px;
+        }
+
+        .clearfix:after{
+            content: "";
+            display: block;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center">
+    <span style="margin-bottom: 15px;display: block;font-size: 20px">广度优先搜索</span>
+    <span>
+        粉红色的为可以走的区域，黑色为障碍物，绿色的为目标位置，红色为小人。
+        <span style="color: red;font-weight: bold">单点方块可以切换障碍物和可以走的区域。</span>
+        <br/>
+        <span style="color: red;font-weight: bold">广度优先搜索可以找到步数最少的路径。</span>
+    </span><br/><br/>
+    <!--row:<input type="text" id="addRow" style="width: 100px;margin-right: 10px;"/>
+    col:<input type="text" id="addCol" style="width: 100px"/>
+    <button onclick="addV()">添加障碍物</button>-->
+    row:<input type="text" id="setPersonRow" style="width: 100px;margin-right: 10px;"/>
+    col:<input type="text" id="setPersonCol" style="width: 100px"/>
+    <button onclick="setPersonPosition()">设置人物位置</button>
+    <br/><br/>
+    row:<input type="text" id="setDistRow" style="width: 100px;margin-right: 10px;"/>
+    col:<input type="text" id="setDistCol" style="width: 100px"/>
+    <button onclick="setDistPosition()">设置终点位置</button>
+    <button onclick="startDfs()">开始</button>
+
+    <div style="width: 500px;height: 660px;position: relative;margin-top: 10px;">
+        <div id="person" style="width: 45px;height: 45px;background-color: red;transition: 1s all linear;
+        position: absolute;left:0;top:0;border: 2px solid beige;"></div>
+        <ul class="clearfix" id="graphUl">
+
+        </ul>
+    </div>
+</div>
+</body>
+</html>
