@@ -33,6 +33,10 @@ class BFS {
     }
 
     startGo(callback) {
+        if(this.person.row === this.dist.row && this.person.col === this.dist.col){
+            callback(true);
+            return;
+        }
         this.stepIndex = 0;
         this.goEd = [];
         this.goEd.push({row: this.person.row, col: this.person.col, index: 0});
@@ -69,19 +73,21 @@ class BFS {
                 left.pre = current;
                 setTimeout(function(){
                     function opt(o) {
-                        if (o.row === that.dist.row && o.col === that.dist.col) {
-                            that.goEd = [];
-                            that.goEd.push(o);
-                            while (o.pre) {
-                                that.goEd.unshift(o.pre);
-                                o = o.pre;
+                        if(!result) {
+                            if (o.row === that.dist.row && o.col === that.dist.col) {
+                                that.goEd = [];
+                                that.goEd.push(o);
+                                while (o.pre) {
+                                    that.goEd.unshift(o.pre);
+                                    o = o.pre;
+                                }
+                                result = true;
+                                callback(true);
+                            } else if (that.canGo(o.row, o.col)) {
+                                that.goEd.push(o);
+                                o.index = index + 1;
+                                that.getLiEle(o.row, o.col).innerHTML = o.index;
                             }
-                            result = true;
-                            callback(true);
-                        }else if (that.canGo(o.row, o.col)) {
-                            that.goEd.push(o);
-                            o.index = index + 1;
-                            that.getLiEle(o.row, o.col).innerHTML = o.index;
                         }
                     }
                     opt(up);
@@ -230,13 +236,13 @@ class BFS {
         let that = this;
         let i = this.stepIndex;
         setTimeout(function () {
-            that.setPersonPositionAndDraw(that.goEd[i].row, that.goEd[i].col);
-            that.stepIndex++;
             if (that.stepIndex < that.goEd.length) {
+                that.setPersonPositionAndDraw(that.goEd[i].row, that.goEd[i].col);
+                that.stepIndex++;
                 that.play(callback);
             } else {
                 that.finish = true;
-                callback();
+                callback(true)
             }
         }, 1000);
     }
