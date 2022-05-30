@@ -28,7 +28,7 @@ public class Dijkstra {
         // 求顶点1到其它各顶点最短路径
         int[] dist = new int[]{-1, 0, 2, 5, maxValue, maxValue};
         // 经过的路线
-        int[] line = new int[]{-1, 1, 2, 3, -1, -1};
+        int[] line = new int[]{-1, 1, 2, 3, 4, 5};
         Set<Integer> excludeIndex = new HashSet<Integer>();
         for (int i = 1; i < dist.length; i++) {
             // 每次都找距离最近的点
