@@ -32,11 +32,14 @@ public class BellmanFord {
         int[] dist = new int[]{-1,0,2,5,maxValue,maxValue};
         // 经过的路线
         int[] line = new int[]{-1,1,2,3,-1,-1};
-        for (int i = 1; i < graph.length; i++) {
-            for (int j = 1; j < graph[i].length; j++) {
-                if(dist[i]+graph[i][j] < dist[j]){
-                    dist[j] = dist[i]+graph[i][j];
-                    line[j] = i;
+        for (int k = 0; k < graph.length-1; k++) {
+            // 这层循环代表通过某一条边使路径变短，需要外面那层是因为可以通过多条边
+            for (int i = 1; i < graph.length; i++) {
+                for (int j = 1; j < graph[i].length; j++) {
+                    if(dist[i]+graph[i][j] < dist[j]){
+                        dist[j] = dist[i]+graph[i][j];
+                        line[j] = i;
+                    }
                 }
             }
         }
