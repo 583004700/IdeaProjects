@@ -4,42 +4,28 @@ import java.util.LinkedList;
 
 /**
  * 单源最短路径的算法实现（从某个点到其它各点最短路径）
- * 和 bellman-ford 算法思想非常像，数据结构的表示和松驰次数有点不同
+ * 和 Floyd 算法思想非常像，数据结构的表示和松驰次数有点不同
  */
 public class BellmanFord {
 
     public static void main(String[] args) {
         int maxValue = 99999;
-        
-        int[][] graph = new int[6][6];
 
-        for (int i = 0; i < graph.length; i++) {
-            for (int j = 0; j < graph[i].length; j++) {
-                graph[i][j] = maxValue;
-            }
-        }
-
-        graph[1][2] = 2;
-        graph[1][3] = 5;
-        graph[2][3] = 2;
-        graph[2][4] = 6;
-        graph[3][4] = 7;
-        graph[3][5] = 1;
-        graph[4][3] = 2;
-        graph[4][5] = 4;
+        int[] u = new int[]{2,1,1,4,3};
+        int[] v = new int[]{3,2,5,5,4};
+        int[] w = new int[]{2,-3,5,2,3};
 
         // 求顶点1到其它各顶点最短路径
-        int[] dist = new int[]{-1,0,2,5,maxValue,maxValue};
+        int[] dist = new int[]{-1,0,maxValue,maxValue,maxValue,maxValue};
         // 经过的路线
-        int[] line = new int[]{-1,1,2,3,-1,-1};
-        for (int k = 0; k < graph.length-1; k++) {
+        int[] line = new int[]{-1,-1,-1,-1,-1,-1};
+
+        for (int i = 0; i < 5; i++) {
             // 这层循环代表通过某一条边使路径变短，需要外面那层是因为可以通过多条边
-            for (int i = 1; i < graph.length; i++) {
-                for (int j = 1; j < graph[i].length; j++) {
-                    if(dist[i]+graph[i][j] < dist[j]){
-                        dist[j] = dist[i]+graph[i][j];
-                        line[j] = i;
-                    }
+            for (int j = 0; j < 5; j++) {
+                if(dist[u[j]]+w[j] < dist[v[j]]){
+                    dist[v[j]] = dist[u[j]]+w[j];
+                    line[v[j]] = u[j];
                 }
             }
         }
@@ -58,7 +44,7 @@ public class BellmanFord {
         // 求1到5最短的路径
         LinkedList<Integer> linkedList = new LinkedList<Integer>();
         int l = 5;
-        while(line[l] != l){
+        while(line[l] != -1){
             linkedList.addFirst(l);
             l = line[l];
         }
