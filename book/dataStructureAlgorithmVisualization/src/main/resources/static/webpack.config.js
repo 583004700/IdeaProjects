@@ -16,8 +16,9 @@ module.exports = {
         /**
          * 算法
          */
-        //'algorithm/dfs': './algorithm/dfs/start.js',
-        'algorithm/bfs': './algorithm/bfs/start.js'
+        /*'algorithm/dfs': './algorithm/dfs/start.js',
+        'algorithm/bfs': './algorithm/bfs/start.js',*/
+        'algorithm/bigInt': './algorithm/bigInt/start.js'
     },
     output: {
         filename: '[name]/js/bundle.js',
@@ -155,12 +156,19 @@ module.exports = {
                 chunks: ['commons','algorithm/dfs'],
                 filename: 'algorithm/dfs/index.html'
             }
-        ),*/
+        ),
         new HtmlWebpackPlugin(
             {
                 template: './algorithm/bfs/BFS.html',
                 chunks: ['commons','algorithm/bfs'],
                 filename: 'algorithm/bfs/index.html'
+            }
+        ),*/
+        new HtmlWebpackPlugin(
+            {
+                template: './algorithm/bigInt/bigint.html',
+                chunks: ['commons','algorithm/bigInt'],
+                filename: 'algorithm/bigInt/index.html'
             }
         ),
 
