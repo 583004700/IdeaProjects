@@ -18,7 +18,8 @@ module.exports = {
          */
         /*'algorithm/dfs': './algorithm/dfs/start.js',
         'algorithm/bfs': './algorithm/bfs/start.js',*/
-        'algorithm/bigInt': './algorithm/bigInt/start.js'
+        'algorithm/bigInt': './algorithm/bigInt/start.js',
+        'algorithm/bigFloat': './algorithm/bigFloat/start.js'
     },
     output: {
         filename: '[name]/js/bundle.js',
@@ -169,6 +170,13 @@ module.exports = {
                 template: './algorithm/bigInt/bigint.html',
                 chunks: ['commons','algorithm/bigInt'],
                 filename: 'algorithm/bigInt/index.html'
+            }
+        ),
+        new HtmlWebpackPlugin(
+            {
+                template: './algorithm/bigFloat/bigFloat.html',
+                chunks: ['commons','algorithm/bigFloat'],
+                filename: 'algorithm/bigFloat/index.html'
             }
         ),
 

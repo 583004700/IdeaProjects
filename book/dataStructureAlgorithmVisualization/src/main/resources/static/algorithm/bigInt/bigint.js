@@ -1,6 +1,6 @@
 class BigInt {
     constructor(s) {
-        s = s.replace(/\b(0+)/gi, "");
+        s = s.replace(/^(0+)/gi, "");
         // u为false代表负数
         this.u = s.charAt(0) !== "-";
         let startI = this.u ? 0 : 1;
@@ -18,12 +18,19 @@ class BigInt {
      * @param other
      */
     lt(other) {
-        if (this.s.length < other.s.length) {
-            return true;
-        } else if (this.s.length === other.s.length && this.s.length !== 0) {
-            return parseInt(this.s[this.s.length - 1]) < parseInt(other.s[other.s.length - 1]);
-        } else {
-            return false;
+        if (other) {
+            let t1 = this.toZeroC().toStringValue();
+            let t2 = other.toZeroC().toStringValue();
+            let abs = Math.abs(t1.length - t2.length);
+            for (let i = 0; i < abs; i++) {
+                if(t1.length<t2.length){
+                    t1 = "0"+t1;
+                }
+                if(t2.length<t1.length){
+                    t2 = "0"+t2;
+                }
+            }
+            return t1 < t2;
         }
     }
 
@@ -215,6 +222,10 @@ class BigIntOperation {
             return n1314;
         }
         return "";
+    }
+
+    static generationBigInt(s) {
+        return new BigInt(s);
     }
 }
 

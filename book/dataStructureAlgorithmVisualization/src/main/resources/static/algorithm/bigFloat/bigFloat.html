@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=0,maximum-scale=1"/>
+    <title>大数精确运算</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<div style="text-align: center">
+    <span style="margin-bottom: 15px;display: block;font-size: 20px">大数精确运算</span>
+    <span style="color:red;font-weight: bold">可以计算基本数字类型无法表示的，任意长度的数</span>
+    <br />
+
+    <input type="text" id="float1" style="width: 200px;margin-right: 10px;font-weight: bold;font-size: 16px;" value="0.1"/>
+    <select id="optSelect" style="min-width: 80px;height: 30px;">
+        <option selected>+</option>
+        <option>-</option>
+        <option>*</option>
+    </select>
+    <input type="text" id="float2" style="width: 200px" value="0.2"/>
+    <button onclick="calc()">计算</button><br/><br/>
+    精确数值：<span id="result" style="margin-top: 10px;font-size: 20px;"></span><br/><br/>
+    直接计算数值：<span id="oldResult" style="margin-top: 10px;font-size: 20px;"></span>
+</div>
+</body>
+</html>
