@@ -7,17 +7,17 @@ const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 module.exports = {
     entry: {
-        /*'dataStructure/aVLTree': './dataStructure/aVLTree/start.js',
+        'dataStructure/aVLTree': './dataStructure/aVLTree/start.js',
         'dataStructure/bpTree': './dataStructure/bpTree/start.js',
         'dataStructure/bTree': './dataStructure/bTree/start.js',
         'dataStructure/heap': './dataStructure/heap/start.js',
         'dataStructure/rbTree': './dataStructure/rbTree/start.js',
-        'dataStructure/hfmTree': './dataStructure/hfmTree/start.js',*/
+        'dataStructure/hfmTree': './dataStructure/hfmTree/start.js',
         /**
          * 算法
          */
-        /*'algorithm/dfs': './algorithm/dfs/start.js',
-        'algorithm/bfs': './algorithm/bfs/start.js',*/
+        'algorithm/dfs': './algorithm/dfs/start.js',
+        'algorithm/bfs': './algorithm/bfs/start.js',
         'algorithm/bigInt': './algorithm/bigInt/start.js',
         'algorithm/bigFloat': './algorithm/bigFloat/start.js'
     },
@@ -105,7 +105,7 @@ module.exports = {
         ]
     },
     plugins: [
-        /*new HtmlWebpackPlugin(
+        new HtmlWebpackPlugin(
             {
                 template: './dataStructure/aVLTree/AVLTree.html',
                 chunks: ['commons','dataStructure/aVLTree'],
@@ -146,12 +146,12 @@ module.exports = {
                 chunks: ['commons','dataStructure/hfmTree'],
                 filename: 'dataStructure/hfmTree/index.html'
             }
-        ),*/
+        ),
 
         /**
          * 算法
          */
-        /*new HtmlWebpackPlugin(
+        new HtmlWebpackPlugin(
             {
                 template: './algorithm/dfs/DFS.html',
                 chunks: ['commons','algorithm/dfs'],
@@ -164,7 +164,7 @@ module.exports = {
                 chunks: ['commons','algorithm/bfs'],
                 filename: 'algorithm/bfs/index.html'
             }
-        ),*/
+        ),
         new HtmlWebpackPlugin(
             {
                 template: './algorithm/bigInt/bigint.html',
