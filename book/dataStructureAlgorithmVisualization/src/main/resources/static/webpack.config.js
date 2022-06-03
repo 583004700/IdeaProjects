@@ -187,6 +187,7 @@ module.exports = {
         //压缩css
         new optimizeCssAssetsWebpackPlugin(),
         new JavaScriptObfuscator({
+            domainLock:["zhu_weibin.gitee.io"],
             compact: true,//压缩代码
             controlFlowFlattening: false,//是否启用控制流扁平化(降低1.5倍的运行速度)
             controlFlowFlatteningThreshold: 1,//应用概率;在较大的代码库中，建议降低此值，因为大量的控制流转换可能会增加代码的大小并降低代码的速度。
