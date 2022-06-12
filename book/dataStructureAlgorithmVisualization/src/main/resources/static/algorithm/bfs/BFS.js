@@ -30,6 +30,7 @@ class BFS {
         this.stepIndex = 0;
         this.count = 70;
         this.finish = true;
+        this.personRealEle = document.getElementById("person");
     }
 
     startGo(callback) {
@@ -187,10 +188,16 @@ class BFS {
 
     initGraph() {
         let ulEle = document.getElementById("graphUl");
-        let that = this;
+        if(window.screen.width < 500) {
+            ulEle.style.width = window.screen.width+"px";
+            this.personRealEle.style.width = ulEle.offsetWidth / 10 - 5 + "px";
+            this.personRealEle.style.height = this.personRealEle.style.width;
+        }
         ulEle.innerHTML = "";
         for (let i = 0; i < this.count; i++) {
             let liEle = document.createElement("li");
+            liEle.style.width = this.personRealEle.style.width;
+            liEle.style.height = liEle.style.width;
             let row = Math.floor(i / 10);
             let col = i % 10;
             liEle.style.backgroundColor = this.spaceColor;
@@ -226,7 +233,6 @@ class BFS {
         this.person = {row: row, col: col};
         let personEle = this.getLiEle(row, col);
         if (personEle) {
-            this.personRealEle = document.getElementById("person");
             this.personRealEle.style.left = personEle.offsetLeft + "px";
             this.personRealEle.style.top = personEle.offsetTop + "px";
         }

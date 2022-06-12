@@ -27,6 +27,7 @@ class DFS{
         this.stepIndex = 0;
         this.count = 70;
         this.finish = true;
+        this.personRealEle = document.getElementById("person");
     }
 
     startGo(){
@@ -157,10 +158,16 @@ class DFS{
 
     initGraph(){
         let ulEle = document.getElementById("graphUl");
-        let that = this;
+        if(window.screen.width < 500) {
+            ulEle.style.width = window.screen.width+"px";
+            this.personRealEle.style.width = ulEle.offsetWidth / 10 - 5 + "px";
+            this.personRealEle.style.height = this.personRealEle.style.width;
+        }
         if(this.liEles.length === 0) {
             for (let i = 0; i < this.count; i++) {
                 let liEle = document.createElement("li");
+                liEle.style.width = this.personRealEle.style.width;
+                liEle.style.height = liEle.style.width;
                 let row = Math.floor(i / 10);
                 let col = i % 10;
                 liEle.setAttribute("onclick", "toggleBarrier(" + row + "," + col + ")");
@@ -196,7 +203,6 @@ class DFS{
         this.person = {row:row,col:col};
         let personEle = this.getLiEle(row,col);
         if(personEle) {
-            this.personRealEle = document.getElementById("person");
             this.personRealEle.style.left = personEle.offsetLeft+"px";
             this.personRealEle.style.top = personEle.offsetTop+"px";
         }
