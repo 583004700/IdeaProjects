@@ -60,13 +60,39 @@ public class TestPattern {
             + "|[A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\\|\\||\\p{Punct})?";
 
     @Test
+    public void testPattern1(){
+        String regexPat1 = "(\"(\\\\\"|\\\\\\\\|\\\\n|[^\"])*\")";
+        //String regexPat1 = "(\"([^\"]|\\\\\")*\")";
+        Pattern pattern = Pattern.compile(regexPat1);
+        String text1 = "\"w\\\"3\n\\\"";
+        System.out.println(text1);
+        Matcher matcher = pattern.matcher(text1);
+        Boolean b = matcher.matches();
+        System.out.println(b);
+        System.out.println(regexPat1);
+        String group = matcher.group(0);
+        System.out.println(group);
+        System.out.println("\"");
+
+        String regexPat2 = "[^\"]*";     // 实际测试时，这个包含 \\ \n 但不包含 \"
+        String text2 = "\\\"";
+        boolean b2 = Pattern.matches(regexPat2,text2);
+        System.out.println(text2);
+        System.out.println(b2);
+    }
+
+    @Test
     public void testPattern() {
-        String regex = "\\d";
-        Pattern pattern = Pattern.compile(regex);
-        String text = "357294";
+        Pattern pattern = Pattern.compile(regexPat);
+        String text = "  owrj";
         Matcher matcher = pattern.matcher(text);
         boolean b = matcher.matches();
         System.out.println(b);
+        if(b){
+            System.out.println(matcher.group(0));
+            System.out.println(matcher.group(1));
+        }
+
         System.out.println(regexPat);// \s*((//.*)|([0-9]+)|("(\\"|\\\\|\\n|[^"])*")|[A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\|\||\p{Punct})?
 
         // 可以有空白字符，注释，数字，字符串（双引号之间内容可以是,空,\",\\,\n,不能是,"），字母或下划线开头可以包含数字的变量名，==，<=，>=，&&，||，标点符号

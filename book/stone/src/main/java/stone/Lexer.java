@@ -8,9 +8,14 @@ import java.util.regex.Pattern;
 
 public class Lexer {
     // 可以有空白字符，注释，数字，字符串（双引号之间内容可以是,空,\",\\,\n,不能是,"），字母或下划线开头可以包含数字的变量名，==，<=，>=，&&，||，标点符号
-    public static String regexPat
+    /*public static String regexPat
         = "\\s*((//.*)|([0-9]+)|(\"(\\\\\"|\\\\\\\\|\\\\n|[^\"])*\")"
-          + "|[A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\\|\\||\\p{Punct})?";
+          + "|[A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\\|\\||\\p{Punct})?";*/
+
+    public static String regexPat
+            = "\\s*((//.*)|([0-9]+)|(\"(\\\\\"|[^\"])*\")"
+            + "|[A-Z_a-z][A-Z_a-z0-9]*|==|<=|>=|&&|\\|\\||\\p{Punct})?";
+
     private Pattern pattern = Pattern.compile(regexPat);
     private ArrayList<Token> queue = new ArrayList<Token>();
     private boolean hasMore;
