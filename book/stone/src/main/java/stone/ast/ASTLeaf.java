@@ -3,6 +3,9 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import stone.Token;
 
+/**
+ * 抽象语法树的叶子节点，没有子节点
+ */
 public class ASTLeaf extends ASTree {
     private static ArrayList<ASTree> empty = new ArrayList<ASTree>(); 
     protected Token token;

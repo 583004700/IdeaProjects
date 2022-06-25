@@ -61,6 +61,7 @@ public class TestPattern {
 
     @Test
     public void testPattern1(){
+        System.out.println(regexPat);
         String regexPat1 = "(\"(\\\\\"|\\\\\\\\|\\\\n|[^\"])*\")";
         //String regexPat1 = "(\"([^\"]|\\\\\")*\")";
         Pattern pattern = Pattern.compile(regexPat1);

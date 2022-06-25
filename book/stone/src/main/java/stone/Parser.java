@@ -124,6 +124,9 @@ public class Parser {
         protected abstract boolean test(Token t);
     }
 
+    /**
+     * 解析之后的标识符
+     */
     protected static class IdToken extends AToken {
         HashSet<String> reserved;
 
@@ -137,6 +140,9 @@ public class Parser {
         }
     }
 
+    /**
+     * 解析之后的数字类型
+     */
     protected static class NumToken extends AToken {
         protected NumToken(Class<? extends ASTLeaf> type) {
             super(type);
@@ -147,6 +153,9 @@ public class Parser {
         }
     }
 
+    /**
+     * 解析之后的字符串
+     */
     protected static class StrToken extends AToken {
         protected StrToken(Class<? extends ASTLeaf> type) {
             super(type);

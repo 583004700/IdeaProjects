@@ -7,22 +7,29 @@ import stone.ast.*;
 public class BasicParser {
     HashSet<String> reserved = new HashSet<String>();
     Operators operators = new Operators();
+
+    // 表达式
     Parser expr0 = rule();
+    // 表达式 或者 数字 或者 标识符 或者 字符串
     Parser primary = rule(PrimaryExpr.class)
         .or(rule().sep("(").ast(expr0).sep(")"),
             rule().number(NumberLiteral.class),
             rule().identifier(Name.class, reserved),
             rule().string(StringLiteral.class));
+    // 负primary 或者 primary
     Parser factor = rule().or(rule(NegativeExpr.class).sep("-").ast(primary),
-                              primary);                               
+                              primary);
+    // 表达式
     Parser expr = expr0.expression(BinaryExpr.class, factor, operators);
 
     Parser statement0 = rule();
+
     Parser block = rule(BlockStmnt.class)
         .sep("{").option(statement0)
         .repeat(rule().sep(";", Token.EOL).option(statement0))
         .sep("}");
     Parser simple = rule(PrimaryExpr.class).ast(expr);
+
     Parser statement = statement0.or(
             rule(IfStmnt.class).sep("if").ast(expr).ast(block)
                                .option(rule().sep("else").ast(block)),
