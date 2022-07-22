@@ -90,6 +90,12 @@ class DrawTree {
             for (let i = 0; i < statusList.size(); i++) {
                 let s = statusList.get(i);
                 ctx.beginPath();
+                let color = s.getNode().color;
+                if (color) {
+                    ctx.strokeStyle = color;
+                } else {
+                    ctx.strokeStyle = "black";
+                }
                 ctx.moveTo(currentX, currentY);
                 ctx.lineTo(s.getMiddle(), s.getY() - height);
                 ctx.stroke();
