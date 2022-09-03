@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style type="text/css">
+        html, body {
+            height: 100%;
+            font:normal 100% Helvetica,Arial,sans-serif;
+        }
+
+        button {
+            color: #fff;
+            background-color: #3378ff;
+            border-color: #3378ff;
+            box-shadow: 0 4px 8px 0 hsla(0, 0%, 100%, .05);
+            cursor: pointer;
+            border-radius: 5px;
+            height: 30px;
+            font-weight: bold;
+            font-size: 15px;
+            width: auto;
+            padding: 0 5px;
+            min-width: 100px;
+        }
+
+        button:hover{
+            background-color: #0d5fff;
+            border-color: #0d5fff;
+        }
+
+
+        input {
+            height: 30px;
+            line-height: 30px;
+            background: #fff;
+            border: 1px solid #ccc;
+            font-size: 18px;
+            color: #324253;
+            border-radius: 5px;
+            box-shadow: none;
+            width: 200px;
+        }
+
+        input:focus {
+            outline: 1px solid #3378ff;
+        }
+
+    </style>
+    <meta charset="UTF-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=0,maximum-scale=1"/>
+    <title>最长回文子字符串</title>
+    <input type="text" id="hwInput" value="sfsogioweewojs" style="width: 100%"/>
+    <br/>
+    <br/>
+    <button onclick="hw()">最长回文子字符串</button>
+</head>
+<body>
+<script type="text/javascript">
+    function hw(){
+        let s = document.getElementById("hwInput").value;
+        // 保存最大的回文下标和字符串，及回文的长度
+        let max = {index: 0,str: "",len:0};
+        for (let index = 0; index < s.length - 1; index+=0.5) {
+            let left = 0;
+            let right = 0;
+            // 下标为 index 时
+            if(index % 1 === 0){
+                left = index - 1;
+                right = index + 1;
+            }else{
+                left = index - 0.5;
+                right = index + 0.5;
+            }
+            // 回文字符串长度
+            let count = 0;
+            let hwStr = "";
+            let hwStrFront = "";
+            console.log("下标为" + index + "时");
+            while (left >= 0 && right < s.length) {
+                let leftStr = s.substring(left, left + 1);
+                let rightStr = s.substring(right, right + 1);
+                if (leftStr === rightStr) {
+                    count++;
+                    hwStr+=leftStr;
+                    hwStrFront = leftStr + hwStrFront;
+                    console.log("   左边下标为："+left+"；右边下标为："+right+"；左边字符串为："+leftStr+"；右边字符串为："+rightStr+"；左右两边相同，相同个数为："+count+"继续向两边扩散比较");
+                } else {
+                    console.log("   左边下标为："+left+"；右边下标为："+right+"；左边字符串为："+leftStr+"；右边字符串为："+rightStr+"；左右两边不相同，退出比较");
+                    break;
+                }
+                left = left - 1;
+                right = right + 1;
+            }
+            if(count>max.len){
+                // 如果当前回文的长度大于最大的回文字符串长度，则更新max
+                let middle = "";
+                if(index % 1 ===0){
+                    middle = s.substring(index,index+1);
+                }
+                max.index = index;
+                max.str = hwStrFront+middle+hwStr;
+                max.len = count;
+            }
+            console.log("下标为" + index + "左右相同的有:" + count+"个");
+        }
+        console.log(s+"最长回文子字符串："+max.str);
+        alert(s+"  最长回文子字符串："+max.str);
+    }
+</script>
+</body>
+</html>
