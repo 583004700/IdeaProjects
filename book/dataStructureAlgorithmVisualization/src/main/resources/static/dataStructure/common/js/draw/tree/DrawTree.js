@@ -66,7 +66,7 @@ class DrawTree {
             let s = DrawTree.drawNodeOptimize(ctx, childNode, xx + width * 2 + splitX, y + splitY, splitY);
             statusList.add(s);
         }
-
+        ctx.save();
         let nodeWidth = node.getDataList().toString().length * 6;
         nodeWidth = Math.max(nodeWidth, 15);
         let height = 15;
@@ -86,7 +86,6 @@ class DrawTree {
                 currentX = (first.getMiddle() + last.getMiddle()) / 2;
             }
             let currentY = y + height;
-            ctx.restore();
             for (let i = 0; i < statusList.size(); i++) {
                 let s = statusList.get(i);
                 ctx.beginPath();
@@ -109,6 +108,7 @@ class DrawTree {
         node.width = nodeWidth;
         node.height = height;
 
+        ctx.restore();
         ctx.save();
         ctx.beginPath();
         ctx.ellipse(currentX, y, nodeWidth, height, 0, 0, 2 * Math.PI);
@@ -123,7 +123,6 @@ class DrawTree {
         ctx.stroke();
 
         if (node.getPre && node.getPre()) {
-            ctx.save();
             ctx.strokeStyle = "red";
             let pre = node.getPre();
             ctx.beginPath();
@@ -140,7 +139,8 @@ class DrawTree {
             ctx.stroke();
             ctx.restore();
         }
-
+        ctx.restore();
+        ctx.save();
         let status = new Status();
         status.setY(y);
         status.setMiddle(currentX);

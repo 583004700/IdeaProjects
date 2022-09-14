@@ -6,6 +6,9 @@ const JavaScriptObfuscator = require('webpack-obfuscator');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 module.exports = {
+    devServer:{
+      host: '0.0.0.0'
+    },
     entry: {
         'dataStructure/aVLTree': './dataStructure/aVLTree/start.js',
         'dataStructure/bpTree': './dataStructure/bpTree/start.js',
