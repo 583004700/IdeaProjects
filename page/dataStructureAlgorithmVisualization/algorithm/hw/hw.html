@@ -74,7 +74,6 @@
             let count = 0;
             let hwStr = "";
             let hwStrFront = "";
-            console.log("下标为" + index + "时");
             while (left >= 0 && right < s.length) {
                 let leftStr = s.substring(left, left + 1);
                 let rightStr = s.substring(right, right + 1);
@@ -82,13 +81,16 @@
                     count++;
                     hwStr+=leftStr;
                     hwStrFront = leftStr + hwStrFront;
-                    console.log("   左边下标为："+left+"；右边下标为："+right+"；左边字符串为："+leftStr+"；右边字符串为："+rightStr+"；左右两边相同，相同个数为："+count+"继续向两边扩散比较");
-                } else {
-                    console.log("   左边下标为："+left+"；右边下标为："+right+"；左边字符串为："+leftStr+"；右边字符串为："+rightStr+"；左右两边不相同，退出比较");
+                }else{
                     break;
                 }
                 left = left - 1;
                 right = right + 1;
+            }
+            if(index%1===0){
+                count = count * 2 + 1;
+            }else{
+                count = count * 2;
             }
             if(count>max.len){
                 // 如果当前回文的长度大于最大的回文字符串长度，则更新max
@@ -100,9 +102,10 @@
                 max.str = hwStrFront+middle+hwStr;
                 max.len = count;
             }
-            console.log("下标为" + index + "左右相同的有:" + count+"个");
         }
-        console.log(s+"最长回文子字符串："+max.str);
+        if(max.str === ""){
+            max.str = s.substr(0,1);
+        }
         alert(s+"  最长回文子字符串："+max.str);
     }
 </script>
