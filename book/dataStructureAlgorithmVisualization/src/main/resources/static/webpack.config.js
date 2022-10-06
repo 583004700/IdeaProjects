@@ -16,13 +16,13 @@ module.exports = {
         'dataStructure/heap': './dataStructure/heap/start.js',
         'dataStructure/rbTree': './dataStructure/rbTree/start.js',
         'dataStructure/hfmTree': './dataStructure/hfmTree/start.js',
-        /**
-         * 算法
-         */
+
+
         'algorithm/dfs': './algorithm/dfs/start.js',
         'algorithm/bfs': './algorithm/bfs/start.js',
         'algorithm/bigInt': './algorithm/bigInt/start.js',
-        'algorithm/bigFloat': './algorithm/bigFloat/start.js'
+        'algorithm/bigFloat': './algorithm/bigFloat/start.js',
+        'algorithm/pack01': './algorithm/pack01/start.js'
     },
     output: {
         filename: '[name]/js/bundle.js',
@@ -151,9 +151,7 @@ module.exports = {
             }
         ),
 
-        /**
-         * 算法
-         */
+
         new HtmlWebpackPlugin(
             {
                 template: './algorithm/dfs/DFS.html',
@@ -183,6 +181,14 @@ module.exports = {
             }
         ),
 
+        new HtmlWebpackPlugin(
+            {
+                template: './algorithm/pack01/pack01.html',
+                chunks: ['commons','algorithm/pack01'],
+                filename: 'algorithm/pack01/index.html'
+            }
+        ),
+
         new MiniCssExtractPlugin({
             //对输出的文件重命名
             filename: '[name]/css/bundle.css'
@@ -190,13 +196,13 @@ module.exports = {
         //压缩css
         new optimizeCssAssetsWebpackPlugin(),
         new JavaScriptObfuscator({
-            domainLock:["zhu_weibin.gitee.io"],
+            domainLock:["zhu_weibin.gitee.io","0.0.0.0","localhost"],
             compact: true,//压缩代码
             controlFlowFlattening: false,//是否启用控制流扁平化(降低1.5倍的运行速度)
             controlFlowFlatteningThreshold: 1,//应用概率;在较大的代码库中，建议降低此值，因为大量的控制流转换可能会增加代码的大小并降低代码的速度。
             deadCodeInjection: false,//随机的死代码块(增加了混淆代码的大小)
             deadCodeInjectionThreshold: 1,//死代码块的影响概率
-            debugProtection: true,//此选项几乎不可能使用开发者工具的控制台选项卡
+            debugProtection: false,//此选项几乎不可能使用开发者工具的控制台选项卡
             debugProtectionInterval: false,//如果选中，则会在“控制台”选项卡上使用间隔强制调试模式，从而更难使用“开发人员工具”的其他功能。
             disableConsoleOutput: true,//通过用空函数替换它们来禁用console.log，console.info，console.error和console.warn。这使得调试器的使用更加困难。
             identifierNamesGenerator: 'hexadecimal',//标识符的混淆方式 hexadecimal(十六进制) mangled(短标识符)
