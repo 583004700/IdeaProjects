@@ -8,9 +8,20 @@ class Node {
         this.data = null;
         this.startIndex = null;
         this.endIndex = null;
-        this.cacheNumber = 0;
+        this.cacheNumber = null;
         this.left = null;
         this.right = null;
+    }
+
+    // 是否覆盖当前区间
+    isCover(startIndex, endIndex) {
+        return (startIndex <= this.startIndex && endIndex >= this.endIndex);
+    }
+
+    // 是否有交集
+    isMixed(startIndex, endIndex) {
+        return (startIndex >= this.startIndex && startIndex <= this.endIndex) ||
+            (endIndex >= this.startIndex && endIndex <= this.endIndex)
     }
 
     setRed() {
@@ -41,10 +52,9 @@ class Node {
     }
 
     getDataList() {
-        let fh = this.cacheNumber >= 0 ? "+" : "-";
-        let splitChar = "\t";
+        let splitChar = "\n";
         return this.data + splitChar + "[" + this.startIndex + "," + this.endIndex + "]"
-            + splitChar + fh + Math.abs(this.cacheNumber);
+            + splitChar + Math.abs(this.cacheNumber);
     }
 }
 

@@ -8,13 +8,32 @@
 <body>
 <div style="text-align: center">
     <span style="margin-bottom: 15px;display: block;font-size: 20px">线段树</span>
-    <span style="color: red;font-weight: bold">每个节点展示格式为：数据值 、[区间] 、lazy标记(带正负号)</span><br/><br/>
+    <span style="color: red;font-weight: bold">每个节点展示格式为：数据值 、[区间] 、lazy标记</span><br/><br/>
     <input type="text" id="numsArr" value="[3,1,2,4,8]"/>
     <select name="ope" id="ope">
         <option value="区间和">区间和</option>
         <option value="区间积">区间积</option>
     </select>&nbsp;&nbsp;
     <button onclick="build()">构建线段树</button>
+
+    <div id="regions">
+
+    </div>
+
+    <br/><br/><br/>
+
+
+
+    下标1：<input type="text" id="uStartIndex" value="2" />
+    下标2：<input type="text" id="uEndIndex" value="3" /><br/>
+    如果是加法，区间内+，如果是乘法，区间内*：<input type="text" id="uValue" value="2" />
+    <button onclick="updateRegionValue()">更新区间值</button>
+    <br/><br/><br/>
+    <input type="text" id="startIndex" value="2" />
+    <input type="text" id="endIndex" value="3" />
+    <button onclick="getRegionValue()">获取区间值</button>
+    区间值为：<span id="regionValue"></span>
+    <br/>
 </div>
 <canvas id="canvas" width="100%" height="100%"></canvas>
 </body>

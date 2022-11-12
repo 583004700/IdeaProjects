@@ -13,24 +13,44 @@ class CalcMethod {
 
 class AddCalcMethod extends CalcMethod {
 
+    defaultCacheNumber() {
+        return 0;
+    }
+
     calc(a, b) {
+        if (b === null || b === undefined) {
+            b = 0;
+        }
         return a + b;
     }
 
     // 加法增加后，父节点累计相加
     update(a, b, val) {
+        if (b === null || b === undefined) {
+            b = 0;
+        }
         return (a + val) + (b + val);
     }
 }
 
 class MultiplyCalcMethod extends CalcMethod {
 
+    defaultCacheNumber() {
+        return 1;
+    }
+
     calc(a, b) {
+        if (b === null || b === undefined) {
+            b = 1;
+        }
         return a * b;
     }
 
     // 乘法相乘，父节点扩大平方倍
     update(a, b, val) {
+        if (b === null || b === undefined) {
+            b = 1;
+        }
         return a * b * val * val;
     }
 }
@@ -57,12 +77,16 @@ class CalcMethodContext {
     update(a, b, val) {
         return this.strategy.update(a, b, val);
     }
+
+    getDefaultCacheNumber() {
+        return this.strategy.defaultCacheNumber();
+    }
 }
 
 class RegionTree {
     // 构建线锻树
-    build(arr,opt) {
-        this.opt = opt;
+    build(arr, opt) {
+        this.calcMethodContext = new CalcMethodContext(opt);
         if (!arr.length) {
             throw "数据格式不正确";
         }
@@ -72,6 +96,7 @@ class RegionTree {
         let nodes = [];
         for (let i = 0; i < arr.length; i++) {
             let node = new Node();
+            node.cacheNumber = this.calcMethodContext.getDefaultCacheNumber();
             node.data = arr[i];
             node.startIndex = i;
             node.endIndex = i;
@@ -79,6 +104,75 @@ class RegionTree {
         }
         let root = this.buildParent(nodes)[0];
         this.root = root;
+    }
+
+    // 获取区间值
+    getRegionValue(startIndex, endIndex) {
+        if (!this.root) {
+            throw "请先构建线段树";
+        }
+        return this.doGetRegionValue(this.root, startIndex, endIndex);
+    }
+
+    // 更新区间值，如果是区间求积，是批量乘以某个数，如果是区间求和，是批量加上某个数
+    update(startIndex, endIndex, value) {
+        if (!this.root) {
+            throw "请先构建线段树";
+        }
+        if(startIndex < this.root.startIndex || endIndex > this.root.endIndex){
+            throw "下标不能在范围之外！";
+        }
+        this.doUpdate(this.root, startIndex, endIndex, value);
+    }
+
+    doUpdate(node, startIndex, endIndex, value) {
+        if (node.isCover(startIndex, endIndex)) {
+            let result = (endIndex - startIndex + 1) * value
+            node.cacheNumber = this.calcMethodContext.calc(node.cacheNumber, result);
+            return result;
+        }
+        if (node.isMixed(startIndex, endIndex)) {
+            let leftResult = this.calcMethodContext.getDefaultCacheNumber();
+            let rightResult = this.calcMethodContext.getDefaultCacheNumber();
+            if (node.left && node.left.isMixed(startIndex, endIndex)) {
+                leftResult = this.doUpdate(node.left, startIndex, endIndex, value);
+            }
+            if (node.right && node.right.isMixed(startIndex, endIndex)) {
+                rightResult = this.doUpdate(node.right, startIndex, endIndex, value);
+            }
+            let r1 = this.calcMethodContext.calc(leftResult, rightResult);
+            let result = this.calcMethodContext.calc(node.cacheNumber, r1);
+            node.cacheNumber = result;
+            return r1;
+        }
+    }
+
+    // 求节点及所有子节点的值
+    doGetRegionValue(node, startIndex, endIndex) {
+        if (node.isCover(startIndex, endIndex)) {
+            let result = this.calcMethodContext.calc(node.data, node.cacheNumber);
+            return result;
+        }
+        if (node.isMixed(startIndex, endIndex)) {
+            let leftResult = null;
+            let rightResult = null;
+            if (node.left && node.left.isMixed(startIndex, endIndex)) {
+                leftResult = this.doGetRegionValue(node.left, startIndex, endIndex);
+            }
+            if (node.right && node.right.isMixed(startIndex, endIndex)) {
+                rightResult = this.doGetRegionValue(node.right, startIndex, endIndex);
+            }
+            let result = null;
+            if (leftResult !== null && rightResult !== null) {
+                result = this.calcMethodContext.calc(leftResult, rightResult);
+            } else if (leftResult !== null) {
+                result = this.calcMethodContext.calc(leftResult, rightResult);
+            } else if (rightResult !== null) {
+                result = this.calcMethodContext.calc(rightResult, leftResult);
+            }
+            return result;
+        }
+        return null;
     }
 
     buildParent(nodes) {
@@ -94,11 +188,12 @@ class RegionTree {
                 next = nodes[i + 1];
             }
             let parent = new Node();
-            let calcMethod = new CalcMethodContext(this.opt);
-            if(next != null){
-                parent.data = calcMethod.calc(current.data,next.data);
+            let calcMethod = this.calcMethodContext;
+            parent.cacheNumber = this.calcMethodContext.getDefaultCacheNumber();
+            if (next != null) {
+                parent.data = calcMethod.calc(current.data, next.data);
                 parent.endIndex = next.endIndex;
-            }else{
+            } else {
                 parent.data = current.data;
                 parent.endIndex = current.endIndex;
             }
