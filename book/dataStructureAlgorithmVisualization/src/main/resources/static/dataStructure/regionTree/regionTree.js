@@ -111,7 +111,7 @@ class RegionTree {
         if (!this.root) {
             throw "请先构建线段树";
         }
-        return this.doGetRegionValue(this.root, startIndex, endIndex);
+        return this.doGetRegionValue(this.root, this.calcMethodContext.getDefaultCacheNumber(), startIndex, endIndex);
     }
 
     // 更新区间值，如果是区间求积，是批量乘以某个数，如果是区间求和，是批量加上某个数
@@ -119,48 +119,49 @@ class RegionTree {
         if (!this.root) {
             throw "请先构建线段树";
         }
-        if(startIndex < this.root.startIndex || endIndex > this.root.endIndex){
+        if (startIndex < this.root.startIndex || endIndex > this.root.endIndex) {
             throw "下标不能在范围之外！";
         }
-        this.doUpdate(this.root, startIndex, endIndex, value);
+        this.doUpdate(this.root, this.calcMethodContext.getDefaultCacheNumber(), startIndex, endIndex, value);
     }
 
-    doUpdate(node, startIndex, endIndex, value) {
+    doUpdate(node, parentCacheNumber, startIndex, endIndex, value) {
         if (node.isCover(startIndex, endIndex)) {
-            let result = (endIndex - startIndex + 1) * value
-            node.cacheNumber = this.calcMethodContext.calc(node.cacheNumber, result);
-            return result;
+            node.cacheNumber = this.calcMethodContext.calc(node.cacheNumber, value);
+            node.cacheNumber = this.calcMethodContext.calc(node.cacheNumber, parentCacheNumber);
+            return;
         }
         if (node.isMixed(startIndex, endIndex)) {
-            let leftResult = this.calcMethodContext.getDefaultCacheNumber();
-            let rightResult = this.calcMethodContext.getDefaultCacheNumber();
-            if (node.left && node.left.isMixed(startIndex, endIndex)) {
-                leftResult = this.doUpdate(node.left, startIndex, endIndex, value);
+            let cacheNumber = node.cacheNumber + parentCacheNumber + value;
+            node.cacheNumber = this.calcMethodContext.getDefaultCacheNumber();
+            let r = this.calcMethodContext.calc((cacheNumber) * (node.endIndex - node.startIndex + 1), node.data);
+            node.data = r;
+            if (node.left) {
+                node.left.cacheNumber = this.calcMethodContext.calc(node.left.cacheNumber, cacheNumber);
+                this.doUpdate(node.left, cacheNumber, startIndex, endIndex, value);
             }
-            if (node.right && node.right.isMixed(startIndex, endIndex)) {
-                rightResult = this.doUpdate(node.right, startIndex, endIndex, value);
+            if (node.right) {
+                node.right.cacheNumber = this.calcMethodContext.calc(node.right.cacheNumber, cacheNumber);
+                this.doUpdate(node.right, cacheNumber, startIndex, endIndex, value);
             }
-            let r1 = this.calcMethodContext.calc(leftResult, rightResult);
-            let result = this.calcMethodContext.calc(node.cacheNumber, r1);
-            node.cacheNumber = result;
-            return r1;
         }
     }
 
     // 求节点及所有子节点的值
-    doGetRegionValue(node, startIndex, endIndex) {
+    doGetRegionValue(node, parentCacheNumber, startIndex, endIndex) {
+        let cacheNumber = parentCacheNumber + node.cacheNumber;
+        let currentResult = this.calcMethodContext.calc(node.data, cacheNumber * (node.endIndex - node.startIndex + 1));
         if (node.isCover(startIndex, endIndex)) {
-            let result = this.calcMethodContext.calc(node.data, node.cacheNumber);
-            return result;
+            return currentResult;
         }
         if (node.isMixed(startIndex, endIndex)) {
             let leftResult = null;
             let rightResult = null;
             if (node.left && node.left.isMixed(startIndex, endIndex)) {
-                leftResult = this.doGetRegionValue(node.left, startIndex, endIndex);
+                leftResult = this.doGetRegionValue(node.left, cacheNumber, startIndex, endIndex);
             }
             if (node.right && node.right.isMixed(startIndex, endIndex)) {
-                rightResult = this.doGetRegionValue(node.right, startIndex, endIndex);
+                rightResult = this.doGetRegionValue(node.right, cacheNumber, startIndex, endIndex);
             }
             let result = null;
             if (leftResult !== null && rightResult !== null) {
