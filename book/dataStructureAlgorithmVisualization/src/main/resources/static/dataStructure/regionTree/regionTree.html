@@ -13,8 +13,11 @@
     <select name="ope" id="ope">
         <option value="区间和">区间和</option>
         <option value="区间积">区间积</option>
+        <option value="最大值">最大值</option>
+        <option value="最小值">最小值</option>
     </select>&nbsp;&nbsp;
-    <button onclick="build()">构建线段树</button> <button onclick="test()">测试</button>
+    <button onclick="build()">构建线段树</button>
+    <button onclick="test()">测试</button>
 
     <div id="regions">
 
@@ -23,14 +26,13 @@
     <br/><br/><br/>
 
 
-
-    下标1：<input type="text" id="uStartIndex" value="2" />
-    下标2：<input type="text" id="uEndIndex" value="3" /><br/>
-    如果是加法，区间内+，如果是乘法，区间内*：<input type="text" id="uValue" value="2" />
+    下标1：<input type="text" id="uStartIndex" value="2"/>
+    下标2：<input type="text" id="uEndIndex" value="3"/><br/>
+    如果是加法，区间内+，如果是乘法，区间内*：<input type="text" id="uValue" value="2"/>
     <button onclick="updateRegionValue()">更新区间值</button>
     <br/><br/><br/>
-    <input type="text" id="startIndex" value="2" />
-    <input type="text" id="endIndex" value="3" />
+    <input type="text" id="startIndex" value="2"/>
+    <input type="text" id="endIndex" value="3"/>
     <button onclick="getRegionValue()">获取区间值</button>
     区间值为：<span id="regionValue"></span>
     <br/>

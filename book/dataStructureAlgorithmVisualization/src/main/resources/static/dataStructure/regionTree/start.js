@@ -99,9 +99,9 @@ window.test = function () {
 }
 
 window.getRegionFor = function (startIndex, endIndex, current) {
-    let value = regionTree.calcMethodContext.getDefaultCacheNumber();
+    let value = null;
     for (let i = startIndex; i <= endIndex; i++) {
-        value = regionTree.calcMethodContext.calc(value, current[i]);
+        value = regionTree.calcMethodContext.calc(current[i],value);
     }
     return value;
 }

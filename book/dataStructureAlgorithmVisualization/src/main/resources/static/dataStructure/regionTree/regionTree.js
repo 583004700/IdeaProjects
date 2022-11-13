@@ -2,13 +2,7 @@ import Node from "./Node";
 import DrawTree from "../common/js/draw/tree/DrawTree";
 
 class CalcMethod {
-    calc(a, b) {
-        throw "请重写计算方式";
-    }
 
-    getNewValue(oldValue, cacheNum, count) {
-        throw "请重写方法！";
-    }
 }
 
 class AddCalcMethod extends CalcMethod {
@@ -17,15 +11,19 @@ class AddCalcMethod extends CalcMethod {
         return 0;
     }
 
+    updateCalc(a, b) {
+        return a + b;
+    }
+
     calc(a, b) {
-        if (b === null || b === undefined) {
-            b = 0;
+        if(b === null || b === undefined){
+            b = this.defaultCacheNumber();
         }
         return a + b;
     }
 
     getNewValue(oldValue, cacheNum, count) {
-        return this.calc(oldValue, cacheNum * count);
+        return this.updateCalc(oldValue, cacheNum * count);
     }
 }
 
@@ -35,21 +33,71 @@ class MultiplyCalcMethod extends CalcMethod {
         return 1;
     }
 
+    updateCalc(a, b) {
+        return a * b;
+    }
+
     calc(a, b) {
-        if (b === null || b === undefined) {
-            b = 1;
+        if(b === null || b === undefined){
+            b = this.defaultCacheNumber();
         }
         return a * b;
     }
 
     getNewValue(oldValue, cacheNum, count) {
-        return this.calc(oldValue, Math.pow(cacheNum, count));
+        return this.updateCalc(oldValue, Math.pow(cacheNum, count));
+    }
+}
+
+class MaxCalcMethod extends CalcMethod {
+
+    defaultCacheNumber() {
+        return 0;
+    }
+
+    updateCalc(a, b) {
+        return a + b;
+    }
+
+    calc(a, b) {
+        if(b === null || b === undefined){
+            return a;
+        }
+        return Math.max(a, b);
+    }
+
+    getNewValue(oldValue, cacheNum, count) {
+        return this.updateCalc(oldValue, cacheNum * count);
+    }
+}
+
+class MinCalcMethod extends CalcMethod {
+
+    defaultCacheNumber() {
+        return 0;
+    }
+
+    updateCalc(a, b) {
+        return a + b;
+    }
+
+    calc(a, b) {
+        if(b === null || b === undefined){
+            return a;
+        }
+        return Math.min(a, b);
+    }
+
+    getNewValue(oldValue, cacheNum, count) {
+        return this.updateCalc(oldValue, cacheNum * count);
     }
 }
 
 let Const = {
     opeAdd: "区间和",
-    opeMultiply: '区间积'
+    opeMultiply: '区间积',
+    opeMax: '最大值',
+    opeMin: '最小值'
 }
 
 // 可能策略中有多个方法，这个是根据上下文场景进行组合
@@ -59,6 +107,10 @@ class CalcMethodContext {
             this.strategy = new AddCalcMethod();
         } else if (ope === Const.opeMultiply) {
             this.strategy = new MultiplyCalcMethod();
+        } else if (ope === Const.opeMax) {
+            this.strategy = new MaxCalcMethod();
+        } else if (ope === Const.opeMin) {
+            this.strategy = new MinCalcMethod();
         }
     }
 
