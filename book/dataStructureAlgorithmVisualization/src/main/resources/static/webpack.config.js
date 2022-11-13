@@ -6,8 +6,8 @@ const JavaScriptObfuscator = require('webpack-obfuscator');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-    devServer:{
-      host: '0.0.0.0'
+    devServer: {
+        host: '0.0.0.0'
     },
     entry: {
         'dataStructure/aVLTree': './dataStructure/aVLTree/start.js',
@@ -111,49 +111,49 @@ module.exports = {
         new HtmlWebpackPlugin(
             {
                 template: './dataStructure/aVLTree/AVLTree.html',
-                chunks: ['commons','dataStructure/aVLTree'],
+                chunks: ['commons', 'dataStructure/aVLTree'],
                 filename: 'dataStructure/aVLTree/index.html'
             }
         ),
         new HtmlWebpackPlugin(
             {
                 template: './dataStructure/bpTree/BPTree.html',
-                chunks: ['commons','dataStructure/bpTree'],
+                chunks: ['commons', 'dataStructure/bpTree'],
                 filename: 'dataStructure/bpTree/index.html'
             }
         ),
         new HtmlWebpackPlugin(
             {
                 template: './dataStructure/bTree/BTree.html',
-                chunks: ['commons','dataStructure/bTree'],
+                chunks: ['commons', 'dataStructure/bTree'],
                 filename: 'dataStructure/bTree/index.html'
             }
         ),
         new HtmlWebpackPlugin(
             {
                 template: './dataStructure/heap/heap.html',
-                chunks: ['commons','dataStructure/heap'],
+                chunks: ['commons', 'dataStructure/heap'],
                 filename: 'dataStructure/heap/index.html'
             }
         ),
         new HtmlWebpackPlugin(
             {
                 template: './dataStructure/rbTree/rbTree.html',
-                chunks: ['commons','dataStructure/rbTree'],
+                chunks: ['commons', 'dataStructure/rbTree'],
                 filename: 'dataStructure/rbTree/index.html'
             }
         ),
         new HtmlWebpackPlugin(
             {
                 template: './dataStructure/hfmTree/hfmTree.html',
-                chunks: ['commons','dataStructure/hfmTree'],
+                chunks: ['commons', 'dataStructure/hfmTree'],
                 filename: 'dataStructure/hfmTree/index.html'
             }
         ),
         new HtmlWebpackPlugin(
             {
                 template: './dataStructure/regionTree/regionTree.html',
-                chunks: ['commons','dataStructure/regionTree'],
+                chunks: ['commons', 'dataStructure/regionTree'],
                 filename: 'dataStructure/regionTree/index.html'
             }
         ),
@@ -162,28 +162,28 @@ module.exports = {
         new HtmlWebpackPlugin(
             {
                 template: './algorithm/dfs/DFS.html',
-                chunks: ['commons','algorithm/dfs'],
+                chunks: ['commons', 'algorithm/dfs'],
                 filename: 'algorithm/dfs/index.html'
             }
         ),
         new HtmlWebpackPlugin(
             {
                 template: './algorithm/bfs/BFS.html',
-                chunks: ['commons','algorithm/bfs'],
+                chunks: ['commons', 'algorithm/bfs'],
                 filename: 'algorithm/bfs/index.html'
             }
         ),
         new HtmlWebpackPlugin(
             {
                 template: './algorithm/bigInt/bigint.html',
-                chunks: ['commons','algorithm/bigInt'],
+                chunks: ['commons', 'algorithm/bigInt'],
                 filename: 'algorithm/bigInt/index.html'
             }
         ),
         new HtmlWebpackPlugin(
             {
                 template: './algorithm/bigFloat/bigFloat.html',
-                chunks: ['commons','algorithm/bigFloat'],
+                chunks: ['commons', 'algorithm/bigFloat'],
                 filename: 'algorithm/bigFloat/index.html'
             }
         ),
@@ -191,7 +191,7 @@ module.exports = {
         new HtmlWebpackPlugin(
             {
                 template: './algorithm/pack01/pack01.html',
-                chunks: ['commons','algorithm/pack01'],
+                chunks: ['commons', 'algorithm/pack01'],
                 filename: 'algorithm/pack01/index.html'
             }
         ),
@@ -202,8 +202,8 @@ module.exports = {
         }),
         //压缩css
         new optimizeCssAssetsWebpackPlugin(),
-        /*new JavaScriptObfuscator({
-            domainLock:["zhu_weibin.gitee.io","0.0.0.0","localhost"],
+        new JavaScriptObfuscator({
+            domainLock: ["zhu_weibin.gitee.io", "0.0.0.0", "localhost"],
             compact: true,//压缩代码
             controlFlowFlattening: false,//是否启用控制流扁平化(降低1.5倍的运行速度)
             controlFlowFlatteningThreshold: 1,//应用概率;在较大的代码库中，建议降低此值，因为大量的控制流转换可能会增加代码的大小并降低代码的速度。
@@ -222,12 +222,12 @@ module.exports = {
             stringArrayThreshold: 1,
             transformObjectKeys: true,
             unicodeEscapeSequence: false//允许启用/禁用字符串转换为unicode转义序列。Unicode转义序列大大增加了代码大小，并且可以轻松地将字符串恢复为原始视图。建议仅对小型源代码启用此选项。
-        }, [])*/
+        }, [])
     ],
     //生产环境下会自动压缩js代码
-    //mode: 'production',
-    mode: 'development',
-    devtool: 'source-map'
+    mode: 'production',
+    //mode: 'development',
+    //devtool: 'source-map'
 }
 
 //webpack serve --mode=development //开启服务器  要先安装 webpack-cli，命令为：npm install -g webpack-cli@4.5.0

@@ -42,11 +42,74 @@ let startY = 100;
 window.build = function () {
     let arr = JSON.parse(numsArrEle.value);
     preArr = arr;
+    current = arr;
     let opt = opeEle.value;
     regionTree.build(arr, opt);
     let treeHeight = regionTree.getHeight();
     canvasEle.height = treeHeight * splitY + window.innerHeight;
     regionTree.drawTreeOptimize(ctx, startX, startY, splitY);
+}
+
+function randomRange(min, max) { // min最小值，max最大值
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+window.test = function () {
+    alert("请打开控制台查看结果！");
+    let arr = [];
+    let q1 = 1;
+    let q2 = 10000000;
+    let len = 10000000;
+    let middle = Math.floor(len / 2);
+    for (let i = 0; i < len; i++) {
+        arr.push(randomRange(q1, q2));
+    }
+    regionTree = new RegionTree();
+    regionTree.build(arr, '区间和');
+    setInterval(function () {
+        let startIndex = randomRange(q1, middle / 2);
+        let endIndex = randomRange(middle, len);
+
+        let updateValue = randomRange(-10, 10);
+
+        // 更新区间值
+        let startT = new Date().getTime();
+        updateRegionFor(startIndex, endIndex, arr, updateValue);
+        let endT = new Date().getTime();
+        regionTree.update(startIndex, endIndex, updateValue);
+        let endT2 = new Date().getTime();
+        console.log("更新区间 " + startIndex + " 至 " + endIndex + " 的值!，for循环耗时：" + (endT - startT));
+        console.log("更新区间 " + startIndex + " 至 " + endIndex + " 的值!，线段树耗时：" + (endT2 - endT));
+        // 重新计算区间值
+        let startTime1 = new Date().getTime();
+        let r1 = getRegionFor(startIndex, endIndex, arr);
+        let endTime1 = new Date().getTime();
+        let r2 = regionTree.getRegionValue(startIndex, endIndex);
+        let endTime2 = new Date().getTime();
+        console.log("startIndex:" + startIndex);
+        console.log("endIndex:" + endIndex);
+        console.log("for求和为:" + r1 + "执行时间：" + (endTime1 - startTime1));
+        console.log("线段树求和为:" + r2 + "执行时间：" + (endTime2 - endTime1));
+        if (r1 !== r2) {
+            alert("计算结果不正确");
+        } else {
+            console.log("计算正确");
+        }
+    }, 1000);
+}
+
+window.getRegionFor = function (startIndex, endIndex, current) {
+    let value = regionTree.calcMethodContext.getDefaultCacheNumber();
+    for (let i = startIndex; i <= endIndex; i++) {
+        value = regionTree.calcMethodContext.calc(value, current[i]);
+    }
+    return value;
+}
+
+window.updateRegionFor = function (startIndex, endIndex, current, updateValue) {
+    for (let i = startIndex; i <= endIndex; i++) {
+        current[i] = regionTree.calcMethodContext.calc(current[i], updateValue);
+    }
 }
 
 window.getRegionValue = function () {
@@ -61,20 +124,12 @@ window.getRegionValue = function () {
     let startIndex = parseInt(startIndexEle.value);
     let endIndex = parseInt(endIndexEle.value);
 
-    let getRegionFor = function(startIndex,endIndex){
-        let value = regionTree.calcMethodContext.getDefaultCacheNumber();
-        for (let i = startIndex; i <= endIndex; i++) {
-            value = regionTree.calcMethodContext.calc(value,current[i]);
-        }
-        return value;
-    }
-
     try {
         let result = regionTree.getRegionValue(startIndex, endIndex);
-        let result2 = getRegionFor(startIndex,endIndex);
-        result2 = "for循环统计结果为："+result2;
-        result = "线段树统计结果为："+result;
-        result = result +","+ result2;
+        let result2 = getRegionFor(startIndex, endIndex, current);
+        result2 = "for循环统计结果为：" + result2;
+        result = "线段树统计结果为：" + result;
+        result = result + "," + result2;
         regionValueEle.innerText = result;
         regionTree.drawTreeOptimize(ctx, startX, startY, splitY);
     } catch (e) {

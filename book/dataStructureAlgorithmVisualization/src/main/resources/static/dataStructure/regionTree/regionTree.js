@@ -6,8 +6,8 @@ class CalcMethod {
         throw "请重写计算方式";
     }
 
-    update(a, b, val) {
-        throw "请重写操作方式，比如乘5，比如加3等";
+    getNewValue(oldValue, cacheNum, count) {
+        throw "请重写方法！";
     }
 }
 
@@ -24,12 +24,8 @@ class AddCalcMethod extends CalcMethod {
         return a + b;
     }
 
-    // 加法增加后，父节点累计相加
-    update(a, b, val) {
-        if (b === null || b === undefined) {
-            b = 0;
-        }
-        return (a + val) + (b + val);
+    getNewValue(oldValue, cacheNum, count) {
+        return this.calc(oldValue, cacheNum * count);
     }
 }
 
@@ -46,12 +42,8 @@ class MultiplyCalcMethod extends CalcMethod {
         return a * b;
     }
 
-    // 乘法相乘，父节点扩大平方倍
-    update(a, b, val) {
-        if (b === null || b === undefined) {
-            b = 1;
-        }
-        return a * b * val * val;
+    getNewValue(oldValue, cacheNum, count) {
+        return this.calc(oldValue, Math.pow(cacheNum, count));
     }
 }
 
@@ -74,8 +66,8 @@ class CalcMethodContext {
         return this.strategy.calc(a, b);
     }
 
-    update(a, b, val) {
-        return this.strategy.update(a, b, val);
+    getNewValue(oldValue, cacheNum, count) {
+        return this.strategy.getNewValue(oldValue, cacheNum, count);
     }
 
     getDefaultCacheNumber() {
@@ -131,26 +123,35 @@ class RegionTree {
             node.cacheNumber = this.calcMethodContext.calc(node.cacheNumber, parentCacheNumber);
             return;
         }
+        let cacheNumber = this.calcMethodContext.calc(node.cacheNumber, parentCacheNumber);
+        node.cacheNumber = this.calcMethodContext.getDefaultCacheNumber();
+        let r = this.calcMethodContext.getNewValue(node.data, cacheNumber, (node.endIndex - node.startIndex + 1));
         if (node.isMixed(startIndex, endIndex)) {
-            let cacheNumber = node.cacheNumber + parentCacheNumber + value;
-            node.cacheNumber = this.calcMethodContext.getDefaultCacheNumber();
-            let r = this.calcMethodContext.calc((cacheNumber) * (node.endIndex - node.startIndex + 1), node.data);
-            node.data = r;
-            if (node.left) {
-                node.left.cacheNumber = this.calcMethodContext.calc(node.left.cacheNumber, cacheNumber);
+            let s = Math.max(startIndex, node.startIndex);
+            let e = Math.min(endIndex, node.endIndex);
+            r = this.calcMethodContext.getNewValue(r, value, (e - s + 1));
+        }
+        node.data = r;
+        if (node.left) {
+            if (node.left.isMixed(startIndex, endIndex)) {
                 this.doUpdate(node.left, cacheNumber, startIndex, endIndex, value);
+            } else {
+                node.left.cacheNumber = this.calcMethodContext.calc(node.left.cacheNumber, cacheNumber);
             }
-            if (node.right) {
-                node.right.cacheNumber = this.calcMethodContext.calc(node.right.cacheNumber, cacheNumber);
+        }
+        if (node.right) {
+            if (node.right.isMixed(startIndex, endIndex)) {
                 this.doUpdate(node.right, cacheNumber, startIndex, endIndex, value);
+            } else {
+                node.right.cacheNumber = this.calcMethodContext.calc(node.right.cacheNumber, cacheNumber);
             }
         }
     }
 
     // 求节点及所有子节点的值
     doGetRegionValue(node, parentCacheNumber, startIndex, endIndex) {
-        let cacheNumber = parentCacheNumber + node.cacheNumber;
-        let currentResult = this.calcMethodContext.calc(node.data, cacheNumber * (node.endIndex - node.startIndex + 1));
+        let cacheNumber = this.calcMethodContext.calc(parentCacheNumber, node.cacheNumber);
+        let currentResult = this.calcMethodContext.getNewValue(node.data, cacheNumber, (node.endIndex - node.startIndex + 1));
         if (node.isCover(startIndex, endIndex)) {
             return currentResult;
         }

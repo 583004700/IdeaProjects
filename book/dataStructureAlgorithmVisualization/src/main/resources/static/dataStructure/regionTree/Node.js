@@ -18,6 +18,10 @@ class Node {
         return (startIndex <= this.startIndex && endIndex >= this.endIndex);
     }
 
+    isCoverOther(startIndex, endIndex){
+        return (startIndex >= this.startIndex && endIndex <= this.endIndex);
+    }
+
     // 是否有交集
     isMixed(startIndex, endIndex) {
         if(this.isCover(startIndex,endIndex)){
