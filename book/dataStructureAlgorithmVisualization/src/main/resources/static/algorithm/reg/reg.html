@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=0,maximum-scale=1"/>
+    <title>正则表达式</title>
+    <style>
+        ul {
+            width: 500px;
+            height: 660px;
+            margin: 10px 10px;
+            float: left;
+            margin-block-start: 0;
+            margin-block-end: 0;
+            margin-inline-start: 0;
+            margin-inline-end: 0;
+            padding-inline-start: 0;
+        }
+
+        ul li {
+            width: 45px;
+            height: 45px;
+            float: left;
+            background-color: pink;
+            list-style: none;
+            border: 2px solid beige;
+            line-height: 45px;
+        }
+
+        .clearfix:after{
+            content: "";
+            display: block;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center">
+    <span style="margin-bottom: 15px;display: block;font-size: 20px">正则表达式</span>
+    <br/><br/>
+    <span id="text">
+        The id global attribute  defines an identifier (ID) which must be unique in the whole document. Its purpose is to identify the element when linking (using a fragment identifier ), scripting, or styling (with CSS ).
+This attribute's value is an opaque string: this means that web authors should not rely on it to convey human-readable information (although having your IDs somewhat human-readable can be useful for code comprehension, e.g. consider ticket-18659 versus r45tgfe-freds&$@).
+id's value must not contain whitespace  (spaces, tabs etc.). Browsers treat non-conforming IDs that contain whitespace as if the whitespace is part of the ID. In contrast to the class attribute, which allows space-separated values, elements can only have one single ID value.
+Note: Using characters except ASCII  letters, digits, '_', '-' and '.' may cause compatibility problems, as they weren't allowed in HTML 4. Though this restriction has been lifted in HTML5 , an ID should start with a letter for compatibility.
+    </span>
+    <br/>
+    <br/>
+    <br/>
+    <input type="text" id="textInput" value="">&nbsp;&nbsp;&nbsp;<button onclick="resetText()">重新设置文本内容</button>
+    <br/><br/>
+    正则表达式：<input id="pattern" type="text" value="">&nbsp;&nbsp;&nbsp;<button>查找</button>
+</div>
+</body>
+</html>
