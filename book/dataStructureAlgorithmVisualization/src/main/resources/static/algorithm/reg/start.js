@@ -8,7 +8,6 @@ ArrayExtend.exec();
 NumberExtend.exec();
 ObjectExtend.exec();
 
-let textEle = document.getElementById("text");
 let patternEle = document.getElementById("pattern");
 let textInputEle = document.getElementById("textInput");
 
@@ -16,9 +15,12 @@ window.isInt = function (n) {
     return /^\d+$/.test(n);
 }
 
-window.resetText = function(){
-    let newText = textInputEle.value;
-    textEle.innerHTML = newText;
+window.search = function(){
+    let pattern = patternEle.value;
+    let str = textInputEle.value;
+    let reg = new Reg(pattern);
+    let result = reg.test(str);
+    alert(result);
 }
 
 window.onload = function () {
