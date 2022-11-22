@@ -238,9 +238,6 @@ class PatternAndCount {
     }
 
     getCount() {
-        if (this.count !== "*" && this.count !== "?" && this.count !== "+") {
-            return parseInt(this.count);
-        }
         return this.count;
     }
 }
@@ -326,6 +323,14 @@ class Reg {
         return result;
     }
 
+    isZeroCount(count) {
+        return count === "*" || count === "?";
+    }
+
+    isManyCount(count) {
+        return count === "*" || count === "+";
+    }
+
     parse(pattern) {
         if (pattern === this.pattern) {
             return;
@@ -338,21 +343,24 @@ class Reg {
         let stateNode = null;
         let prePre = null;
 
+
         let patternAndCountArr = this._parsePatternCompleteChar(pattern);
 
         for (let i = 0; i < patternAndCountArr.length; i++) {
             let patternAndCount = patternAndCountArr[i];
             let ch = patternAndCount.singlePattern;
-            let haveStar = patternAndCount.getCount() === "*";
+            let manyCount = this.isManyCount(patternAndCount.getCount());
+            let zeroCount = this.isZeroCount(patternAndCount.getCount());
             let charReal = ch;
             stateNode = new StateNode(++count);
             stateNode.setPatternAndCount(patternAndCount);
             this.fsm.addStateNode(stateNode);
             stateNode.pre.addCharMatch(charReal, stateNode);
             prePre = preNoStar;
-            if (haveStar) {
+            if (manyCount) {
                 stateNode.addCharMatch(charReal, stateNode);
-            } else {
+            }
+            if (!zeroCount) {
                 preNoStar = stateNode;
             }
             while (prePre !== null && prePre !== stateNode) {
@@ -361,10 +369,10 @@ class Reg {
             }
         }
 
-        // 如果结点最后是 * 号，代表重复0次也行，所以他前面的也是可接受状态。
+        // 如果结点最后有包含重复0次的节点，代表重复0次也行，所以他前面的也是可接受状态。
         let acceptStateNode = this.fsm.tail;
         while (acceptStateNode !== null && acceptStateNode.patternAndCount
-        && acceptStateNode.patternAndCount.count === "*") {
+        && this.isZeroCount(acceptStateNode.patternAndCount.count)) {
             acceptStateNode.accept = true;
             acceptStateNode = acceptStateNode.pre;
         }

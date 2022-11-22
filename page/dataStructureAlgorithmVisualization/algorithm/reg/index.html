@@ -37,12 +37,22 @@
 <body>
 <div style="text-align: center">
     <span style="margin-bottom: 15px;display: block;font-size: 20px">正则表达式(有限状态机)</span>
-    <span style="margin-bottom: 15px;display: block;font-size: 20px">
-        目前实现：*匹配0次或多次，$匹配数字0-9，.匹配任意一个字符
+    <span style="margin-bottom: 15px;display: block;font-size: 14px">
+        目前实现：<br/>
+        .匹配任意一个字符,
+        \w 查找数字、字母及下划线。,
+        \d 查找数字,
+        \D 查找非数字,
+        \s 查找空白字符,
+        \S 查找非空白字符
+        <br/>
+         * 匹配0次或多次, + 匹配1次或多次, ? 匹配0次或1次
+        <br/>
+        匹配 \*+?[]{}$ 字符需要使用 \ 转义，如匹配 * 字符使用 \*
     </span>
     文本内容：<textarea id="textInput" style="width: 400px;height: 100px">aab98k39i9</textarea>&nbsp;&nbsp;&nbsp;
     <br/><br/>
-    正则表达式：<input id="pattern" type="text" value="a*b$*k$*i$">&nbsp;&nbsp;&nbsp;<button onclick="search()">匹配</button>
+    正则表达式：<input id="pattern" type="text" value="a*b\d*k\d*i\d">&nbsp;&nbsp;&nbsp;<button onclick="search()">匹配</button>
 </div>
 <script type="text/javascript" src="../../commons/js/bundle.js"></script><script type="text/javascript" src="../../algorithm/reg/js/bundle.js"></script></body>
 </html>

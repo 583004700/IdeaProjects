@@ -211,7 +211,7 @@ module.exports = {
         }),
         //压缩css
         new optimizeCssAssetsWebpackPlugin(),
-        /*new JavaScriptObfuscator({
+        new JavaScriptObfuscator({
             domainLock: ["zhu_weibin.gitee.io", "0.0.0.0", "localhost"],
             compact: true,//压缩代码
             controlFlowFlattening: false,//是否启用控制流扁平化(降低1.5倍的运行速度)
@@ -231,12 +231,12 @@ module.exports = {
             stringArrayThreshold: 1,
             transformObjectKeys: true,
             unicodeEscapeSequence: false//允许启用/禁用字符串转换为unicode转义序列。Unicode转义序列大大增加了代码大小，并且可以轻松地将字符串恢复为原始视图。建议仅对小型源代码启用此选项。
-        }, [])*/
+        }, [])
     ],
     //生产环境下会自动压缩js代码
-    //mode: 'production',
-    mode: 'development',
-    devtool: 'source-map'
+    mode: 'production',
+    //mode: 'development',
+    //devtool: 'source-map'
 }
 
 //webpack serve --mode=development //开启服务器  要先安装 webpack-cli，命令为：npm install -g webpack-cli@4.5.0
