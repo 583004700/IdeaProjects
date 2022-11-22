@@ -30,7 +30,21 @@ class DotCharMatch extends CharMatch {
     }
 }
 
-// 数字匹配
+// \w 数字,字母，下划线 匹配
+class NumberAndLettersAndUnderLineCharMatch extends CharMatch {
+    constructor(patternChar) {
+        super(patternChar);
+    }
+
+    test(str) {
+        let isNumber = str.length === 1 && parseInt(str) >= 0 && parseInt(str) <= 9;
+        let isUnderLine = str === "_";
+        let isLetters = (str >= "a" && str <= "z") || (str >= "A" && str <= "Z");
+        return isNumber || isUnderLine || isLetters;
+    }
+}
+
+// \d 数字匹配
 class NumberCharMatch extends CharMatch {
     constructor(patternChar) {
         super(patternChar);
@@ -41,6 +55,39 @@ class NumberCharMatch extends CharMatch {
     }
 }
 
+// \D 非数字匹配
+class NotNumberCharMatch extends CharMatch {
+    constructor(patternChar) {
+        super(patternChar);
+    }
+
+    test(str) {
+        return !new NumberCharMatch(this.patternChar).test(str);
+    }
+}
+
+// \s 空白字符匹配
+class SpaceCharMatch extends CharMatch {
+    constructor(patternChar) {
+        super(patternChar);
+    }
+
+    test(str) {
+        return str === " " || str === "\t" || str === "\r" || str === "\n";
+    }
+}
+
+// \S 非空白字符匹配
+class NotSpaceCharMatch extends CharMatch {
+    constructor(patternChar) {
+        super(patternChar);
+    }
+
+    test(str) {
+        return !new SpaceCharMatch(this.patternChar).test(str);
+    }
+}
+
 class CharMatchFactory {
     static getCharMatch(patternChar) {
         let result = null;
@@ -48,8 +95,20 @@ class CharMatchFactory {
             case ".":
                 result = new DotCharMatch(patternChar);
                 break;
-            case "$":
+            case "\\w":
+                result = new NumberAndLettersAndUnderLineCharMatch(patternChar);
+                break;
+            case "\\d":
                 result = new NumberCharMatch(patternChar);
+                break;
+            case "\\D":
+                result = new NotNumberCharMatch(patternChar);
+                break;
+            case "\\s":
+                result = new SpaceCharMatch(patternChar);
+                break;
+            case "\\S":
+                result = new SpaceCharMatch(patternChar);
                 break;
             default:
                 result = new CharMatch(patternChar);
