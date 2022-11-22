@@ -23,6 +23,9 @@ class DotCharMatch extends CharMatch {
     }
 
     test(str) {
+        if (str === undefined) {
+            return false;
+        }
         return true;
     }
 }
@@ -64,14 +67,14 @@ class StateNode {
         this.pre = null;
         this.next = null;
         this.id = id;
-        this.ch = null;
+        this.patternAndCount = null;
     }
 
-    setChar(ch) {
-        this.ch = ch;
+    setPatternAndCount(patternAndCount) {
+        this.patternAndCount = patternAndCount;
     }
 
-    // 添加一个匹配规则及流向的结点
+    // 添加一个匹配规则及流向的结点,如 \d , a
     addCharMatch(patternChar, stateNode) {
         let key = patternChar;
         let charMatchArr = this.charMatchs[key];
@@ -154,17 +157,90 @@ class ExecResult {
 
 }
 
+class PatternAndCount {
+    // 匹配模式和重复次数,count为字符串
+    constructor(singlePattern, count) {
+        this.singlePattern = singlePattern;
+        this.count = count;
+    }
+
+    getCount() {
+        if (this.count !== "*" && this.count !== "?" && this.count !== "+") {
+            return parseInt(this.count);
+        }
+        return this.count;
+    }
+}
+
 class Reg {
     constructor(pattern, global = false) {
-        this.pattern = pattern;
         this.global = global;
         // 从哪个坐标开始匹配，如果是全局匹配，每次匹配成功后，需要修改这个值
         this.startIndex = 0;
         this.fsm = null;
         this.parse(pattern);
+        this.pattern = pattern;
+    }
+
+    _parsePatternCompleteChar(pattern) {
+        // 返回值为 [{PatternAndCount}]
+
+        // 字符匹配
+
+        //  .  任意字符
+        //  \\w 查找数字、字母及下划线。
+        //  \\d 查找数字
+        //  \\D 查找非数字
+        //  \\s 查找空白字符
+        //  \\S 查找非空白字符
+
+        // 量词
+
+        // *  匹配0次或多次
+        // +  匹配1次或多次
+        // ?  匹配0次或1次
+
+        let primarySinglePatternPrefix = "\\";
+        let primarySinglePatternPrefixes = "wdDsS";
+        let primaryCountSuffixes = "*+?";
+        let result = [];
+        for (let i = 0; i < pattern.length; i++) {
+            let singlePattern = null;
+            let count = null;
+            let c = pattern.substr(i, 1);
+            if (c === primarySinglePatternPrefix) {
+                continue;
+            }
+            if (i > 0 && pattern.substr(i - 1, 1) === primarySinglePatternPrefix) {
+                if (primarySinglePatternPrefixes.indexOf(c) === -1) {
+                    throw "正则表达式不正确，\\" + c + "不是正确的匹配模式！";
+                }
+                // 如果前面字符是 \\
+                singlePattern = primarySinglePatternPrefix + c;
+            } else {
+                singlePattern = c;
+            }
+            let nextC = null;
+            if (i < pattern.length - 1) {
+                nextC = pattern.substr(i + 1, 1);
+            }
+            if (nextC && primaryCountSuffixes.indexOf(nextC) !== -1) {
+                count = nextC;
+                i++;
+            } else {
+                count = "1";
+            }
+
+            let patternAndCount = new PatternAndCount(singlePattern, count);
+            result.push(patternAndCount);
+        }
+        return result;
     }
 
     parse(pattern) {
+        if (pattern === this.pattern) {
+            return;
+        }
         this.fsm = new FSM();
         let count = 1;
         let first = new StateNode(count);
@@ -172,18 +248,16 @@ class Reg {
         let preNoStar = this.fsm.header;
         let stateNode = null;
         let prePre = null;
-        for (let i = 0; i < pattern.length; i++) {
-            let ch = pattern.substr(i, 1);
-            if (i < pattern.length - 1) {
-                if (pattern.substr(i + 1, 1) === "*") {
-                    ch = pattern.substr(i, 2);
-                    i++;
-                }
-            }
-            let haveStar = ch.indexOf("*") !== -1;
-            let charReal = ch.substr(0, 1);
+
+        let patternAndCountArr = this._parsePatternCompleteChar(pattern);
+
+        for (let i = 0; i < patternAndCountArr.length; i++) {
+            let patternAndCount = patternAndCountArr[i];
+            let ch = patternAndCount.singlePattern;
+            let haveStar = patternAndCount.getCount() === "*";
+            let charReal = ch;
             stateNode = new StateNode(++count);
-            stateNode.setChar(ch);
+            stateNode.setPatternAndCount(patternAndCount);
             this.fsm.addStateNode(stateNode);
             stateNode.pre.addCharMatch(charReal, stateNode);
             prePre = preNoStar;
@@ -196,15 +270,17 @@ class Reg {
                 prePre.addCharMatch(charReal, stateNode);
                 prePre = prePre.next;
             }
+        }
 
+        // 如果结点最后是 * 号，代表重复0次也行，所以他前面的也是可接受状态。
+        let acceptStateNode = this.fsm.tail;
+        while (acceptStateNode !== null && acceptStateNode.patternAndCount
+        && acceptStateNode.patternAndCount.count === "*") {
+            acceptStateNode.accept = true;
+            acceptStateNode = acceptStateNode.pre;
         }
-        let te = this.fsm.tail;
-        while (te !== null && te.ch && te.ch.indexOf("*") !== -1) {
-            te.accept = true;
-            te = te.pre;
-        }
-        if (te && te !== this.fsm.header) {
-            te.accept = true;
+        if (acceptStateNode && acceptStateNode !== this.fsm.header) {
+            acceptStateNode.accept = true;
         }
     }
 
