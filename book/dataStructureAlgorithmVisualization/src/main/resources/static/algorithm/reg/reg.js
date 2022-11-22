@@ -274,7 +274,11 @@ class Reg {
         // ?  匹配0次或1次
 
         let primarySinglePatternPrefix = "\\";
-        let primarySinglePatternPrefixes = "wdDsS\\";
+        // \+c c有效的
+        let primarySinglePatternPrefixes = "wdDsS\\*+?[]{}$";
+        // 需要忽略的 \* 代表 *
+        let ignorePrimarySinglePatternPrefixes = "\\*+?[]{}$";
+        // 次数
         let primaryCountSuffixes = "*+?";
         let result = [];
         let startIndex = 0;
@@ -295,17 +299,16 @@ class Reg {
                     throw "正则表达式不正确，\\" + c + "不是正确的匹配模式！";
                 }
                 // 如果前面字符是 \
-                if(c !== preIsPrimarySinglePatternPrefix){
+                if (ignorePrimarySinglePatternPrefixes.indexOf(c) === -1) {
                     // 如果当前的不是 \ ，则为 \t \n 等
                     singlePattern = primarySinglePatternPrefix + c;
-                }else{
+                } else {
                     // 如果是 \\ ，则代表匹配 \
                     singlePattern = c;
                 }
             } else {
                 singlePattern = c;
             }
-            startIndex = i + 1;
             let nextC = null;
             if (i < pattern.length - 1) {
                 nextC = pattern.substr(i + 1, 1);
@@ -316,9 +319,9 @@ class Reg {
             } else {
                 count = "1";
             }
-
             let patternAndCount = new PatternAndCount(singlePattern, count);
             result.push(patternAndCount);
+            startIndex = i + 1;
         }
         return result;
     }

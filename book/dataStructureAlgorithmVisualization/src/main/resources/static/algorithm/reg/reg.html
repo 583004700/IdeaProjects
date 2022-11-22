@@ -39,14 +39,16 @@
     <span style="margin-bottom: 15px;display: block;font-size: 20px">正则表达式(有限状态机)</span>
     <span style="margin-bottom: 15px;display: block;font-size: 14px">
         目前实现：<br/>
-        .匹配任意一个字符<br/>
-        \w 查找数字、字母及下划线。<br/>
-        \d 查找数字<br/>
-        \D 查找非数字<br/>
-        \s 查找空白字符<br/>
-        \S 查找非空白字符<br/>
-        <br/><br/>
+        .匹配任意一个字符,
+        \w 查找数字、字母及下划线。,
+        \d 查找数字,
+        \D 查找非数字,
+        \s 查找空白字符,
+        \S 查找非空白字符,
+        <br/>
         *匹配0次或多次
+        <br/>
+        匹配 \*+?[]{}$ 字符需要使用 \ 转义，如匹配 * 字符使用 \*
     </span>
     文本内容：<textarea id="textInput" style="width: 400px;height: 100px">aab98k39i9</textarea>&nbsp;&nbsp;&nbsp;
     <br/><br/>
