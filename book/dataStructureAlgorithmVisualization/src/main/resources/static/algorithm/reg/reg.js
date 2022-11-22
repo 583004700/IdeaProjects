@@ -88,6 +88,17 @@ class NotSpaceCharMatch extends CharMatch {
     }
 }
 
+// \\  \字符匹配,因为\有特殊含义，所以用 \\ 去匹配字符 \
+class RightSlashCharMatch extends CharMatch {
+    constructor(patternChar) {
+        super(patternChar);
+    }
+
+    test(str) {
+        return str === "\\";
+    }
+}
+
 class CharMatchFactory {
     static getCharMatch(patternChar) {
         let result = null;
@@ -109,6 +120,9 @@ class CharMatchFactory {
                 break;
             case "\\S":
                 result = new SpaceCharMatch(patternChar);
+                break;
+            case "\\\\":
+                result = new RightSlashCharMatch(patternChar);
                 break;
             default:
                 result = new CharMatch(patternChar);
@@ -260,25 +274,38 @@ class Reg {
         // ?  匹配0次或1次
 
         let primarySinglePatternPrefix = "\\";
-        let primarySinglePatternPrefixes = "wdDsS";
+        let primarySinglePatternPrefixes = "wdDsS\\";
         let primaryCountSuffixes = "*+?";
         let result = [];
+        let startIndex = 0;
         for (let i = 0; i < pattern.length; i++) {
             let singlePattern = null;
             let count = null;
             let c = pattern.substr(i, 1);
-            if (c === primarySinglePatternPrefix) {
+            let preIsPrimarySinglePatternPrefix = false;
+            let startIndexChar = pattern.substr(startIndex, 1);
+            if (startIndexChar === primarySinglePatternPrefix) {
+                preIsPrimarySinglePatternPrefix = true;
+            }
+            if (c === primarySinglePatternPrefix && startIndex === i) {
                 continue;
             }
-            if (i > 0 && pattern.substr(i - 1, 1) === primarySinglePatternPrefix) {
+            if (preIsPrimarySinglePatternPrefix) {
                 if (primarySinglePatternPrefixes.indexOf(c) === -1) {
                     throw "正则表达式不正确，\\" + c + "不是正确的匹配模式！";
                 }
-                // 如果前面字符是 \\
-                singlePattern = primarySinglePatternPrefix + c;
+                // 如果前面字符是 \
+                if(c !== preIsPrimarySinglePatternPrefix){
+                    // 如果当前的不是 \ ，则为 \t \n 等
+                    singlePattern = primarySinglePatternPrefix + c;
+                }else{
+                    // 如果是 \\ ，则代表匹配 \
+                    singlePattern = c;
+                }
             } else {
                 singlePattern = c;
             }
+            startIndex = i + 1;
             let nextC = null;
             if (i < pattern.length - 1) {
                 nextC = pattern.substr(i + 1, 1);

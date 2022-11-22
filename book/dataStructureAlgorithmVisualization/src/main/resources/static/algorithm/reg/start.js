@@ -16,11 +16,15 @@ window.isInt = function (n) {
 }
 
 window.search = function(){
-    let pattern = patternEle.value;
-    let str = textInputEle.value;
-    let reg = new Reg(pattern);
-    let result = reg.test(str);
-    alert(result);
+    try{
+        let pattern = patternEle.value;
+        let str = textInputEle.value;
+        let reg = new Reg(pattern);
+        let result = reg.test(str);
+        alert(result);
+    }catch (e){
+        alert(e);
+    }
 }
 
 window.onload = function () {
