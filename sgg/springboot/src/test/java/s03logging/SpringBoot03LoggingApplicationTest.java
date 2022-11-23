@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  *
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = SpringBoot03LoggingApplication.class)
 public class SpringBoot03LoggingApplicationTest {
 	@Test
 	public void contextLoads(){

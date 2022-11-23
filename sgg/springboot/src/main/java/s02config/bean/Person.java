@@ -22,7 +22,7 @@ import java.util.Map;
  * PropertySource可以指定加载某个配置文件中的内容
  */
 @ConfigurationProperties(prefix = "person")
-//@PropertySource(value = "classpath:person.properties")
+@PropertySource(value = "classpath:s02config/person.properties")
 @Component
 //@Validated
 public class Person {

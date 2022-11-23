@@ -17,7 +17,7 @@ import s02config.config.MyAppConfig;
  *
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = SpringBoot02ConfigApplication.class)
 public class SpringBoot02ConfigApplicationTests {
 
 	@Autowired
