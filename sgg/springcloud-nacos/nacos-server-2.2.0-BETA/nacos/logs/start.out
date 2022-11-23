@@ -1,0 +1,57 @@
+/Library/Java/JavaVirtualMachines/jdk1.8.0_271.jdk/Contents/Home/bin/java -Djava.ext.dirs=/Library/Java/JavaVirtualMachines/jdk1.8.0_271.jdk/Contents/Home/jre/lib/ext:/Library/Java/JavaVirtualMachines/jdk1.8.0_271.jdk/Contents/Home/lib/ext  -Xms512m -Xmx512m -Xmn256m -Dnacos.standalone=true -Dnacos.member.list= -Xloggc:/Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/logs/nacos_gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M -Dloader.path=/Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/plugins,/Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/plugins/health,/Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/plugins/cmdb,/Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/plugins/selector -Dnacos.home=/Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos -jar /Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/target/nacos-server.jar  --spring.config.additional-location=file:/Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/conf/ --logging.config=/Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/conf/nacos-logback.xml --server.max-http-header-size=524288
+
+         ,--.
+       ,--.'|
+   ,--,:  : |                                           Nacos 2.2.0-BETA
+,`--.'`|  ' :                       ,---.               Running in stand alone mode, All function modules
+|   :  :  | |                      '   ,'\   .--.--.    Port: 8848
+:   |   \ | :  ,--.--.     ,---.  /   /   | /  /    '   Pid: 81288
+|   : '  '; | /       \   /     \.   ; ,. :|  :  /`./   Console: http://192.168.108.99:8848/nacos/index.html
+'   ' ;.    ;.--.  .-. | /    / ''   | |: :|  :  ;_
+|   | | \   | \__\/: . ..    ' / '   | .; : \  \    `.      https://nacos.io
+'   : |  ; .' ," .--.; |'   ; :__|   :    |  `----.   \
+|   | '`--'  /  /  ,.  |'   | '.'|\   \  /  /  /`--'  /
+'   : |     ;  :   .'   \   :    : `----'  '--'.     /
+;   |.'     |  ,     .-./\   \  /            `--'---'
+'---'        `--`---'     `----'
+
+2022-11-23 13:16:59,409 INFO Tomcat initialized with port(s): 8848 (http)
+
+2022-11-23 13:16:59,561 INFO Root WebApplicationContext: initialization completed in 3641 ms
+
+2022-11-23 13:17:05,809 INFO Adding welcome page: class path resource [static/index.html]
+
+2022-11-23 13:17:06,430 WARN You are asking Spring Security to ignore Ant [pattern='/**']. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+
+2022-11-23 13:17:06,431 INFO Will not secure Ant [pattern='/**']
+
+2022-11-23 13:17:06,474 INFO Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@cf65451, org.springframework.security.web.context.SecurityContextPersistenceFilter@517bd097, org.springframework.security.web.header.HeaderWriterFilter@1601e47, org.springframework.security.web.csrf.CsrfFilter@7de0c6ae, org.springframework.security.web.authentication.logout.LogoutFilter@114a85c2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4a9cc6cb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@56e07a08, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@724f138e, org.springframework.security.web.session.SessionManagementFilter@66971f6b, org.springframework.security.web.access.ExceptionTranslationFilter@5471388b]
+
+2022-11-23 13:17:06,505 INFO Exposing 1 endpoint(s) beneath base path '/actuator'
+
+2022-11-23 13:17:06,560 INFO Tomcat started on port(s): 8848 (http) with context path '/nacos'
+
+2022-11-23 13:17:06,592 INFO Nacos started successfully in stand alone mode. use embedded storage
+
+2022-11-23 13:17:29,234 INFO Initializing Servlet 'dispatcherServlet'
+
+2022-11-23 13:17:29,236 INFO Completed initialization in 2 ms
+
+2022-11-23 15:24:03,493 WARN [WatchFileCenter] start close
+
+2022-11-23 15:24:03,494 WARN [ThreadPoolManager] Start destroying ThreadPool
+
+2022-11-23 15:24:03,494 WARN [NotifyCenter] Start destroying Publisher
+
+2022-11-23 15:24:03,494 WARN [WatchFileCenter] start to shutdown this watcher which is watch : /Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/conf
+
+2022-11-23 15:24:03,495 WARN [NotifyCenter] Destruction of the end
+
+2022-11-23 15:24:03,495 WARN [WatchFileCenter] start to shutdown this watcher which is watch : /Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/data/tps
+
+2022-11-23 15:24:03,496 WARN [WatchFileCenter] start to shutdown this watcher which is watch : /Users/common/e/IdeaProjects/sgg/springcloud-nacos/nacos-server-2.2.0-BETA/nacos/data/loader
+
+2022-11-23 15:24:03,498 WARN [WatchFileCenter] already closed
+
+2022-11-23 15:24:04,441 WARN [ThreadPoolManager] Destruction of the end
+

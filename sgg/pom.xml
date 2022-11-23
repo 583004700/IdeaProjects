@@ -46,8 +46,9 @@
         <module>mycat</module>
 
         <module>dubbo-admin</module>
+        <module>springcloud-nacos</module>
 
-<!--        <module>activiti</module>-->
+        <!--        <module>activiti</module>-->
     </modules>
 
     <properties>
