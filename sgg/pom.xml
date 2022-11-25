@@ -37,10 +37,10 @@
         <module>springmvc</module>
         <module>springmvc-annotation</module>
         <module>spring-annotation</module>
-<!--        <module>spring-security</module>-->
+        <!--        <module>spring-security</module>-->
         <module>redis</module>
         <module>mybatisplus</module>
-<!--        <module>encrypt-decrypt</module>-->
+        <!--        <module>encrypt-decrypt</module>-->
         <module>gitGithub</module>
         <module>java8</module>
         <module>mycat</module>
@@ -48,7 +48,7 @@
         <module>dubbo-admin</module>
         <module>springcloud-nacos</module>
 
-        <!--        <module>activiti</module>-->
+        <module>activiti</module>
     </modules>
 
     <properties>
