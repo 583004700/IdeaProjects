@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: consul-application
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+        healthCheckPath: /health
+        healthCheckInterval: 15s
+        register: true
+server:
+  port: 0

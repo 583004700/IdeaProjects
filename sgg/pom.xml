@@ -47,6 +47,8 @@
 
         <module>dubbo-admin</module>
         <module>springcloud-nacos</module>
+        <module>springcloud-consul</module>
+        <module>springcloud-consul/springcloud-consul-consume</module>
 
         <module>activiti</module>
     </modules>
