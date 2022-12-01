@@ -50,6 +50,8 @@
         <module>springcloud-consul</module>
         <module>springcloud-consul/springcloud-consul-consume</module>
 
+        <module>springcloud-oauth2</module>
+
         <module>activiti</module>
     </modules>
 
