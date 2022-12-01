@@ -1,5 +1,6 @@
 package com.demo.mydemo.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +13,7 @@ import java.security.Principal;
 public class TestEndPointController {
 
     @GetMapping("/product/{id}")
+    @PreAuthorize("hasAnyAuthority('p1')") //拥有p1权限才能访问资源
     public String getProduct(@PathVariable String id) {
         return "product id : " + id;
     }

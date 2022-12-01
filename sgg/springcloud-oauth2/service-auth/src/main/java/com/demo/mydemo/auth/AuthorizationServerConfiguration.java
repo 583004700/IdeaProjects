@@ -37,6 +37,12 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
             password
          */
 
+        /**
+         * 授权码模式,先拿到code
+         * http://localhost:9098/oauth/authorize?client_id=client_3&response_type=code&scope=server&redirect_uri=https://www.baidu.com
+         *
+         */
+
         // 配置两个客户端，一个用于password认证一个用于client认证
         clients.inMemory().withClient("client_1")
                 .resourceIds("1", "2")
@@ -45,17 +51,21 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .authorities("oauth2")
                 .secret(finalSecret)
                 .and().withClient("client_2")
-                .resourceIds("1", "2")
+                .resourceIds("res1", "res2")
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("server")
                 .authorities("oauth2")
                 .secret(finalSecret)
                 .and().withClient("client_3")
-                .resourceIds("1","2")
+                .resourceIds("res1","res2")
+                // 跳转到授权页面
+                .autoApprove(false)
                 .authorizedGrantTypes("authorization_code","refresh_token")
                 .scopes("server")
                 .authorities("oauth2")
-                .secret(finalSecret);
+                .secret(finalSecret)
+                .resourceIds("res1","res2")
+                .redirectUris("https://www.baidu.com");
     }
 
     @Override
@@ -69,5 +79,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         // 允许表单认证
         security.allowFormAuthenticationForClients();
+        security.checkTokenAccess("permitAll");
     }
 }
