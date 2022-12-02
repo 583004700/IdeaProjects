@@ -6,10 +6,10 @@ spring:
 security:
   oauth2:
     resource:
+      jwt:
+        # 自己定义了 token_store,这个可以随便写
+        key-value: init
       user-info-uri: http://localhost:9098/users/current
     client:
-      id: client_2
-      client-secret: 123456
+      # 如果使用 jwt 校验，则不会使用这个去校验
       access-token-uri: http://localhost:9098/oauth/token
-      grant-type: client_credentials,password
-      scope: server
