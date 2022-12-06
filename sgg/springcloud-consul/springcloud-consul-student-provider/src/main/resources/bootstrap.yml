@@ -13,3 +13,15 @@ spring:
 
 server:
   port: 8080
+
+knife4j:
+  # 开启增强配置
+  enable: true
+  # 是否生产环境 默认否;生产环境配置为true，将无法访问文档
+  production: false
+  basic:
+    enable: true
+    # Basic认证用户名
+    username: product
+    # Basic认证密码
+    password: 111111
