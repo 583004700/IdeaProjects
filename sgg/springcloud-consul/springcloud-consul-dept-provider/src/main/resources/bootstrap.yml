@@ -1,6 +1,6 @@
 spring:
   application:
-    name: consul-student-provider
+    name: consul-dept-provider
   cloud:
     consul:
       host: localhost
@@ -12,4 +12,4 @@ spring:
         register: true
 
 server:
-  port: 8080
+  port: 8085

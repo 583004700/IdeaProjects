@@ -12,6 +12,7 @@
     <modules>
         <module>springcloud-consul-consume</module>
         <module>springcloud-consul-student-provider</module>
+        <module>springcloud-consul-dept-provider</module>
     </modules>
 
     <properties>

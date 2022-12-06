@@ -9,14 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @EnableDiscoveryClient
 @RestController
-public class ConsulApplication {
-
+public class ConsulDeptProviderApplication {
     @RequestMapping("/health")
     public String home() {
         return "Hello world";
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(ConsulApplication.class, args);
+        SpringApplication.run(ConsulDeptProviderApplication.class, args);
     }
 }
