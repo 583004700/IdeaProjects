@@ -34,3 +34,8 @@ docker exec -it gitlab bash
 gitlab-ctl reconfigure
 容器中重启服务
 gitlab-ctl restart
+
+#### jenkins Post Steps Exec command
+nohup java -jar /Users/zhuwb/xxoo/springboot-web*.jar > mylog.log 2>&1 &
+
+#### jenkins Pre Steps Exec command
