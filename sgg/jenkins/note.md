@@ -1,6 +1,6 @@
 ### 一、运行jenkins
 java -jar jenkins.war --httpPort=8080
-### 浏览 http://localhost:8080 并按照说明完成安装。
+### 浏览 http://localhost:8080 并按照说明完成安装。用户名：admin 密码：adminadmin
 
 ### 二、docker 安装gitlab
 #### 下载
