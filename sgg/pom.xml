@@ -52,6 +52,7 @@
         <module>springcloud-oauth2</module>
 
         <module>activiti</module>
+        <module>xxl-job</module>
     </modules>
 
     <properties>
