@@ -1,6 +1,9 @@
 class BigInt {
     constructor(s) {
         s = s.replace(/^(0+)/gi, "");
+        if (s.length === 0) {
+            s = "0";
+        }
         // u为false代表负数
         this.u = s.charAt(0) !== "-";
         let startI = this.u ? 0 : 1;
@@ -23,11 +26,11 @@ class BigInt {
             let t2 = other.toZeroC().toStringValue();
             let abs = Math.abs(t1.length - t2.length);
             for (let i = 0; i < abs; i++) {
-                if(t1.length<t2.length){
-                    t1 = "0"+t1;
+                if (t1.length < t2.length) {
+                    t1 = "0" + t1;
                 }
-                if(t2.length<t1.length){
-                    t2 = "0"+t2;
+                if (t2.length < t1.length) {
+                    t2 = "0" + t2;
                 }
             }
             return t1 < t2;
