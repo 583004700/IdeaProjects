@@ -103,6 +103,7 @@ let Const = {
 // 可能策略中有多个方法，这个是根据上下文场景进行组合
 class CalcMethodContext {
     constructor(ope) {
+        this.ope = ope;
         if (ope === Const.opeAdd) {
             this.strategy = new AddCalcMethod();
         } else if (ope === Const.opeMultiply) {
@@ -160,6 +161,9 @@ class RegionTree {
 
     // 更新区间值，如果是区间求积，是批量乘以某个数，如果是区间求和，是批量加上某个数
     update(startIndex, endIndex, value) {
+        if(this.calcMethodContext.ope === Const.opeMax || this.calcMethodContext.ope === Const.opeMin){
+            throw "求最小值或最大值时不支持更新！";
+        }
         if (!this.root) {
             throw "请先构建线段树";
         }
