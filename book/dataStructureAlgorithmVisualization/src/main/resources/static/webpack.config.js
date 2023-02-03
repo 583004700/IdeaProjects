@@ -17,6 +17,7 @@ module.exports = {
         'dataStructure/rbTree': './dataStructure/rbTree/start.js',
         'dataStructure/hfmTree': './dataStructure/hfmTree/start.js',
         'dataStructure/regionTree': './dataStructure/regionTree/start.js',
+        'dataStructure/binarySearchTree': './dataStructure/binarySearchTree/start.js',
 
         'algorithm/dfs': './algorithm/dfs/start.js',
         'algorithm/bfs': './algorithm/bfs/start.js',
@@ -156,6 +157,13 @@ module.exports = {
                 template: './dataStructure/regionTree/regionTree.html',
                 chunks: ['commons', 'dataStructure/regionTree'],
                 filename: 'dataStructure/regionTree/index.html'
+            }
+        ),
+        new HtmlWebpackPlugin(
+            {
+                template: './dataStructure/binarySearchTree/binarySearchTree.html',
+                chunks: ['commons', 'dataStructure/binarySearchTree'],
+                filename: 'dataStructure/binarySearchTree/index.html'
             }
         ),
 
