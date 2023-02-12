@@ -18,6 +18,7 @@ module.exports = {
         'dataStructure/hfmTree': './dataStructure/hfmTree/start.js',
         'dataStructure/regionTree': './dataStructure/regionTree/start.js',
         'dataStructure/binarySearchTree': './dataStructure/binarySearchTree/start.js',
+        'dataStructure/trieTree': './dataStructure/trieTree/start.js',
 
         'algorithm/dfs': './algorithm/dfs/start.js',
         'algorithm/bfs': './algorithm/bfs/start.js',
@@ -164,6 +165,13 @@ module.exports = {
                 template: './dataStructure/binarySearchTree/binarySearchTree.html',
                 chunks: ['commons', 'dataStructure/binarySearchTree'],
                 filename: 'dataStructure/binarySearchTree/index.html'
+            }
+        ),
+        new HtmlWebpackPlugin(
+            {
+                template: './dataStructure/trieTree/trieTree.html',
+                chunks: ['commons', 'dataStructure/trieTree'],
+                filename: 'dataStructure/trieTree/index.html'
             }
         ),
 

@@ -7,11 +7,11 @@ class Status {
         return this.x;
     }
 
-    setMiddle(middle){
+    setMiddle(middle) {
         this.middle = middle;
     }
 
-    getMiddle(){
+    getMiddle() {
         return this.middle;
     }
 
@@ -31,11 +31,11 @@ class Status {
         return this.width;
     }
 
-    setNode(node){
+    setNode(node) {
         this.node = node;
     }
 
-    getNode(){
+    getNode() {
         return this.node;
     }
 }
@@ -78,7 +78,7 @@ class DrawTree {
                 // 只有一个结点时
                 if (first.getNode() === node.right) {
                     currentX = first.getMiddle() - splitXFinal / 2;
-                }else{
+                } else {
                     currentX = first.getMiddle() + splitXFinal / 2;
                 }
             } else {
@@ -147,7 +147,7 @@ class DrawTree {
         status.setNode(node);
         if (statusList.size() === 0) {
             status.setWidth(nodeWidth);
-            status.setX(x);
+            status.setX(currentX + 5);
         } else {
             status.setWidth(allWidth);
             status.setX(statusList[0].getX());
