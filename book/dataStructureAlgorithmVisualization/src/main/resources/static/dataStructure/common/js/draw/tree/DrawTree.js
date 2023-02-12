@@ -146,8 +146,8 @@ class DrawTree {
         status.setMiddle(currentX);
         status.setNode(node);
         if (statusList.size() === 0) {
-            status.setWidth(nodeWidth);
-            status.setX(currentX + 5);
+            status.setWidth(nodeWidth + splitX / 2);
+            status.setX(x);
         } else {
             status.setWidth(allWidth);
             status.setX(statusList[0].getX());
