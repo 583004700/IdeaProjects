@@ -4,6 +4,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const optimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const JavaScriptObfuscator = require('webpack-obfuscator');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const path = require("path");
 
 module.exports = {
     devServer: {
@@ -19,6 +21,7 @@ module.exports = {
         'dataStructure/regionTree': './dataStructure/regionTree/start.js',
         'dataStructure/binarySearchTree': './dataStructure/binarySearchTree/start.js',
         'dataStructure/trieTree': './dataStructure/trieTree/start.js',
+        'dataStructure/464canIWin': './dataStructure/464canIWin/start.js',
 
         'algorithm/dfs': './algorithm/dfs/start.js',
         'algorithm/bfs': './algorithm/bfs/start.js',
@@ -111,6 +114,12 @@ module.exports = {
         ]
     },
     plugins: [
+        new CopyWebpackPlugin([
+            {
+                from: path.resolve(__dirname, './imgs'),
+                to: resolve(__dirname, '../../../../../../page/dataStructureAlgorithmVisualization/imgs')
+            }
+        ]),
         new HtmlWebpackPlugin(
             {
                 template: './dataStructure/aVLTree/AVLTree.html',
@@ -172,6 +181,13 @@ module.exports = {
                 template: './dataStructure/trieTree/trieTree.html',
                 chunks: ['commons', 'dataStructure/trieTree'],
                 filename: 'dataStructure/trieTree/index.html'
+            }
+        ),
+        new HtmlWebpackPlugin(
+            {
+                template: './dataStructure/464canIWin/canIWin.html',
+                chunks: ['commons', 'dataStructure/464canIWin'],
+                filename: 'dataStructure/464canIWin/index.html'
             }
         ),
 
@@ -247,7 +263,7 @@ module.exports = {
             stringArrayThreshold: 1,
             transformObjectKeys: true,
             unicodeEscapeSequence: false//允许启用/禁用字符串转换为unicode转义序列。Unicode转义序列大大增加了代码大小，并且可以轻松地将字符串恢复为原始视图。建议仅对小型源代码启用此选项。
-        }, [])
+        }, ["dataStructure/464canIWin"])
     ],
     //生产环境下会自动压缩js代码
     mode: 'production',
