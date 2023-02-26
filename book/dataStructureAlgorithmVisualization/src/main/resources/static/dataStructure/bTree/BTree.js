@@ -114,7 +114,7 @@ class BTree {
                 }
             }
             parent.removeChildNode(node);
-            if (parent.getDataList().length === 1 && parent !== this.root) {
+            if (parent.getDataList().length === this.minDataLength && parent !== this.root) {
                 this.down(parent);
             }
             if (parent === this.root && this.root.getChildrenList().length === 1) {
