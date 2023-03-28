@@ -53,6 +53,7 @@
 
         <module>activiti</module>
         <module>xxl-job</module>
+        <module>project</module>
     </modules>
 
     <properties>
