@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Setter
 @Getter
@@ -16,5 +15,5 @@ public class FundGsPo {
     private String name;
     private String type;
     private BigDecimal gszzl;
-    private Date gztime;
+    private String gztime;
 }

@@ -19,7 +19,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
@@ -107,9 +106,8 @@ public class FundServiceImpl implements FundService {
         List<Fund> result = new ArrayList<>();
         boolean can = false;
         try {
-            can = lock.tryLock(1, TimeUnit.SECONDS);
+            can = lock.tryLock();
             if (can) {
-                lock.lock();
                 Map<String, Fund> allFund = this.getAllFund();
                 Iterator<Map.Entry<String, Fund>> iterator = allFund.entrySet().iterator();
                 List<Callable<List<Fund>>> callables = new ArrayList<>();
