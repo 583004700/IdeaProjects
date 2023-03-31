@@ -11,4 +11,6 @@ public interface FundService {
     Fund getFundByCode(Fund fund);
 
     List<Fund> getGszSort();
+
+    int insertBatch();
 }

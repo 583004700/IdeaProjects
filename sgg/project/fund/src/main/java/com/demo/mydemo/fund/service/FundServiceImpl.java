@@ -3,8 +3,11 @@ package com.demo.mydemo.fund.service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.demo.mydemo.fund.entity.Fund;
+import com.demo.mydemo.fund.entity.po.FundGsPo;
+import com.demo.mydemo.fund.mapper.FundGsMapper;
 import com.demo.mydemo.fund.utils.HttpClientUtil;
 import lombok.Setter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -51,6 +54,9 @@ public class FundServiceImpl implements FundService {
 
     @Autowired
     HttpClientUtil httpClientUtil;
+
+    @Autowired
+    FundGsMapper fundGsMapper;
 
     private final String allFundUrl = "http://fund.eastmoney.com/js/fundcode_search.js";
 
@@ -155,4 +161,18 @@ public class FundServiceImpl implements FundService {
         return result;
     }
 
+    public int insertBatch() {
+        List<Fund> gszSort = getGszSort();
+        List<FundGsPo> fundGsPos = new ArrayList<>();
+        gszSort.forEach(t -> {
+            FundGsPo fundGsPo = new FundGsPo();
+            BeanUtils.copyProperties(t, fundGsPo);
+            String oldTime = fundGsPo.getGztime();
+            if(!StringUtils.isEmpty(oldTime)){
+                fundGsPo.setGztime(oldTime.replaceAll("-","").substring(0,8));
+            }
+            fundGsPos.add(fundGsPo);
+        });
+        return fundGsMapper.insertBatch(fundGsPos);
+    }
 }
