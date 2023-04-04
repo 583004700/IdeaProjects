@@ -2,18 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mydemo.fund.mapper.FundGsMapper">
     <insert id="insertBatch">
-        insert into fund_gs (fundcode,name,type,gszzl,gztime) values
+        insert into fund_gs (fundcode,name,type,gszzl,gzdate,gztime,updated_time) values
 
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.fundcode},#{item.name},#{item.type},#{item.gszzl},#{item.gztime})
+            (#{item.fundcode},#{item.name},#{item.type},#{item.gszzl},#{item.gzdate},#{item.gztime},#{item.updatedTime})
         </foreach>
 
         on duplicate key update
         fundcode = VALUES (fundcode),
-        gztime = VALUES (gztime),
+        gzdate = VALUES (gzdate),
         name = VALUES(name),
         type = VALUES(type),
-        gszzl = VALUES(gszzl)
+        gszzl = VALUES(gszzl),
+        gztime = VALUES (gztime),
+        updated_time = VALUES (updated_time)
     </insert>
 
 </mapper>

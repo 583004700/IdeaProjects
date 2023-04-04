@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.demo.mydemo.fund.entity.Fund;
 import com.demo.mydemo.fund.entity.po.FundGsPo;
 import com.demo.mydemo.fund.mapper.FundGsMapper;
+import com.demo.mydemo.fund.utils.DateUtil;
 import com.demo.mydemo.fund.utils.HttpClientUtil;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
@@ -13,11 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -167,10 +165,16 @@ public class FundServiceImpl implements FundService {
         gszSort.forEach(t -> {
             FundGsPo fundGsPo = new FundGsPo();
             BeanUtils.copyProperties(t, fundGsPo);
-            String oldTime = fundGsPo.getGztime();
-            if(!StringUtils.isEmpty(oldTime)){
-                fundGsPo.setGztime(oldTime.replaceAll("-","").substring(0,8));
+            String oldTime = t.getGztime();
+            try {
+                fundGsPo.setGztime(DateUtil.parse(DateUtil.yyyy_MM_dd_HH_mm,oldTime));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
             }
+            if(!StringUtils.isEmpty(oldTime)){
+                fundGsPo.setGzdate(oldTime.replaceAll("-","").substring(0,8));
+            }
+            fundGsPo.setUpdatedTime(new Date());
             fundGsPos.add(fundGsPo);
         });
         return fundGsMapper.insertBatch(fundGsPos);

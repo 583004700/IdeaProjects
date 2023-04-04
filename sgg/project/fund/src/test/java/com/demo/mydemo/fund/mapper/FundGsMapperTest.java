@@ -22,12 +22,12 @@ public class FundGsMapperTest {
         FundGsPo p1 = new FundGsPo();
         p1.setFundcode("001");
         p1.setName("一");
-        p1.setGztime("20230101");
+        p1.setGzdate("20230101");
 
         FundGsPo p2 = new FundGsPo();
         p2.setFundcode("002");
         p2.setName("三");
-        p2.setGztime("20230102");
+        p2.setGzdate("20230102");
         p2.setType("三type");
         list.add(p1);
         list.add(p2);
