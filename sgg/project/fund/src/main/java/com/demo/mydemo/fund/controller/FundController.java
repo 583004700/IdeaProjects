@@ -26,4 +26,10 @@ public class FundController {
     public List<Fund> getGszSort() {
         return fundService.getGszSort();
     }
+
+    @RequestMapping("/insertBatch")
+    @ResponseBody
+    public int insertBatch() {
+        return fundService.insertBatch();
+    }
 }
