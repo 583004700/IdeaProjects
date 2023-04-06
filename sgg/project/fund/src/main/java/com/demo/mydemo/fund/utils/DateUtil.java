@@ -10,6 +10,8 @@ public class DateUtil {
     // 年月日时分
     public static final String yyyy_MM_dd_HH_mm = "yyyy-MM-dd HH:mm";
 
+    public static final String yyyy_MM_dd = "yyyy-MM-dd";
+
     public static Date parse(String pattern, String dateStr) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.parse(dateStr);

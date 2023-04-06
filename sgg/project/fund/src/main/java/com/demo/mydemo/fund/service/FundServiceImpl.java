@@ -2,8 +2,11 @@ package com.demo.mydemo.fund.service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.demo.mydemo.fund.entity.Fund;
 import com.demo.mydemo.fund.entity.po.FundGsPo;
+import com.demo.mydemo.fund.entity.vo.FundVo;
 import com.demo.mydemo.fund.mapper.FundGsMapper;
 import com.demo.mydemo.fund.utils.DateUtil;
 import com.demo.mydemo.fund.utils.HttpClientUtil;
@@ -15,12 +18,18 @@ import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 @Service
 public class FundServiceImpl implements FundService {
@@ -161,22 +170,88 @@ public class FundServiceImpl implements FundService {
 
     public int insertBatch() {
         List<Fund> gszSort = getGszSort();
+        if (gszSort == null || gszSort.isEmpty()) {
+            return 0;
+        }
         List<FundGsPo> fundGsPos = new ArrayList<>();
         gszSort.forEach(t -> {
             FundGsPo fundGsPo = new FundGsPo();
             BeanUtils.copyProperties(t, fundGsPo);
             String oldTime = t.getGztime();
             try {
-                fundGsPo.setGztime(DateUtil.parse(DateUtil.yyyy_MM_dd_HH_mm,oldTime));
+                fundGsPo.setGztime(DateUtil.parse(DateUtil.yyyy_MM_dd_HH_mm, oldTime));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-            if(!StringUtils.isEmpty(oldTime)){
-                fundGsPo.setGzdate(oldTime.replaceAll("-","").substring(0,8));
+            if (!StringUtils.isEmpty(oldTime)) {
+                fundGsPo.setGzdate(oldTime.replaceAll("-", "").substring(0, 8));
             }
             fundGsPo.setUpdatedTime(new Date());
             fundGsPos.add(fundGsPo);
         });
         return fundGsMapper.insertBatch(fundGsPos);
+    }
+
+    @Override
+    public List<FundGsPo> selectList(Map<String, Object> param) {
+        LambdaQueryWrapper<FundGsPo> queryWrapper = new QueryWrapper<FundGsPo>().lambda();
+        if (param.containsKey("gzdate")) {
+            queryWrapper.eq(FundGsPo::getGzdate, param.get("gzdate"));
+        }
+        queryWrapper.last(" order by gzdate desc,gszzl desc");
+        return fundGsMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<FundVo> lastNRise(Date date, int n) {
+        int count = 0;
+        int realCount = 0;
+        int maxCount = 100;
+        List<Map<String, FundGsPo>> allFundGsPos = new ArrayList<>();
+        int minLength = Integer.MAX_VALUE;
+        Map<String, FundGsPo> minMap = new HashMap<>();
+        while (realCount < n && count < maxCount) {
+            Map<String, Object> param = new HashMap<>();
+            param.put("gzdate", DateUtil.format("yyyyMMdd", date));
+            List<FundGsPo> fundGsPos = selectList(param);
+            if (fundGsPos != null && !fundGsPos.isEmpty()) {
+                realCount++;
+                Map<String, FundGsPo> collect = fundGsPos.stream().collect(Collectors.toMap(FundGsPo::getFundcode, f -> f));
+                allFundGsPos.add(collect);
+                if (collect.size() < minLength) {
+                    minLength = collect.size();
+                    minMap = collect;
+                }
+            }
+            count++;
+            date = DateUtil.subDate(date, 1);
+        }
+
+        List<FundVo> result = new ArrayList<>();
+        minMap.forEach((k, v) -> {
+            boolean flag = true;
+            for (int i = 0; i < allFundGsPos.size(); i++) {
+                Map<String, FundGsPo> every = allFundGsPos.get(i);
+                FundGsPo fundGsPo = every.get(k);
+                if (fundGsPo == null || fundGsPo.getGszzl() == null || fundGsPo.getGszzl().doubleValue() <= 0) {
+                    flag = false;
+                    break;
+                }
+            }
+            Map<String, FundGsPo> lastMap = allFundGsPos.get(0);
+            if (flag && lastMap != null) {
+                FundGsPo fundGsPo = lastMap.get(k);
+                FundVo fundVo = new FundVo();
+                BeanUtils.copyProperties(fundGsPo,fundVo);
+                result.add(fundVo);
+            }
+            result.sort((a, b) -> {
+                if (b.getGszzl().equals(a.getGszzl())) {
+                    return 0;
+                }
+                return b.getGszzl().compareTo(a.getGszzl());
+            });
+        });
+        return result;
     }
 }

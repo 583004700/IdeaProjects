@@ -17,5 +17,4 @@
         gztime = VALUES (gztime),
         updated_time = VALUES (updated_time)
     </insert>
-
 </mapper>
