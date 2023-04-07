@@ -13,7 +13,7 @@ public class FundTask {
     @Autowired
     FundService fundService;
 
-    @Scheduled(cron = "0 40 11,14,15 * * MON-FRI")
+    @Scheduled(cron = "0 40 11,14,15,17 * * MON-FRI")
     private void insertBatch() {
         fundService.insertBatch();
     }
