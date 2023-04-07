@@ -41,7 +41,11 @@ public class FundController {
 
     @RequestMapping("/lastNRise")
     @ResponseBody
-    public List<FundVo> lastNRise(@RequestParam("date") String date, @RequestParam("n") int n) throws ParseException {
-        return fundService.lastNRise(DateUtil.parse(DateUtil.yyyy_MM_dd, date), n);
+    public List<FundVo> lastNRise(@RequestParam("date") String date, @RequestParam("n") int n,
+                                  @RequestParam(value = "sortType", required = false) Integer sortType) throws ParseException {
+        if (sortType == null) {
+            sortType = 1;
+        }
+        return fundService.lastNRise(DateUtil.parse(DateUtil.yyyy_MM_dd, date), n, sortType);
     }
 }

@@ -54,5 +54,5 @@ public interface FundService {
      * @param n
      * @return
      */
-    List<FundVo> lastNRise(Date date, int n);
+    List<FundVo> lastNRise(Date date, int n,int sortType);
 }

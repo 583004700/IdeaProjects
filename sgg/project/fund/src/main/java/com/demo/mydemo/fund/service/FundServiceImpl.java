@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -203,7 +204,7 @@ public class FundServiceImpl implements FundService {
     }
 
     @Override
-    public List<FundVo> lastNRise(Date date, int n) {
+    public List<FundVo> lastNRise(Date date, int n,int sortType) {
         int count = 0;
         int realCount = 0;
         int maxCount = 100;
@@ -229,6 +230,7 @@ public class FundServiceImpl implements FundService {
 
         List<FundVo> result = new ArrayList<>();
         minMap.forEach((k, v) -> {
+            BigDecimal nDaysGszzl = BigDecimal.valueOf(1);
             boolean flag = true;
             for (int i = 0; i < allFundGsPos.size(); i++) {
                 Map<String, FundGsPo> every = allFundGsPos.get(i);
@@ -237,20 +239,30 @@ public class FundServiceImpl implements FundService {
                     flag = false;
                     break;
                 }
+                BigDecimal xsGszzl = fundGsPo.getGszzl().divide(BigDecimal.valueOf(100)).add(BigDecimal.valueOf(1));
+                nDaysGszzl = nDaysGszzl.multiply(xsGszzl);
             }
+            nDaysGszzl = nDaysGszzl.subtract(BigDecimal.valueOf(1));
+            nDaysGszzl = nDaysGszzl.multiply(BigDecimal.valueOf(100));
             Map<String, FundGsPo> lastMap = allFundGsPos.get(0);
             if (flag && lastMap != null) {
                 FundGsPo fundGsPo = lastMap.get(k);
                 FundVo fundVo = new FundVo();
-                BeanUtils.copyProperties(fundGsPo,fundVo);
+                fundVo.setNDaysGszzl(nDaysGszzl);
+                BeanUtils.copyProperties(fundGsPo, fundVo);
                 result.add(fundVo);
             }
-            result.sort((a, b) -> {
-                if (b.getGszzl().equals(a.getGszzl())) {
-                    return 0;
-                }
-                return b.getGszzl().compareTo(a.getGszzl());
-            });
+            if(sortType == 1) {
+                // 最近一天涨幅最大
+                result.sort((a, b) -> {
+                    return b.getGszzl().compareTo(a.getGszzl());
+                });
+            }else{
+                // 最近n天涨幅最大
+                result.sort((a, b) -> {
+                    return b.getNDaysGszzl().compareTo(a.getNDaysGszzl());
+                });
+            }
         });
         return result;
     }

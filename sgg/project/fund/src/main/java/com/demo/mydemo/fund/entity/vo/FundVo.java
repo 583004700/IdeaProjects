@@ -20,4 +20,6 @@ public class FundVo {
     private Date gztime;
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updatedTime;
+    // n天内的估算增长率
+    private BigDecimal nDaysGszzl;
 }
