@@ -1,0 +1,1 @@
+window.__PRODUCTION__FUND__CONF__={"VITE_GLOB_APP_TITLE":"Fund","VITE_GLOB_API_URL":"/fund","VITE_GLOB_UPLOAD_URL":"/upload","VITE_GLOB_API_URL_PREFIX":""};Object.freeze(window.__PRODUCTION__FUND__CONF__);Object.defineProperty(window,"__PRODUCTION__FUND__CONF__",{configurable:false,writable:false,});
