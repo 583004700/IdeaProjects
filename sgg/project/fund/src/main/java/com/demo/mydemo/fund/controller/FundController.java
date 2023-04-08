@@ -52,19 +52,23 @@ public class FundController {
         if (sortType == null) {
             sortType = 1;
         }
-        if(!StringUtils.isEmpty(field)){
-            if(field.equals("nDaysGszzl")){
+        if (!StringUtils.isEmpty(field)) {
+            if (field.equals("nDaysGszzl")) {
                 sortType = 2;
-            }else if(field.equals("gszzl")){
+            } else if (field.equals("gszzl")) {
                 sortType = 1;
             }
         }
         List<FundVo> result = fundService.lastNRise(DateUtil.parse(DateUtil.yyyy_MM_dd, date), n, sortType);
         PageVo<FundVo> pageVo = new PageVo<>();
-        pageVo.setTotal(result.size());
-        if (page != null && pageSize != null) {
+        int total = result.size();
+        pageVo.setTotal(total);
+        if (page != null && pageSize != null && total > 0) {
             int start = (page - 1) * pageSize;
-            result = result.subList(start, start + pageSize);
+            start = Math.min(start, total - 1);
+            int end = start + pageSize;
+            end = Math.min(end, total - 1);
+            result = result.subList(start, end);
         }
         pageVo.setItems(result);
         ResultVo<PageVo<FundVo>> resultVo = new ResultVo<>();
