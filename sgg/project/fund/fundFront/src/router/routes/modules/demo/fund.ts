@@ -19,7 +19,7 @@ const fund: AppRouteModule = {
       name: 'lastNRise',
       component: () => import('/@/views/demo/fund/LastNRise.vue'),
       meta: {
-        title: '最近n天连涨',
+        title: '最近n天涨幅',
       },
     },
   ],

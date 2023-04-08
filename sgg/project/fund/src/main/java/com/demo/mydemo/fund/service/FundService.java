@@ -48,11 +48,11 @@ public interface FundService {
     List<FundGsPo> selectList(@Param("param") Map<String, Object> param);
 
     /**
-     * 查询最近n天连涨的基金
+     * 查询最近n天涨幅的基金
      *
      * @param date
      * @param n
      * @return
      */
-    List<FundVo> lastNRise(Date date, int n,int sortType);
+    List<FundVo> lastNRise(Date date, int n,int sortType,boolean continuation);
 }

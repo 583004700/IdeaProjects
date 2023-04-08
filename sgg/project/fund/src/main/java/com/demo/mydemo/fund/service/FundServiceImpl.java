@@ -204,7 +204,7 @@ public class FundServiceImpl implements FundService {
     }
 
     @Override
-    public List<FundVo> lastNRise(Date date, int n,int sortType) {
+    public List<FundVo> lastNRise(Date date, int n,int sortType,boolean continuation) {
         int count = 0;
         int realCount = 0;
         int maxCount = 100;
@@ -235,9 +235,16 @@ public class FundServiceImpl implements FundService {
             for (int i = 0; i < allFundGsPos.size(); i++) {
                 Map<String, FundGsPo> every = allFundGsPos.get(i);
                 FundGsPo fundGsPo = every.get(k);
-                if (fundGsPo == null || fundGsPo.getGszzl() == null || fundGsPo.getGszzl().doubleValue() <= 0) {
-                    flag = false;
-                    break;
+                if(continuation) {
+                    if (fundGsPo == null || fundGsPo.getGszzl() == null || fundGsPo.getGszzl().doubleValue() <= 0) {
+                        flag = false;
+                        break;
+                    }
+                }else{
+                    if (fundGsPo == null || fundGsPo.getGszzl() == null) {
+                        flag = false;
+                        break;
+                    }
                 }
                 BigDecimal xsGszzl = fundGsPo.getGszzl().divide(BigDecimal.valueOf(100)).add(BigDecimal.valueOf(1));
                 nDaysGszzl = nDaysGszzl.multiply(xsGszzl);

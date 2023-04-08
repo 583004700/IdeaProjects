@@ -69,6 +69,17 @@ export function getFormConfig(): Partial<FormProps> {
           xl: 6,
           xxl: 8
         }
+      },
+      {
+        field: `continuation`,
+        label: `是否连续涨:`,
+        component: 'Checkbox',
+        required: false,
+        defaultValue: true,
+        colProps: {
+          xl: 6,
+          xxl: 8
+        }
       }
     ],
   };

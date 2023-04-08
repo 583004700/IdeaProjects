@@ -32,7 +32,7 @@ export default defineComponent({
   setup() {
     const checkedKeys = ref<Array<string | number>>([]);
     const [registerTable, {getForm}] = useTable({
-      title: '最近n天连涨',
+      title: '最近n天涨幅',
       api: demoListApi,
       columns: getBasicColumns(),
       useSearchForm: true,
