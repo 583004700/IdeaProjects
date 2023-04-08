@@ -1,0 +1,2 @@
+export * from "/Users/common/e/IdeaProjects/sgg/project/fund/vue-vben-admin/internal/eslint-config/src/strict";
+export { default } from "/Users/common/e/IdeaProjects/sgg/project/fund/vue-vben-admin/internal/eslint-config/src/strict";

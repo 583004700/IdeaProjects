@@ -1,0 +1,1 @@
+module.exports = require("/Users/common/e/IdeaProjects/sgg/project/fund/fundFront/node_modules/.pnpm/jiti@1.18.2/node_modules/jiti/lib/index.js")(null, { interopDefault: true, esmResolve: true })("/Users/common/e/IdeaProjects/sgg/project/fund/fundFront/internal/vite-config/src/index.ts")
