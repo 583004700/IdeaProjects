@@ -3,10 +3,13 @@ package com.demo.mydemo.fund.controller;
 import com.demo.mydemo.fund.entity.Fund;
 import com.demo.mydemo.fund.entity.po.FundGsPo;
 import com.demo.mydemo.fund.entity.vo.FundVo;
+import com.demo.mydemo.fund.entity.vo.common.PageVo;
+import com.demo.mydemo.fund.entity.vo.common.ResultVo;
 import com.demo.mydemo.fund.service.FundService;
 import com.demo.mydemo.fund.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,11 +44,31 @@ public class FundController {
 
     @RequestMapping("/lastNRise")
     @ResponseBody
-    public List<FundVo> lastNRise(@RequestParam("date") String date, @RequestParam("n") int n,
-                                  @RequestParam(value = "sortType", required = false) Integer sortType) throws ParseException {
+    public ResultVo<PageVo<FundVo>> lastNRise(@RequestParam("gzdate") String date, @RequestParam("n") int n,
+                                              @RequestParam(value = "sortType", required = false) Integer sortType,
+                                              @RequestParam(value = "page", required = false) Integer page,
+                                              @RequestParam(value = "pageSize", required = false) Integer pageSize,
+                                              @RequestParam(value = "field", required = false) String field) throws ParseException {
         if (sortType == null) {
             sortType = 1;
         }
-        return fundService.lastNRise(DateUtil.parse(DateUtil.yyyy_MM_dd, date), n, sortType);
+        if(!StringUtils.isEmpty(field)){
+            if(field.equals("nDaysGszzl")){
+                sortType = 2;
+            }else if(field.equals("gszzl")){
+                sortType = 1;
+            }
+        }
+        List<FundVo> result = fundService.lastNRise(DateUtil.parse(DateUtil.yyyy_MM_dd, date), n, sortType);
+        PageVo<FundVo> pageVo = new PageVo<>();
+        pageVo.setTotal(result.size());
+        if (page != null && pageSize != null) {
+            int start = (page - 1) * pageSize;
+            result = result.subList(start, start + pageSize);
+        }
+        pageVo.setItems(result);
+        ResultVo<PageVo<FundVo>> resultVo = new ResultVo<>();
+        resultVo.setResult(pageVo);
+        return resultVo;
     }
 }
