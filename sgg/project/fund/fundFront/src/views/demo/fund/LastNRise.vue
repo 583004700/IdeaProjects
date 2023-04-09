@@ -1,19 +1,7 @@
 <template>
   <BasicTable @register="registerTable">
     <template #form-custom> custom-slot</template>
-    <template #headerTop>
-      <a-alert type="info" show-icon>
-        <template #message>
-          <template v-if="checkedKeys.length > 0">
-            <span>已选中{{ checkedKeys.length }}条记录(可跨页)</span>
-            <a-button type="link" @click="checkedKeys = []" size="small">清空</a-button>
-          </template>
-          <template v-else>
-            <span>未选中任何项目</span>
-          </template>
-        </template>
-      </a-alert>
-    </template>
+
     <template #toolbar>
       <a-button type="primary" @click="updateGs">更新基金估值</a-button>
     </template>
@@ -45,13 +33,7 @@ export default defineComponent({
         size: "small",
         simple: true
       },
-      rowKey: 'id',
-      rowSelection: {
-        type: 'checkbox',
-        selectedRowKeys: checkedKeys,
-        onSelect: onSelect,
-        onSelectAll: onSelectAll,
-      },
+      rowKey: 'id'
     });
 
     function updateGs(e) {
@@ -63,36 +45,15 @@ export default defineComponent({
         alert("更新基金数据完成！");
       }).catch((data) => {
         alert("更新基金数据完成！");
-      }).finally((data) => {
+      }).finally((data: any) => {
         ub.style.display = 'block';
       });
-    }
-
-    function onSelect(record, selected) {
-      if (selected) {
-        checkedKeys.value = [...checkedKeys.value, record.id];
-      } else {
-        checkedKeys.value = checkedKeys.value.filter((id) => id !== record.id);
-      }
-    }
-
-    function onSelectAll(selected, selectedRows, changeRows) {
-      const changeIds = changeRows.map((item) => item.id);
-      if (selected) {
-        checkedKeys.value = [...checkedKeys.value, ...changeIds];
-      } else {
-        checkedKeys.value = checkedKeys.value.filter((id) => {
-          return !changeIds.includes(id);
-        });
-      }
     }
 
     return {
       registerTable,
       updateGs,
-      checkedKeys,
-      onSelect,
-      onSelectAll,
+      checkedKeys
     };
   },
 });

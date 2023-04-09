@@ -17,7 +17,7 @@ export default defineApplicationConfig({
     server: {
       proxy: {
         '/fund': {
-          target: 'http://localhost:1888',
+          target: 'http://localhost:1688',
           changeOrigin: true,
           ws: true,
           //rewrite: (path) => path.replace(new RegExp(`^/fund`), ''),

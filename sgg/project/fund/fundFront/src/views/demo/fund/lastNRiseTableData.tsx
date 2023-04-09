@@ -55,8 +55,8 @@ export function getFormConfig(): Partial<FormProps> {
         required: true,
         defaultValue: new Date(),
         colProps: {
-          xl: 12,
-          xxl: 8
+          xl: 8,
+          xxl: 6
         },
       },
       {
@@ -77,8 +77,8 @@ export function getFormConfig(): Partial<FormProps> {
         required: false,
         defaultValue: true,
         colProps: {
-          xl: 6,
-          xxl: 8
+          xl: 3,
+          xxl: 4
         }
       }
     ],
