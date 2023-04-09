@@ -175,7 +175,7 @@ public class FundServiceImpl implements FundService {
                             result.add(historyFundByCode);
                         }
                         Thread.sleep(80);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -264,7 +264,11 @@ public class FundServiceImpl implements FundService {
             fundGsPo.setUpdatedTime(new Date());
             fundGsPos.add(fundGsPo);
         });
-        return fundGsMapper.insertBatch(fundGsPos);
+        if (!fundGsPos.isEmpty()) {
+            return fundGsMapper.insertBatch(fundGsPos);
+        } else {
+            return 0;
+        }
     }
 
     public int insertBatch() {
@@ -285,10 +289,18 @@ public class FundServiceImpl implements FundService {
             if (!StringUtils.isEmpty(oldTime)) {
                 fundGsPo.setGzdate(oldTime.replaceAll("-", "").substring(0, 8));
             }
-            fundGsPo.setUpdatedTime(new Date());
-            fundGsPos.add(fundGsPo);
+            if (fundGsPo.getGztime() != null
+                    && DateUtil.format(DateUtil.yyyy_MM_dd, new Date())
+                    .equals(DateUtil.format(DateUtil.yyyy_MM_dd, fundGsPo.getGztime()))) {
+                fundGsPo.setUpdatedTime(new Date());
+                fundGsPos.add(fundGsPo);
+            }
         });
-        return fundGsMapper.insertBatch(fundGsPos);
+        if (!fundGsPos.isEmpty()) {
+            return fundGsMapper.insertBatch(fundGsPos);
+        } else {
+            return 0;
+        }
     }
 
     @Override
