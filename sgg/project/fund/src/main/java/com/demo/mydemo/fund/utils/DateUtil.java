@@ -35,4 +35,11 @@ public class DateUtil {
         calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - days);
         return calendar.getTime();
     }
+
+    public static Date subMonth(Date date,int month){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(Calendar.MONTH, calendar.get(Calendar.MONTH) - month);
+        return calendar.getTime();
+    }
 }

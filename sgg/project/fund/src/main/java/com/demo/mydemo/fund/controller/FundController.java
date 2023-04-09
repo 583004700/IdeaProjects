@@ -36,6 +36,12 @@ public class FundController {
         return fundService.getGszSort();
     }
 
+    @RequestMapping("/insertBatchHistory")
+    @ResponseBody
+    public int insertBatchHistory(@RequestParam("gzdate") String date) throws ParseException {
+        return fundService.insertBatchHistory(DateUtil.parse(DateUtil.yyyy_MM_dd,date));
+    }
+
     @RequestMapping("/insertBatch")
     @ResponseBody
     public int insertBatch() {

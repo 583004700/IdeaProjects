@@ -30,6 +30,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,11 +72,14 @@ public class FundServiceImpl implements FundService {
 
     private final String singleFundUrl = "http://fundgz.1234567.com.cn/js/${code}.js?rt=1463558676006";
 
+    private final String historyUrl = "http://fundf10.eastmoney.com/F10DataApi.aspx?type=lsjz&code=${code}&page=1&sdate=${sdate}&edate=${edate}&per=1";
+
     private final static int THREAD_NUM = 9;
 
     private ExecutorService executorService;
 
     private ReentrantLock lock = new ReentrantLock();
+    private ReentrantLock lock2 = new ReentrantLock();
 
     public FundServiceImpl() {
         this.executorService = Executors.newFixedThreadPool(this.THREAD_NUM);
@@ -98,6 +103,44 @@ public class FundServiceImpl implements FundService {
         return result;
     }
 
+    public Fund getHistoryFundByCode(Fund fund, Date date) {
+        boolean hasHis = true;
+        String dateStr = DateUtil.format(DateUtil.yyyy_MM_dd, date);
+        String smDateStr = DateUtil.format(DateUtil.yyyy_MM_dd, DateUtil.subMonth(date, 1));
+        String hisUrl = historyUrl.replace("${code}", fund.getFundcode())
+                .replace("${sdate}", smDateStr)
+                .replace("${edate}", dateStr);
+        byte[] hisFundStr = httpClientUtil.getForEntity(hisUrl, byte[].class);
+        if (hisFundStr != null) {
+            String body = new String(hisFundStr, StandardCharsets.UTF_8);
+            if (body.contains("暂无数据")) {
+                hasHis = false;
+            }
+            if (hasHis) {
+                body = body.replace("var apidata=", "").replace(";", "");
+                String content = JSONObject.parseObject(body).getString("content");
+                Pattern pattern = Pattern.compile("\\d*\\.*\\d*%");
+                Matcher matcher = pattern.matcher(content);
+                String gszzl = null;
+                if (matcher.find()) {
+                    gszzl = matcher.group(0);
+                }
+                Pattern timePattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+                Matcher timeMatcher = timePattern.matcher(content);
+                String gzdate = null;
+                if (timeMatcher.find()) {
+                    gzdate = timeMatcher.group(0);
+                }
+                if (!StringUtils.isEmpty(gszzl) && !StringUtils.isEmpty(gzdate)) {
+                    gszzl = gszzl.replace("%", "");
+                    fund.setGszzl(BigDecimal.valueOf(Double.parseDouble(gszzl)));
+                    fund.setGztime(gzdate + " 15:00:00");
+                }
+            }
+        }
+        return fund;
+    }
+
     public Fund getFundByCode(Fund fund) {
         String url = singleFundUrl.replace("${code}", fund.getFundcode());
         byte[] fundStr = httpClientUtil.getForEntity(url, byte[].class);
@@ -114,6 +157,37 @@ public class FundServiceImpl implements FundService {
             }
         }
         return fund;
+    }
+
+    public List<Fund> getHistoryGszSort(Date date) {
+        List<Fund> result = new ArrayList<>();
+        boolean can = false;
+        try {
+            can = lock2.tryLock();
+            if (can) {
+                Map<String, Fund> allFund = this.getAllFund();
+                Iterator<Map.Entry<String, Fund>> iterator = allFund.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    try {
+                        Map.Entry<String, Fund> next = iterator.next();
+                        Fund historyFundByCode = getHistoryFundByCode(next.getValue(), date);
+                        if (historyFundByCode.getGszzl() != null) {
+                            result.add(historyFundByCode);
+                        }
+                        Thread.sleep(80);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (can) {
+                lock2.unlock();
+            }
+        }
+        return result;
     }
 
     public List<Fund> getGszSort() {
@@ -169,6 +243,30 @@ public class FundServiceImpl implements FundService {
         return result;
     }
 
+    public int insertBatchHistory(Date date) {
+        List<Fund> gszSort = getHistoryGszSort(date);
+        if (gszSort == null || gszSort.isEmpty()) {
+            return 0;
+        }
+        List<FundGsPo> fundGsPos = new ArrayList<>();
+        gszSort.forEach(t -> {
+            FundGsPo fundGsPo = new FundGsPo();
+            BeanUtils.copyProperties(t, fundGsPo);
+            String oldTime = t.getGztime();
+            try {
+                fundGsPo.setGztime(DateUtil.parse(DateUtil.yyyy_MM_dd_HH_mm, oldTime));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            if (!StringUtils.isEmpty(oldTime)) {
+                fundGsPo.setGzdate(oldTime.replaceAll("-", "").substring(0, 8));
+            }
+            fundGsPo.setUpdatedTime(new Date());
+            fundGsPos.add(fundGsPo);
+        });
+        return fundGsMapper.insertBatch(fundGsPos);
+    }
+
     public int insertBatch() {
         List<Fund> gszSort = getGszSort();
         if (gszSort == null || gszSort.isEmpty()) {
@@ -204,7 +302,7 @@ public class FundServiceImpl implements FundService {
     }
 
     @Override
-    public List<FundVo> lastNRise(Date date, int n,int sortType,boolean continuation) {
+    public List<FundVo> lastNRise(Date date, int n, int sortType, boolean continuation) {
         int count = 0;
         int realCount = 0;
         int maxCount = 100;
@@ -235,12 +333,12 @@ public class FundServiceImpl implements FundService {
             for (int i = 0; i < allFundGsPos.size(); i++) {
                 Map<String, FundGsPo> every = allFundGsPos.get(i);
                 FundGsPo fundGsPo = every.get(k);
-                if(continuation) {
+                if (continuation) {
                     if (fundGsPo == null || fundGsPo.getGszzl() == null || fundGsPo.getGszzl().doubleValue() <= 0) {
                         flag = false;
                         break;
                     }
-                }else{
+                } else {
                     if (fundGsPo == null || fundGsPo.getGszzl() == null) {
                         flag = false;
                         break;
@@ -259,12 +357,12 @@ public class FundServiceImpl implements FundService {
                 BeanUtils.copyProperties(fundGsPo, fundVo);
                 result.add(fundVo);
             }
-            if(sortType == 1) {
+            if (sortType == 1) {
                 // 最近一天涨幅最大
                 result.sort((a, b) -> {
                     return b.getGszzl().compareTo(a.getGszzl());
                 });
-            }else{
+            } else {
                 // 最近n天涨幅最大
                 result.sort((a, b) -> {
                     return b.getNDaysGszzl().compareTo(a.getNDaysGszzl());
