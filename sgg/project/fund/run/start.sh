@@ -1,0 +1,1 @@
+nohup java -Xms512m -Xmx512m -Dfile.encoding=UTF-8 -DhistorySleepTime=116 -DsleepTime=40 -jar fund-2.2.2.RELEASE.jar &

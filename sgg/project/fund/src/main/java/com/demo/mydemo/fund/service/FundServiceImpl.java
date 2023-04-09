@@ -36,12 +36,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class FundServiceImpl implements FundService {
+    // 116
+    private int historySleepTime = Integer.valueOf(System.getProperty("historySleepTime"));
 
     @Setter
     public static class FundTask implements Callable<List<Fund>> {
         private FundService fundService;
         private List<Fund> funds;
-        private int sleepTime = 40;
+        // 40
+        private int sleepTime = Integer.valueOf(System.getProperty("sleepTime"));
 
         public FundTask(FundService fundService) {
             this.fundService = fundService;
@@ -174,7 +177,7 @@ public class FundServiceImpl implements FundService {
                         if (historyFundByCode.getGszzl() != null) {
                             result.add(historyFundByCode);
                         }
-                        Thread.sleep(80);
+                        Thread.sleep(historySleepTime);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
