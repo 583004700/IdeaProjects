@@ -36,14 +36,14 @@ import java.util.stream.Collectors;
 
 @Service
 public class FundServiceImpl implements FundService {
-    // 116
+
     private int historySleepTime = Integer.valueOf(System.getProperty("historySleepTime"));
 
     @Setter
     public static class FundTask implements Callable<List<Fund>> {
         private FundService fundService;
         private List<Fund> funds;
-        // 40
+        
         private int sleepTime = Integer.valueOf(System.getProperty("sleepTime"));
 
         public FundTask(FundService fundService) {
@@ -82,7 +82,9 @@ public class FundServiceImpl implements FundService {
     private ExecutorService executorService;
 
     private ReentrantLock lock = new ReentrantLock();
-    private ReentrantLock lock2 = new ReentrantLock();
+
+    private Long historyGszSortLastExecTime = 0L;
+    private Long historyExecMaxTime = Long.valueOf(System.getProperty("historyExecMaxTime"));
 
     public FundServiceImpl() {
         this.executorService = Executors.newFixedThreadPool(this.THREAD_NUM);
@@ -163,10 +165,15 @@ public class FundServiceImpl implements FundService {
     }
 
     public List<Fund> getHistoryGszSort(Date date) {
-        List<Fund> result = new ArrayList<>();
         boolean can = false;
+        synchronized (this) {
+            if (System.currentTimeMillis() - historyGszSortLastExecTime > historyExecMaxTime) {
+                historyGszSortLastExecTime = System.currentTimeMillis();
+                can = true;
+            }
+        }
+        List<Fund> result = new ArrayList<>();
         try {
-            can = lock2.tryLock();
             if (can) {
                 Map<String, Fund> allFund = this.getAllFund();
                 Iterator<Map.Entry<String, Fund>> iterator = allFund.entrySet().iterator();
@@ -176,7 +183,7 @@ public class FundServiceImpl implements FundService {
                         Fund historyFundByCode = getHistoryFundByCode(next.getValue(), date);
                         if (historyFundByCode.getGszzl() != null) {
                             result.add(historyFundByCode);
-                            System.out.println("已经获取"+result.size()+"条具体估值数据！");
+                            System.out.println("已经获取" + result.size() + "条具体估值数据！");
                         }
                         Thread.sleep(historySleepTime);
                     } catch (Exception e) {
@@ -186,10 +193,6 @@ public class FundServiceImpl implements FundService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (can) {
-                lock2.unlock();
-            }
         }
         return result;
     }
@@ -376,12 +379,22 @@ public class FundServiceImpl implements FundService {
             if (sortType == 1) {
                 // 最近一天涨幅最大
                 result.sort((a, b) -> {
-                    return b.getGszzl().compareTo(a.getGszzl());
+                    int c = b.getGszzl().compareTo(a.getGszzl());
+                    if (c != 0) {
+                        return c;
+                    } else {
+                        return b.getNDaysGszzl().compareTo(a.getNDaysGszzl());
+                    }
                 });
             } else {
                 // 最近n天涨幅最大
                 result.sort((a, b) -> {
-                    return b.getNDaysGszzl().compareTo(a.getNDaysGszzl());
+                    int c = b.getNDaysGszzl().compareTo(a.getNDaysGszzl());
+                    if (c != 0) {
+                        return c;
+                    } else {
+                        return b.getGszzl().compareTo(a.getGszzl());
+                    }
                 });
             }
         });
