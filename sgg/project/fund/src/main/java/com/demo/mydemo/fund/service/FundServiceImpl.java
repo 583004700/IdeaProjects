@@ -176,6 +176,7 @@ public class FundServiceImpl implements FundService {
                         Fund historyFundByCode = getHistoryFundByCode(next.getValue(), date);
                         if (historyFundByCode.getGszzl() != null) {
                             result.add(historyFundByCode);
+                            System.out.println("已经获取"+result.size()+"条具体估值数据！");
                         }
                         Thread.sleep(historySleepTime);
                     } catch (Exception e) {
