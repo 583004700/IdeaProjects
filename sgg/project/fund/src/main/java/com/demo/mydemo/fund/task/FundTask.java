@@ -23,6 +23,10 @@ public class FundTask {
 
     @Scheduled(cron = "0 20 10 * * MON-FRI")
     private void insertBatchHistory() {
-        fundService.insertBatchHistory(DateUtil.subDate(new Date(), 1));
+        Date currentDate = new Date();
+        System.out.println("insertBatchHistory定时任务启动：当前时间为："+DateUtil.format(DateUtil.yyyy_MM_dd_HH_mm,currentDate));
+        int row = fundService.insertBatchHistory(DateUtil.subDate(currentDate, 1));
+        System.out.println("insertBatchHistory定时任务完成：当前时间为："
+                +DateUtil.format(DateUtil.yyyy_MM_dd_HH_mm,new Date())+";row为："+row);
     }
 }
