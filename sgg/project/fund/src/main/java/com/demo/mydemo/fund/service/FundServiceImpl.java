@@ -124,7 +124,7 @@ public class FundServiceImpl implements FundService {
             if (hasHis) {
                 body = body.replace("var apidata=", "").replace(";", "");
                 String content = JSONObject.parseObject(body).getString("content");
-                Pattern pattern = Pattern.compile("\\d*\\.*\\d*%");
+                Pattern pattern = Pattern.compile("-?\\d*\\.*\\d*%");
                 Matcher matcher = pattern.matcher(content);
                 String gszzl = null;
                 if (matcher.find()) {
