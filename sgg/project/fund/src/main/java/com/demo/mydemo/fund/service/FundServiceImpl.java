@@ -167,7 +167,10 @@ public class FundServiceImpl implements FundService {
     public List<Fund> getHistoryGszSort(Date date) {
         boolean can = false;
         synchronized (this) {
-            if (System.currentTimeMillis() - historyGszSortLastExecTime > historyExecMaxTime) {
+            long subTime = System.currentTimeMillis() - historyGszSortLastExecTime;
+            System.out.println("subTime:"+subTime);
+            System.out.println("historyGszSortLastExecTime:"+historyGszSortLastExecTime);
+            if (subTime > historyExecMaxTime) {
                 historyGszSortLastExecTime = System.currentTimeMillis();
                 can = true;
             }
