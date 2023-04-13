@@ -57,7 +57,7 @@ public class FundController {
                                               @RequestParam(value = "field", required = false) String field,
                                               @RequestParam(value = "continuation",required = false)Boolean continuation) throws ParseException {
         if (sortType == null) {
-            sortType = 1;
+            sortType = 2;
         }
         if (!StringUtils.isEmpty(field)) {
             if (field.equals("nDaysGszzl")) {
