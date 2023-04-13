@@ -356,7 +356,7 @@ public class FundServiceImpl implements FundService {
                 Map<String, FundGsPo> every = allFundGsPos.get(i);
                 FundGsPo fundGsPo = every.get(k);
                 if (continuation) {
-                    if (fundGsPo == null || fundGsPo.getGszzl() == null || fundGsPo.getGszzl().doubleValue() <= 0) {
+                    if (fundGsPo == null || fundGsPo.getGszzl() == null || fundGsPo.getGszzl().doubleValue() < 0) {
                         flag = false;
                         break;
                     }
