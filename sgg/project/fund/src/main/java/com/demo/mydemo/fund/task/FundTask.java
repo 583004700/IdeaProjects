@@ -4,6 +4,7 @@ import com.demo.mydemo.fund.service.FundService;
 import com.demo.mydemo.fund.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -21,6 +22,7 @@ public class FundTask {
 
     @Scheduled(cron = "0 20 10 ? * MON-FRI")
     @Async
+    @Lazy(value = false)
     public void insertBatchHistory() {
         Date currentDate = new Date();
         System.out.println("insertBatchHistory定时任务启动：当前时间为：" + DateUtil.format(DateUtil.yyyy_MM_dd_HH_mm, currentDate));
