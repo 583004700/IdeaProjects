@@ -10,6 +10,7 @@ import com.demo.mydemo.fund.entity.vo.FundVo;
 import com.demo.mydemo.fund.mapper.FundGsMapper;
 import com.demo.mydemo.fund.utils.DateUtil;
 import com.demo.mydemo.fund.utils.HttpClientUtil;
+import com.xxl.job.core.context.XxlJobHelper;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,7 +187,7 @@ public class FundServiceImpl implements FundService {
                         Fund historyFundByCode = getHistoryFundByCode(next.getValue(), date);
                         if (historyFundByCode.getGszzl() != null) {
                             result.add(historyFundByCode);
-                            System.out.println("已经获取" + result.size() + "条具体估值数据！");
+                            XxlJobHelper.log("已经获取" + result.size() + "条具体估值数据！");
                         }
                         Thread.sleep(historySleepTime);
                     } catch (Exception e) {
