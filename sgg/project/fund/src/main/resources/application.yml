@@ -15,4 +15,19 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
-##-------mybatis plus 配置----------------end----------------------
+  ##-------mybatis plus 配置----------------end----------------------
+
+#  # log config
+#logging:
+#  config=classpath:logback.xml
+#
+#xxl:
+#  job:
+#    admin:
+#      addresses: http://127.0.0.1:1888/xxl-job-admin
+#      accessToken: default_token
+#  executor:
+#    appname: xxl-job-executor-sample
+#    port: 9999
+#    logpath: ./jobhandler
+#    logretentiondays: 2
