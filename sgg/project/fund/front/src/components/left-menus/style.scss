@@ -41,9 +41,13 @@ $animation_time : 0.5s;
     color: rgb(28,107,186);
   }
 
+  .menu{
+    height: 40px;
+  }
+
   .menu,.subMenu{
     overflow: hidden;
-    transition: height 0.5s;
+    transition: height $animation_time;
   }
   .menuItem {
     height: 40px;

@@ -9,7 +9,7 @@ export class TabItem {
   selected: boolean;
 }
 
-class HeadTabs extends Component {
+class Tabs extends Component {
 
   /**
    * 添加一个标签页
@@ -68,4 +68,4 @@ class HeadTabs extends Component {
   }
 }
 
-export default HeadTabs;
+export default Tabs;

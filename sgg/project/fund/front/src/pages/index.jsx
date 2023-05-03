@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux";
 import {CHANGE_SELECTED} from "../redux/constant/routersActionType";
-import HeadTabs, {TabItem} from '../components/head-tabs/HeadTabs';
-import LeftMenus from "../components/left-menus/LeftMenus";
+import Tabs, {TabItem} from '../components/head-tabs/Tabs';
+import SidebarMenus from "../components/left-menus/SidebarMenus";
 
 class Index extends Component {
 
@@ -41,11 +41,11 @@ class Index extends Component {
     const {routers} = this.props;
     return (
       <div>
-        <HeadTabs tabItems={tabItems} ref={c => {
+        <Tabs tabItems={tabItems} ref={c => {
           this.headTab = c;
         }}/>
 
-        <LeftMenus style={{height: document.body.clientHeight - 33,width: 200}} routers={routers}/>
+        <SidebarMenus style={{height: document.body.clientHeight - 33,width: 200}} routers={routers}/>
       </div>
     )
   }

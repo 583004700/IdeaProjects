@@ -3,16 +3,20 @@ import {Component} from '../../../libs';
 
 export default class Menu extends Component {
 
+  id = null;
   parentId = null;
-
   open = false;
 
   state = {
     subMenuHeight: 0
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    let {id, parentId, menuComponents} = props.propsObject;
+    this.id = id;
+    this.parentId = parentId;
+    menuComponents[this.id] = this;
   }
 
   menuItemClick = (e) => {
@@ -28,21 +32,25 @@ export default class Menu extends Component {
   展开当前菜单
    */
   openMenu() {
-    this.open = true;
-    if (this.props.children) {
-      this.subMenu.fastHeight = this.subMenu.fastHeight === undefined ? this.subMenu.scrollHeight : this.subMenu.fastHeight;
-      this._dealWithParent(this.subMenu.parentNode, this.subMenu.fastHeight);
+    if (!this.open) {
+      this.open = true;
+      if (this.props.children) {
+        this.subMenu.fastHeight = this.subMenu.fastHeight === undefined ? this.subMenu.scrollHeight : this.subMenu.fastHeight;
+        this._dealWithParent(this.subMenu.parentNode, this.subMenu.fastHeight);
+      }
+      this.setState({subMenuHeight: this.subMenu.fastHeight});
     }
-    this.setState({subMenuHeight: this.subMenu.fastHeight});
   }
 
   closeMenu() {
-    this.open = false;
-    if (this.props.children) {
-      this.subMenu.fastHeight = this.subMenu.fastHeight === undefined ? this.subMenu.scrollHeight : this.subMenu.fastHeight;
-      this._dealWithParent(this.subMenu.parentNode, -this.subMenu.fastHeight);
+    if (this.open) {
+      this.open = false;
+      if (this.props.children) {
+        this.subMenu.fastHeight = this.subMenu.fastHeight === undefined ? this.subMenu.scrollHeight : this.subMenu.fastHeight;
+        this._dealWithParent(this.subMenu.parentNode, -this.subMenu.fastHeight);
+      }
+      this.setState({subMenuHeight: 0});
     }
-    this.setState({subMenuHeight: 0});
   }
 
   _dealWithParent(node, subMenuHeight) {
@@ -69,11 +77,18 @@ export default class Menu extends Component {
           <i style={{fontSize: 12, position: "absolute", marginTop: -7, top: "50%", right: 20}}
              className={this.props.children ? this.open ? "el-icon-arrow-up rotate0" : "el-icon-arrow-up rotate-180" : ""}></i>
         </div>
-        <div ref={c => this.subMenu = c} className="subMenu" style={{height: subMenuHeight,position:"relative"}}>
+        <div ref={c => this.subMenu = c} className="subMenu" style={{height: subMenuHeight, position: "relative"}}>
           {
             this.props.children
           }
-          <div style={{width: "100%",height: "100%",position:"absolute",top:0,left:0,display: this.open ? "none": "block"}}>
+          <div style={{
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            display: this.open ? "none" : "block"
+          }}>
           </div>
         </div>
       </div>
