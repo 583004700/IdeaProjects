@@ -18,6 +18,10 @@ class MenuComponent{
 
 class LeftMenus extends Component {
 
+  f = function(c){
+    //console.log(c);
+  };
+
   // 保存菜单id 与 组件的对应关系
   // {key:}
   menuComponents = {
@@ -56,11 +60,11 @@ class LeftMenus extends Component {
           menuName: router.routerItem.name
         }
       }, childrenComponent);
-
+      this.menuComponents[router.routerItem.id] = new MenuComponent(current,router.routerItem.id,null);
     } else {
-      current = React.createElement(Menu, {propsObject: {paddingLeft: deep * 20, menuName: router.routerItem.name}});
+      //current = React.createElement(Menu, {propsObject: {paddingLeft: deep * 20, menuName: router.routerItem.name}});
+      return <Menu ref={(c)=>{this.f(c)}} propsObject={{paddingLeft: deep * 20, menuName: router.routerItem.name}}></Menu>
     }
-    this.menuComponents[router.routerItem.id] = new MenuComponent(current,router.routerItem.id,null);
     return current;
   }
 
@@ -72,7 +76,6 @@ class LeftMenus extends Component {
   render() {
     const {routers} = this.props;
     let {allRouters} = routers;
-    let that = this;
     return (
       <div className='menuContainer' style={this.style({overflow: "hidden"})}>
         <div style={{
@@ -82,10 +85,7 @@ class LeftMenus extends Component {
         }}>
           {
             allRouters.map(r => {
-              let kv = this.generationEveryMenu(r, 1);
-              let item = r.routerItem;
-              that.menuComponents[item.id] = new MenuComponent(kv,item.id,null);
-              return kv;
+              return this.generationEveryMenu(r, 1);
             })
           }
         </div>
