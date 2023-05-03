@@ -1,0 +1,57 @@
+$animation_time : 0.5s;
+
+.menuContainer {
+  border-right: 1px solid #ccc;
+  font: 13px bold;
+  color: rgb(102,102,102);
+
+  @keyframes iconOpen {
+    from{
+      transform: rotate(0deg);
+    }
+    to{
+      transform: rotate(-180deg);
+    }
+  }
+
+  .rotate-180{
+    animation-name: iconOpen;
+    animation-duration: $animation_time;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes iconClose {
+    from{
+      transform: rotate(-180deg);
+    }
+    to{
+      transform: rotate(0deg);
+    }
+  }
+
+  .rotate0{
+    animation-name: iconClose;
+    animation-duration: $animation_time;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  .menuOpen{
+    color: rgb(28,107,186);
+  }
+
+  .menu,.subMenu{
+    overflow: hidden;
+    transition: height 0.5s;
+  }
+  .menuItem {
+    height: 40px;
+    line-height: 40px;
+
+    &:hover {
+      background-color: #f5f5f5;
+      cursor: pointer;
+    }
+  }
+}
