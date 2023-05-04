@@ -37,6 +37,7 @@ class SidebarMenus extends Component {
         return that.generationEveryMenu(r, deep + 1, router.routerItem.id);
       });
       current = React.createElement(Menu, {
+        key: router.routerItem.id,
         propsObject: {
           menuComponents: this.menuComponents,
           id: router.routerItem.id,
@@ -46,7 +47,7 @@ class SidebarMenus extends Component {
         }
       }, childrenComponent);
     } else {
-      return <Menu propsObject={{
+      return <Menu key={router.routerItem.id} propsObject={{
         menuComponents: this.menuComponents,
         id: router.routerItem.id,
         parentId,
@@ -63,6 +64,7 @@ class SidebarMenus extends Component {
   }
 
   render() {
+    console.log("render");
     const {routers} = this.props;
     let {allRouters} = routers;
     return (

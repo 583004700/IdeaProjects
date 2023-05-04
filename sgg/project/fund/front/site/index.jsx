@@ -9,6 +9,7 @@ import 'element-theme-default';
 
 import './styles/base.scss';
 import './styles/prism.css';
+import './styles/index.scss';
 
 import App from './page';
 
