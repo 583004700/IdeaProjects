@@ -38,7 +38,7 @@ $animation_time : 0.5s;
   }
 
   .menuOpen{
-    color: rgb(28,107,186);
+    color: rgb(28,107,186) !important;
   }
 
   .menu{
@@ -52,6 +52,7 @@ $animation_time : 0.5s;
   .menuItem {
     height: 40px;
     line-height: 40px;
+    color: rgba(0,0,0,.65);
 
     &:hover {
       background-color: #f5f5f5;

@@ -72,7 +72,12 @@ export default class Menu extends Component {
       <div style={this.style()} className="menu">
         <div onClick={(e) => {
           this.menuItemClick(e)
-        }} style={{paddingLeft: paddingLeft, position: "relative", fontSize: this.props.children ? 13 : 12}}
+        }} style={{
+          paddingLeft: paddingLeft,
+          position: "relative",
+          fontSize: this.props.children ? "inherit" : 12,
+          fontWeight: !this.props.children && this.open ? 700 : "inherit"
+        }}
              className={this.open ? "menuItem menuOpen" : "menuItem"}>{menuName}
           <i style={{fontSize: 12, position: "absolute", marginTop: -7, top: "50%", right: 20}}
              className={this.props.children ? this.open ? "el-icon-arrow-up rotate0" : "el-icon-arrow-up rotate-180" : ""}></i>
