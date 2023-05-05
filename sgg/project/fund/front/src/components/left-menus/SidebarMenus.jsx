@@ -63,6 +63,13 @@ class SidebarMenus extends Component {
   componentDidMount() {
     // 打开菜单id7
     this.openMenu(7);
+
+    setTimeout(()=>{
+      this.menuComponents.get(7).closeMenu();
+      this.menuComponents.get(5).closeMenu();
+      this.menuComponents.get(3).closeMenu();
+      this.menuComponents.get(2).closeMenu();
+    },2000)
   }
 
   render() {

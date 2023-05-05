@@ -24,7 +24,7 @@ export default class Menu extends Component {
     this.id = id;
     this.parentId = parentId;
     this.deep = deep;
-    if(parentId !== null){
+    if (parentId !== null) {
       menuComponents.get(parentId).childrenIds.push(this);
     }
     menuComponents.set(this.id, this);
@@ -33,7 +33,7 @@ export default class Menu extends Component {
   componentDidMount() {
     let linkArr = this.getLinkArr();
     for (let i = 0; i < linkArr.length; i++) {
-      if(linkArr[i] !== this) {
+      if (linkArr[i] !== this) {
         linkArr[i].allChildrenIds.push(this);
       }
     }
@@ -42,7 +42,18 @@ export default class Menu extends Component {
   menuItemClick = (e) => {
     e.stopPropagation();
     if (this.open) {
-      this.closeMenu();
+      let hasOpen = false;
+      for (let i = 0; i < this.allChildrenIds.length; i++) {
+        if (this.allChildrenIds[i].open && this.allChildrenIds[i].allChildrenIds.length === 0) {
+          hasOpen = true;
+          break;
+        }
+      }
+      if (hasOpen) {
+        this.retractMenu();
+      } else {
+        this.closeMenu();
+      }
     } else {
       this.openMenu();
     }
@@ -91,7 +102,7 @@ export default class Menu extends Component {
     if (!this.open) {
       let {menuComponents} = this.props.propsObject;
       let linkObj = this.getLinkObj();
-      let keys = menuComponents.keys();
+      let keys = [...menuComponents.keys()].reverse();
       let sameRetract = false;
       for (const menuComponentsKey of keys) {
         let v = menuComponents.get(menuComponentsKey);
@@ -100,15 +111,15 @@ export default class Menu extends Component {
             let hasOpen = false;
             // 打开一个菜单时，要收起同级的其它已打开的菜单
             for (let i = 0; i < v.allChildrenIds.length; i++) {
-              if(v.allChildrenIds[i].open && v.allChildrenIds[i].allChildrenIds.length === 0){
+              if (v.allChildrenIds[i].open && v.allChildrenIds[i].allChildrenIds.length === 0) {
                 hasOpen = true;
                 break;
               }
             }
-            if(hasOpen) {
+            if (hasOpen) {
               // 如果其它菜单中有已经打开的子菜单
               v.retractMenu();
-            }else{
+            } else {
               v.closeMenu();
             }
             sameRetract = true;
@@ -120,12 +131,12 @@ export default class Menu extends Component {
           }
         }
       }
-      this.open = true;
       this.setSelected(true);
       if (this.props.children) {
-        this.subMenu.fastHeight = this.subMenu.fastHeight === undefined ? this.subMenu.scrollHeight : this.subMenu.fastHeight;
-        this._dealWithParent(this.subMenu.parentNode, this.subMenu.fastHeight);
+        let fastHeight = this.subMenu.fastHeight === undefined ? this.subMenu.scrollHeight : this.subMenu.fastHeight;
+        this._dealWithParent(menuComponents.get(this.id), fastHeight, 1);
       }
+      this.open = true;
       this.setState({subMenuHeight: this.subMenu.fastHeight});
     }
   }
@@ -141,29 +152,39 @@ export default class Menu extends Component {
   }
 
   retractMenu() {
+    let {menuComponents} = this.props.propsObject;
     if (this.open) {
-      this.open = false;
       if (this.props.children) {
-        this.subMenu.fastHeight = this.subMenu.fastHeight === undefined ? this.subMenu.scrollHeight : this.subMenu.fastHeight;
-        this._dealWithParent(this.subMenu.parentNode, -this.subMenu.fastHeight);
+        let fastHeight = this.subMenu.fastHeight === undefined ? this.subMenu.scrollHeight : this.subMenu.fastHeight;
+        this._dealWithParent(menuComponents.get(this.id), -fastHeight, 1);
       }
+      this.open = false;
       this.setState({subMenuHeight: 0});
     }
   }
 
-  _dealWithParent(node, subMenuHeight) {
-    if(node.open === false && subMenuHeight < 0){
-      return;
-    }
-    if (node && (node.classList.contains("menu") || (node.classList.contains("subMenu")))) {
-      let fastHeight = node.fastHeight;
-      node.open = subMenuHeight > 0;
-      node.fastHeight = ((fastHeight === undefined ? node.clientHeight : fastHeight) + subMenuHeight);
-      node.style.height = ((fastHeight === undefined ? node.clientHeight : fastHeight) + subMenuHeight) + "px";
-      if (node && node.parentNode) {
-        this._dealWithParent(node.parentNode, subMenuHeight);
+  _dealWithParent(component, subMenuHeight, deep) {
+    let {menuComponents} = this.props.propsObject;
+    if (component) {
+      if(deep > 1) {
+        let node = component.subMenu;
+        this._dealWithParentNode(node, subMenuHeight);
+      }
+      let menuDeal = !(component.open !== true && subMenuHeight < 0);
+      if(menuDeal){
+        let node = component.menu;
+        this._dealWithParentNode(node, subMenuHeight);
+      }
+      if (menuDeal && component && component.parentId !== null) {
+        this._dealWithParent(menuComponents.get(component.parentId), subMenuHeight, deep + 1);
       }
     }
+  }
+
+  _dealWithParentNode(node, subMenuHeight) {
+    let fastHeight = node.fastHeight;
+    node.fastHeight = ((fastHeight === undefined ? node.clientHeight : fastHeight) + subMenuHeight);
+    node.style.height = ((fastHeight === undefined ? node.clientHeight : fastHeight) + subMenuHeight) + "px";
   }
 
   render() {
@@ -171,7 +192,7 @@ export default class Menu extends Component {
     const {subMenuHeight} = this.state;
     const {paddingLeft, menuName} = propsObject;
     return (
-      <div style={this.style()} className="menu">
+      <div ref={c => this.menu = c} style={this.style()} className="menu">
         <div onClick={(e) => {
           this.menuItemClick(e)
         }} style={{
@@ -181,7 +202,7 @@ export default class Menu extends Component {
           fontWeight: !this.props.children && this.selected ? 700 : "inherit"
         }}
              className={this.selected ? "menuItem menuOpen" : "menuItem"}>{menuName}
-          <i style={{fontSize: 12, position: "absolute", marginTop: -7, top: "50%", right: 20}}
+          <i style={{fontSize: 12, position: "absolute", marginTop: -7, top: "50%", right: 30}}
              className={this.props.children ? this.open ? "el-icon-arrow-up rotate0" : "el-icon-arrow-up rotate-180" : ""}></i>
         </div>
         <div ref={c => this.subMenu = c} className="subMenu" style={{height: subMenuHeight, position: "relative"}}>
