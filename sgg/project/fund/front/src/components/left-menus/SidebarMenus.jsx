@@ -8,7 +8,7 @@ class SidebarMenus extends Component {
 
   // 保存菜单id 与 组件的对应关系
   // {key:}
-  menuComponents = {}
+  menuComponents = new Map();
 
   /**
    * 定位到某个菜单并打开
@@ -16,10 +16,10 @@ class SidebarMenus extends Component {
    */
   openMenu(menuId) {
     let linked = [];
-    let current: Menu = this.menuComponents[menuId];
+    let current: Menu = this.menuComponents.get(menuId);
     while (current) {
       linked.unshift(current);
-      current = this.menuComponents[current.parentId];
+      current = this.menuComponents.get(current.parentId);
     }
 
     setTimeout(() => {
@@ -42,6 +42,7 @@ class SidebarMenus extends Component {
           menuComponents: this.menuComponents,
           id: router.routerItem.id,
           parentId: parentId,
+          deep: deep,
           paddingLeft: deep * 20,
           menuName: router.routerItem.name
         }
@@ -51,6 +52,7 @@ class SidebarMenus extends Component {
         menuComponents: this.menuComponents,
         id: router.routerItem.id,
         parentId,
+        deep: deep,
         paddingLeft: deep * 20,
         menuName: router.routerItem.name
       }}></Menu>
@@ -64,7 +66,6 @@ class SidebarMenus extends Component {
   }
 
   render() {
-    console.log("render");
     const {routers} = this.props;
     let {allRouters} = routers;
     return (

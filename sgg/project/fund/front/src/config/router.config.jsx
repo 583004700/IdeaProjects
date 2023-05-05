@@ -36,9 +36,9 @@ export default {
           ]
         },
         {
-          routerItem: new RouterItem(4,'/system/org','组织机构'),
+          routerItem: new RouterItem("a",'/system/org','组织机构'),
           children: [
-            {routerItem: new RouterItem(8,'/system/account','账号管理'),}
+            {routerItem: new RouterItem("c",'/system/account','账号管理'),}
           ]
         }
       ]
