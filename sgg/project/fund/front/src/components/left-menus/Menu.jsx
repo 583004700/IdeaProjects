@@ -99,13 +99,14 @@ export default class Menu extends Component {
           if (v.parentId === this.parentId && v.open && !sameRetract) {
             let hasOpen = false;
             // 打开一个菜单时，要收起同级的其它已打开的菜单
-            for (let i = 0; i < this.allChildrenIds.length; i++) {
-              if(this.allChildrenIds[i].open && this.allChildrenIds[i].allChildrenIds.length === 0){
+            for (let i = 0; i < v.allChildrenIds.length; i++) {
+              if(v.allChildrenIds[i].open && v.allChildrenIds[i].allChildrenIds.length === 0){
                 hasOpen = true;
                 break;
               }
             }
-            if(!hasOpen) {
+            if(hasOpen) {
+              // 如果其它菜单中有已经打开的子菜单
               v.retractMenu();
             }else{
               v.closeMenu();
