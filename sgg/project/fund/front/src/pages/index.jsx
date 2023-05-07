@@ -1,23 +1,36 @@
 import React, {Component} from 'react'
 import {connect} from "react-redux";
 import {CHANGE_SELECTED} from "../redux/constant/routersActionType";
-import Tabs, {TabItem} from '../components/head-tabs/Tabs';
-import SidebarMenus from "../components/left-menus/SidebarMenus";
+import Tabs, {TabItem} from '../components/tabs/Tabs';
+import SidebarMenus from "../components/sidebar-menus/SidebarMenus";
 
 class Index extends Component {
 
   state = {
     tabItems: []
   }
+  tabs = null;
+  sidebarMenus = null;
 
   getAllRouters(): TabItem[] {
     let items = [];
     let i1: TabItem = new TabItem();
     i1.id = "3";
     i1.name = "订单查询";
-    i1.selected = true;
     items.push(i1);
     return items;
+  }
+
+  menuOpen(menu){
+    console.log(menu);
+  }
+
+  tabSelected(tab){
+    console.log(tab);
+  }
+
+  tabClose(tab){
+    console.log(tab);
   }
 
   componentDidMount() {
@@ -28,24 +41,26 @@ class Index extends Component {
     t2.name = "系统设置";
 
     setTimeout(()=>{
-      this.headTab.addTabItem(t2);
+      this.tabs.addTabItem(t2);
     },3000);
 
     setTimeout(()=>{
-      this.headTab.selectTabItem("i2");
+      this.tabs.selectTabItem("i2");
     },6000);
+
+    this.sidebarMenus.openMenu("7");
   }
 
   render() {
     const {tabItems} = this.state;
-    const {routers} = this.props;
+    const {allRouters} = this.props.routers;
     return (
       <div>
         <Tabs tabItems={tabItems} ref={c => {
-          this.headTab = c;
-        }}/>
+          this.tabs = c;
+        }} onSelected={this.tabSelected} onClose={this.tabClose}/>
 
-        <SidebarMenus style={{height: document.body.clientHeight - 33,width: 200}} routers={routers}/>
+        <SidebarMenus ref={c=>this.sidebarMenus = c} onOpen={this.menuOpen} style={{height: document.body.clientHeight - 33,width: 200}} allRouters={allRouters}/>
       </div>
     )
   }

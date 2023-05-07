@@ -11,8 +11,10 @@ export default class Menu extends Component {
   linkObj = null;
   linkArr = null;
   open = false;
-
   selected = false;
+
+  menu = null;
+  subMenu = null;
 
   state = {
     subMenuHeight: 0
@@ -60,7 +62,7 @@ export default class Menu extends Component {
   }
 
   /**
-   * 获取当前节点的来源
+   * 获取当前节点的来源，map结构，顺序为从子到父
    * @returns {{}}
    */
   getLinkObj() {
@@ -78,7 +80,7 @@ export default class Menu extends Component {
   }
 
   /**
-   * 获取当前节点的路径
+   * 获取当前节点的路径,从父到子
    * @returns {[]}
    */
   getLinkArr() {
@@ -100,9 +102,9 @@ export default class Menu extends Component {
    */
   openMenu() {
     if (!this.open) {
-      let {menuComponents} = this.props.propsObject;
+      let {menuComponents,onOpen} = this.props.propsObject;
       let linkObj = this.getLinkObj();
-      let keys = [...menuComponents.keys()].reverse();
+      let keys = menuComponents.keys();
       let sameRetract = false;
       for (const menuComponentsKey of keys) {
         let v = menuComponents.get(menuComponentsKey);
@@ -137,6 +139,9 @@ export default class Menu extends Component {
         this._dealWithParent(menuComponents.get(this.id), fastHeight, 1);
       }
       this.open = true;
+      if(onOpen){
+        onOpen(this);
+      }
       this.setState({subMenuHeight: this.subMenu.fastHeight});
     }
   }

@@ -4,6 +4,32 @@ import Menu from "./Menu";
 
 import './style.scss';
 
+export class RouterItem{
+  id: string;
+  url: string;
+  name: string;
+  constructor(id: string,url: string, name: string) {
+    this.id = id;
+    this.url = url;
+    this.name = name;
+  }
+}
+
+/**
+ *  属性 onOpen 菜单打开时回调
+ *  属性 allRouters 所有菜单数据，结构为
+ *
+ *  [{
+ *       routerItem: new RouterItem(1,'/system','系统管理'),
+ *       children: [
+ *         {
+ *           routerItem: new RouterItem(6,'/system/users','用户管理'),
+ *         }
+ *       ]
+ *  }]
+ *
+ */
+
 class SidebarMenus extends Component {
 
   // 保存菜单id 与 组件的对应关系
@@ -15,13 +41,7 @@ class SidebarMenus extends Component {
    * @param menuId
    */
   openMenu(menuId) {
-    let linked = [];
-    let current: Menu = this.menuComponents.get(menuId);
-    while (current) {
-      linked.unshift(current);
-      current = this.menuComponents.get(current.parentId);
-    }
-
+    let linked = this.menuComponents.get(menuId).getLinkArr();
     setTimeout(() => {
       for (let i = 0; i < linked.length; i++) {
         linked[i].openMenu();
@@ -29,7 +49,21 @@ class SidebarMenus extends Component {
     });
   }
 
+  /**
+   * 关闭某个菜单和所有上级菜单
+   * @param menuId
+   */
+  closeMenu(menuId) {
+    let linked = this.menuComponents.get(menuId).getLinkArr();
+    setTimeout(() => {
+      for (let i = 0; i < linked.length; i++) {
+        linked[i].closeMenu();
+      }
+    });
+  }
+
   generationEveryMenu = (router, deep: number, parentId) => {
+    let {onOpen} = this.props;
     let current = null;
     if (router.children && router.children.length > 0) {
       let that = this;
@@ -39,6 +73,7 @@ class SidebarMenus extends Component {
       current = React.createElement(Menu, {
         key: router.routerItem.id,
         propsObject: {
+          onOpen: onOpen,
           menuComponents: this.menuComponents,
           id: router.routerItem.id,
           parentId: parentId,
@@ -49,6 +84,7 @@ class SidebarMenus extends Component {
       }, childrenComponent);
     } else {
       return <Menu key={router.routerItem.id} propsObject={{
+        onOpen: onOpen,
         menuComponents: this.menuComponents,
         id: router.routerItem.id,
         parentId,
@@ -60,21 +96,8 @@ class SidebarMenus extends Component {
     return current;
   }
 
-  componentDidMount() {
-    // 打开菜单id7
-    this.openMenu(7);
-
-    setTimeout(()=>{
-      this.menuComponents.get(7).closeMenu();
-      this.menuComponents.get(5).closeMenu();
-      this.menuComponents.get(3).closeMenu();
-      this.menuComponents.get(2).closeMenu();
-    },2000)
-  }
-
   render() {
-    const {routers} = this.props;
-    let {allRouters} = routers;
+    const {allRouters} = this.props;
     return (
       <div className='menuContainer' style={this.style({overflow: "hidden"})}>
         <div style={{
