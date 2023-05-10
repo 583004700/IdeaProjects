@@ -1,6 +1,7 @@
 package com.demo.mydemo.fund.utils;
 
 import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,12 @@ public class HttpClientUtil {
 
     public static String get(String url) {
         try {
-            return HttpRequest.get(url).timeout(1000 * 30).execute().body();
+            HttpResponse execute = HttpRequest.get(url).timeout(1000 * 30).execute();
+            if(execute.getStatus() == 200){
+                return execute.body();
+            }else{
+                System.out.println("请求异常！url:"+url);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
