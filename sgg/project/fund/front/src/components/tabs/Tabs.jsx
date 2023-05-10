@@ -17,17 +17,8 @@ export class TabItem {
 
 class Tabs extends Component {
 
-  tabItemsMap = new Map();
-
   constructor(props) {
     super(props);
-  }
-
-  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-    this.tabItemsMap.clear();
-    for (let i = 0; i < this.props.tabItems.length; i++) {
-      this.tabItemsMap.set(this.props.tabItems[i].id,this.props.tabItems[i]);
-    }
   }
 
   /**
@@ -57,17 +48,28 @@ class Tabs extends Component {
 
   selectTabItem = (id: string) => {
     const {tabItems,onSelected} = this.props;
-    for (let i = 0; i < tabItems.length; i++) {
-      tabItems[i].selected = id === tabItems[i].id;
+    for (const element of tabItems) {
+      element.selected = false;
     }
+    this.searchTab(id).selected = true;
     this.flush();
     if(onSelected){
-      onSelected(this.tabItemsMap.get(id));
+      onSelected(this.searchTab(id));
     }
   }
 
+  searchTab(id: string){
+    const {tabItems} = this.props;
+    for (const element of tabItems) {
+      if(element.id === id){
+        return element;
+      }
+    }
+    return null;
+  }
+
   has = (id: string) => {
-    this.tabItemsMap.has(id);
+    return this.searchTab(id) !== null;
   }
 
   render() {

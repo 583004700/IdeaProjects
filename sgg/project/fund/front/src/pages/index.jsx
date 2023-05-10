@@ -11,56 +11,71 @@ class Index extends Component {
   }
   tabs = null;
   sidebarMenus = null;
+  allRoutersMap = new Map();
 
-  getAllRouters(): TabItem[] {
-    let items = [];
-    let i1: TabItem = new TabItem();
-    i1.id = "3";
-    i1.name = "订单查询";
-    items.push(i1);
-    return items;
+  onMenuOpen = (menu)=>{
+    if(!menu.childrenIds || menu.childrenIds.length === 0) {
+      let routerItem = this.allRoutersMap.get(menu.id).routerItem;
+      let tabItem: TabItem = new TabItem();
+      tabItem.id = routerItem.id;
+      tabItem.name = routerItem.name;
+      if(!this.tabs.has(tabItem.id)) {
+        this.tabs.addTabItem(tabItem);
+      }
+      this.tabs.selectTabItem(tabItem.id);
+    }
   }
 
-  menuOpen(menu){
-    console.log(menu);
+  onTabSelected = (tab)=>{
+    console.log(tab);
+    this.sidebarMenus.openMenu(tab.id);
   }
 
-  tabSelected(tab){
+  onTabClose = (tab)=>{
     console.log(tab);
   }
 
-  tabClose(tab){
-    console.log(tab);
+  parseRouter(routerItemObj){
+     this.allRoutersMap.set(routerItemObj.routerItem.id,routerItemObj);
+     if(routerItemObj.children){
+       for (const element of routerItemObj.children) {
+         this.parseRouter(element);
+       }
+     }
   }
 
   componentDidMount() {
-    this.setState({tabItems: this.getAllRouters()});
+    //this.sidebarMenus.openMenu("7");
+    const {allRouters} = this.props.routers;
+    for (const element of allRouters) {
+      this.parseRouter(element);
+    }
 
-    let t2: TabItem = new TabItem();
-    t2.id = "i2";
-    t2.name = "系统设置";
+    const l = ()=>{
+      let path = location.hash.replace("#","");
+      alert(path);
+    }
 
-    setTimeout(()=>{
-      this.tabs.addTabItem(t2);
-    },3000);
+    window.addEventListener("hashchange", l, false);
 
-    setTimeout(()=>{
-      this.tabs.selectTabItem("i2");
-    },6000);
-
-    this.sidebarMenus.openMenu("7");
+    window.addEventListener("load", l, false);
   }
 
   render() {
+    let c = require('./fund/lastNRise').default;
+    let comp = React.createElement(c,null,null);
     const {tabItems} = this.state;
     const {allRouters} = this.props.routers;
+    console.log(allRouters);
     return (
       <div>
         <Tabs tabItems={tabItems} ref={c => {
           this.tabs = c;
-        }} onSelected={this.tabSelected} onClose={this.tabClose}/>
+        }} onSelected={this.onTabSelected} onClose={this.onTabClose}/>
 
-        <SidebarMenus ref={c=>this.sidebarMenus = c} onOpen={this.menuOpen} style={{height: document.body.clientHeight - 33,width: 200}} allRouters={allRouters}/>
+        <SidebarMenus ref={c=>this.sidebarMenus = c} onOpen={this.onMenuOpen}
+                      style={{height: document.body.clientHeight - 33,width: 200,float: 'left'}} allRouters={allRouters}/>
+        {comp}
       </div>
     )
   }
