@@ -44,7 +44,7 @@ public class FundServiceImpl implements FundService {
     public static class FundTask implements Callable<List<Fund>> {
         private FundService fundService;
         private List<Fund> funds;
-        
+
         private int sleepTime = Integer.valueOf(System.getProperty("sleepTime"));
 
         public FundTask(FundService fundService) {
@@ -149,9 +149,8 @@ public class FundServiceImpl implements FundService {
 
     public Fund getFundByCode(Fund fund) {
         String url = singleFundUrl.replace("${code}", fund.getFundcode());
-        byte[] fundStr = httpClientUtil.getForEntity(url, byte[].class);
-        if (fundStr != null) {
-            String body = new String(fundStr, StandardCharsets.UTF_8);
+        String body = HttpClientUtil.get(url);
+        if (body != null) {
             String fundJsonStr = body.replace("jsonpgz(", "").replace(");", "");
             JSONObject fundJsonObject = JSONObject.parseObject(fundJsonStr);
             if (fundJsonObject != null) {
@@ -169,8 +168,8 @@ public class FundServiceImpl implements FundService {
         boolean can = false;
         synchronized (this) {
             long subTime = System.currentTimeMillis() - historyGszSortLastExecTime;
-            System.out.println("subTime:"+subTime);
-            System.out.println("historyGszSortLastExecTime:"+historyGszSortLastExecTime);
+            System.out.println("subTime:" + subTime);
+            System.out.println("historyGszSortLastExecTime:" + historyGszSortLastExecTime);
             if (subTime > historyExecMaxTime) {
                 historyGszSortLastExecTime = System.currentTimeMillis();
                 can = true;

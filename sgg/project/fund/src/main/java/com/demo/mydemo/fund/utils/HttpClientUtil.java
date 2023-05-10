@@ -1,5 +1,6 @@
 package com.demo.mydemo.fund.utils;
 
+import cn.hutool.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,16 @@ public class HttpClientUtil {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }while(!success);
+        } while (!success);
+        return null;
+    }
+
+    public static String get(String url) {
+        try {
+            return HttpRequest.get(url).timeout(1000 * 30).execute().body();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return null;
     }
 
