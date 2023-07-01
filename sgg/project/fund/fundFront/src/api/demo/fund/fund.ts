@@ -6,6 +6,7 @@ export const demoListApi = (params: DemoParams) =>{
   return defHttp.get<DemoListGetResultModel>({
     url: '/lastNRise',
     params,
+    timeout: -1,
     headers: {
       // @ts-ignore
       ignoreCancelToken: true,

@@ -55,8 +55,8 @@ export function getFormConfig(): Partial<FormProps> {
         required: true,
         defaultValue: new Date(),
         colProps: {
-          xl: 8,
-          xxl: 6
+          xl: 6,
+          xxl: 4
         },
       },
       {
@@ -66,8 +66,8 @@ export function getFormConfig(): Partial<FormProps> {
         required: true,
         defaultValue: 1,
         colProps: {
-          xl: 6,
-          xxl: 8
+          xl: 4,
+          xxl: 4
         }
       },
       {
@@ -78,6 +78,17 @@ export function getFormConfig(): Partial<FormProps> {
         defaultValue: true,
         colProps: {
           xl: 3,
+          xxl: 4
+        }
+      },
+      {
+        field: `fundName`,
+        label: `基金名称:`,
+        component: 'Input',
+        required: false,
+        defaultValue: "",
+        colProps: {
+          xl: 8,
           xxl: 4
         }
       }

@@ -15,6 +15,7 @@ import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -319,12 +320,15 @@ public class FundServiceImpl implements FundService {
         if (param.containsKey("gzdate")) {
             queryWrapper.eq(FundGsPo::getGzdate, param.get("gzdate"));
         }
+        if(!ObjectUtils.isEmpty(param.get("fundName"))){
+            queryWrapper.like(FundGsPo::getName,param.get("fundName"));
+        }
         queryWrapper.last(" order by gzdate desc,gszzl desc");
         return fundGsMapper.selectList(queryWrapper);
     }
 
     @Override
-    public List<FundVo> lastNRise(Date date, int n, int sortType, boolean continuation) {
+    public List<FundVo> lastNRise(Date date, int n, int sortType, boolean continuation,String fundName) {
         int count = 0;
         int realCount = 0;
         int maxCount = 100;
@@ -334,6 +338,7 @@ public class FundServiceImpl implements FundService {
         while (realCount < n && count < maxCount) {
             Map<String, Object> param = new HashMap<>();
             param.put("gzdate", DateUtil.format("yyyyMMdd", date));
+            param.put("fundName",fundName);
             List<FundGsPo> fundGsPos = selectList(param);
             if (fundGsPos != null && !fundGsPos.isEmpty()) {
                 realCount++;

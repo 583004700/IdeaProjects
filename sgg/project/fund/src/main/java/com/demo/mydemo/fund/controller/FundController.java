@@ -55,7 +55,8 @@ public class FundController {
                                               @RequestParam(value = "page", required = false) Integer page,
                                               @RequestParam(value = "pageSize", required = false) Integer pageSize,
                                               @RequestParam(value = "field", required = false) String field,
-                                              @RequestParam(value = "continuation",required = false)Boolean continuation) throws ParseException {
+                                              @RequestParam(value = "continuation",required = false)Boolean continuation,
+                                              @RequestParam(value = "fundName", required = false) String fundName) throws ParseException {
         if (sortType == null) {
             sortType = 2;
         }
@@ -69,7 +70,7 @@ public class FundController {
         if(continuation == null){
             continuation = true;
         }
-        List<FundVo> result = fundService.lastNRise(DateUtil.parse(DateUtil.yyyy_MM_dd, date), n, sortType,continuation);
+        List<FundVo> result = fundService.lastNRise(DateUtil.parse(DateUtil.yyyy_MM_dd, date), n, sortType,continuation,fundName);
         PageVo<FundVo> pageVo = new PageVo<>();
         int total = result.size();
         pageVo.setTotal(total);
