@@ -56,7 +56,7 @@ export function getFormConfig(): Partial<FormProps> {
         defaultValue: new Date(),
         colProps: {
           xl: 6,
-          xxl: 4
+          xxl: 6
         },
       },
       {
@@ -77,8 +77,8 @@ export function getFormConfig(): Partial<FormProps> {
         required: false,
         defaultValue: true,
         colProps: {
-          xl: 3,
-          xxl: 4
+          xl: 2,
+          xxl: 2
         }
       },
       {
@@ -88,8 +88,8 @@ export function getFormConfig(): Partial<FormProps> {
         required: false,
         defaultValue: "",
         colProps: {
-          xl: 8,
-          xxl: 4
+          xl: 6,
+          xxl: 6
         }
       }
     ],
@@ -98,7 +98,8 @@ export function getFormConfig(): Partial<FormProps> {
 
 export const vxeTableFormSchema: VxeFormItemProps[] = [
   {
-    span: 12,
+    span: 2,
+    titleWidth: 0,
     align: 'right',
     className: '!pr-0',
     itemRender: {
