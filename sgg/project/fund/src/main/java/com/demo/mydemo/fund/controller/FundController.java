@@ -78,7 +78,7 @@ public class FundController {
             int start = (page - 1) * pageSize;
             start = Math.min(start, total - 1);
             int end = start + pageSize;
-            end = Math.min(end, total - 1);
+            end = Math.min(end, total);
             result = result.subList(start, end);
         }
         pageVo.setItems(result);
