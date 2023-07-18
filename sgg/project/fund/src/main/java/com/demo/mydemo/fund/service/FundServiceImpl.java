@@ -333,8 +333,8 @@ public class FundServiceImpl implements FundService {
         int realCount = 0;
         int maxCount = 100;
         List<Map<String, FundGsPo>> allFundGsPos = new ArrayList<>();
-        int minLength = Integer.MAX_VALUE;
-        Map<String, FundGsPo> minMap = new HashMap<>();
+        int minLength = Integer.MIN_VALUE;
+        Map<String, FundGsPo> maxMap = new HashMap<>();
         while (realCount < n && count < maxCount) {
             Map<String, Object> param = new HashMap<>();
             param.put("gzdate", DateUtil.format("yyyyMMdd", date));
@@ -344,9 +344,9 @@ public class FundServiceImpl implements FundService {
                 realCount++;
                 Map<String, FundGsPo> collect = fundGsPos.stream().collect(Collectors.toMap(FundGsPo::getFundcode, f -> f));
                 allFundGsPos.add(collect);
-                if (collect.size() < minLength) {
+                if (collect.size() > minLength) {
                     minLength = collect.size();
-                    minMap = collect;
+                    maxMap = collect;
                 }
             }
             count++;
@@ -354,19 +354,21 @@ public class FundServiceImpl implements FundService {
         }
 
         List<FundVo> result = new ArrayList<>();
-        minMap.forEach((k, v) -> {
+        maxMap.forEach((k, v) -> {
             BigDecimal nDaysGszzl = BigDecimal.valueOf(1);
             boolean flag = true;
             for (int i = 0; i < allFundGsPos.size(); i++) {
                 Map<String, FundGsPo> every = allFundGsPos.get(i);
                 FundGsPo fundGsPo = every.get(k);
+                if(fundGsPo == null){
+                    fundGsPo = new FundGsPo();
+                    every.put(k,fundGsPo);
+                }
+                if(fundGsPo.getGszzl() == null){
+                    fundGsPo.setGszzl(new BigDecimal("0"));
+                }
                 if (continuation) {
-                    if (fundGsPo == null || fundGsPo.getGszzl() == null || fundGsPo.getGszzl().doubleValue() < 0) {
-                        flag = false;
-                        break;
-                    }
-                } else {
-                    if (fundGsPo == null || fundGsPo.getGszzl() == null) {
+                    if (fundGsPo.getGszzl().doubleValue() < 0) {
                         flag = false;
                         break;
                     }
@@ -378,10 +380,9 @@ public class FundServiceImpl implements FundService {
             nDaysGszzl = nDaysGszzl.multiply(BigDecimal.valueOf(100));
             Map<String, FundGsPo> lastMap = allFundGsPos.get(0);
             if (flag && lastMap != null) {
-                FundGsPo fundGsPo = lastMap.get(k);
                 FundVo fundVo = new FundVo();
                 fundVo.setNDaysGszzl(nDaysGszzl);
-                BeanUtils.copyProperties(fundGsPo, fundVo);
+                BeanUtils.copyProperties(v, fundVo);
                 result.add(fundVo);
             }
             if (sortType == 1) {

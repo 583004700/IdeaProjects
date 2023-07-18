@@ -64,7 +64,7 @@ export function getFormConfig(): Partial<FormProps> {
         label: `天数:`,
         component: 'InputNumber',
         required: true,
-        defaultValue: 1,
+        defaultValue: 55,
         colProps: {
           xl: 4,
           xxl: 4
@@ -75,7 +75,7 @@ export function getFormConfig(): Partial<FormProps> {
         label: `是否连续涨:`,
         component: 'Checkbox',
         required: false,
-        defaultValue: true,
+        defaultValue: false,
         colProps: {
           xl: 2,
           xxl: 2

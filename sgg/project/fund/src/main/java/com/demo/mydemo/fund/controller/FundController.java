@@ -68,7 +68,7 @@ public class FundController {
             }
         }
         if(continuation == null){
-            continuation = true;
+            continuation = false;
         }
         List<FundVo> result = fundService.lastNRise(DateUtil.parse(DateUtil.yyyy_MM_dd, date), n, sortType,continuation,fundName);
         PageVo<FundVo> pageVo = new PageVo<>();
