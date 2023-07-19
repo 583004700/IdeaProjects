@@ -52,7 +52,7 @@ export function getFormConfig(): Partial<FormProps> {
         label: `天数:`,
         component: 'InputNumber',
         required: true,
-        defaultValue: 55,
+        defaultValue: 8,
         colProps: {
           xl: 4,
           xxl: 4
