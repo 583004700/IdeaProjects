@@ -18,12 +18,6 @@ export function getBasicColumns(): BasicColumn[] {
       sorter: false,
     },
     {
-      title: '最近一天涨幅',
-      dataIndex: 'gszzl',
-      width: 150,
-      sorter: true,
-    },
-    {
       title: '最近n天涨幅',
       dataIndex: 'nDaysGszzl',
       width: 150,
