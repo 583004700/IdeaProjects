@@ -24,12 +24,6 @@ export function getBasicColumns(): BasicColumn[] {
       sorter: true,
     },
     {
-      title: '涨幅时间',
-      dataIndex: 'gztime',
-      width: 150,
-      sorter: false,
-    },
-    {
       title: '数据更新时间',
       dataIndex: 'updatedTime',
       width: 150,
