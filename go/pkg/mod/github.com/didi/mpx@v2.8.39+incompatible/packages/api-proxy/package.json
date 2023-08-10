@@ -1,0 +1,42 @@
+{
+  "name": "@mpxjs/api-proxy",
+  "version": "2.8.39",
+  "description": "convert miniprogram API at each end",
+  "module": "src/index.js",
+  "types": "@types/index.d.ts",
+  "sideEffects": [
+    "*.styl"
+  ],
+  "scripts": {
+    "test": "jest"
+  },
+  "files": [
+    "src",
+    "@types",
+    "README.md"
+  ],
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com/didi/mpx.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "keywords": [
+    "api",
+    "proxy",
+    "web",
+    "promise"
+  ],
+  "author": "httpsxiao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/didi/mpx/issues"
+  },
+  "homepage": "https://github.com/didi/mpx#readme",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
