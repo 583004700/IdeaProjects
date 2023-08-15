@@ -95,6 +95,7 @@ func getMethod() {
 	// 如果是带指针的方法，也要传入对象的指针
 	//typeUser := reflect.TypeOf(&User{})
 	typeUser := reflect.TypeOf(User{})
+	valueUser := reflect.ValueOf(User{})
 	methodNum := typeUser.NumMethod()
 	for i := 0; i < methodNum; i++ {
 		method := typeUser.Method(i)
@@ -102,6 +103,7 @@ func getMethod() {
 	}
 	m, _ := typeUser.MethodByName("Say2")
 	fmt.Println(m.Name)
+	fmt.Println(valueUser.CanAddr())
 }
 
 func getFunc() {

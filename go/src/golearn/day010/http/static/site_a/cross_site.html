@@ -1,0 +1,24 @@
+<html>
+<head>
+    <title>test</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <!--<script>标签的src属性不受同源策略限制，会立即执行test.js里的脚本-->
+    <script type="text/javascript" src="http://localhost:5657/file/test.js"></script>
+    <script type="text/javascript">
+        $.ajax({
+            url: "http://localhost:5657",
+            dataType: "jsonp",
+            // 会把yyds当成一个json函数去执行
+            jsonpCallback: "yyds",
+            success: function (data) {//把yyds函数的参数传给这里的data
+                var div = document.getElementById("div");
+                div.innerHTML = data.message;
+            }
+        });
+    </script>
+</head>
+<body>
+    以下是js函数回调获取的内容<br>
+    <div id='div'></div>
+</body>
+</html>
