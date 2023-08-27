@@ -2,19 +2,18 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	_ "net/http/pprof"
 	"runtime"
 	"time"
 )
 
-func main18() {
-	go func() {
+func main() {
+	/*go func() {
 		//在8080端口接收debug
 		if err := http.ListenAndServe("localhost:8080", nil); err != nil {
 			panic(err)
 		}
-	}()
+	}()*/
 
 	go func() {
 		//每隔1秒打印一次协程数量

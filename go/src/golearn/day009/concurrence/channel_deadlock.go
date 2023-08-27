@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func main() {
+func main18() {
 	ch := make(chan struct{}, 1)
 	ch <- struct{}{} //有1个缓冲可以用，无需阻塞，可以立即执行
 	go func() {      //子协程1

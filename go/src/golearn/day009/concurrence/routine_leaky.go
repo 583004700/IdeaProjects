@@ -16,9 +16,9 @@ func work() {
 // 模拟一个接口处理函数
 func handle() {
 	//借助于带超时的context来实现对函数的超时控制
-	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*100) //改成1000试试
-	defer cancel()                                                                 //纯粹出于良好习惯，函数退出前调用cancel()
-	// begin := time.Now()
+	ctx, cancel := context.WithTimeout(context.Background(), time.Millisecond*1000) //改成1000试试
+	defer cancel()                                                                  //纯粹出于良好习惯，函数退出前调用cancel()
+	begin := time.Now()
 	workDone := make(chan struct{}) //创建一个无缓冲管道
 	go func() {                     //启动一个子协程
 		work()
@@ -28,7 +28,7 @@ func handle() {
 	case <-workDone: //永远执行不到
 		fmt.Println("LongTimeWork return")
 	case <-ctx.Done(): //ctx.Done()是一个管道，context超时或者调用了cancel()都会关闭这个管道，然后读操作就会立即返回
-		// fmt.Printf("LongTimeWork timeout %d ms\n", time.Since(begin).Milliseconds())
+		fmt.Printf("LongTimeWork timeout %d ms\n", time.Since(begin).Milliseconds())
 	}
 }
 

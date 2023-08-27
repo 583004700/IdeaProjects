@@ -16,6 +16,8 @@ require (
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
 	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
+	github.com/golang/protobuf v1.5.0 // indirect
+	github.com/gorhill/cronexpr v0.0.0-20180427100037-88b0669f7d75 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
@@ -34,6 +36,10 @@ require (
 	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
+	github.com/x-mod/errors v0.2.3 // indirect
+	github.com/x-mod/event v0.0.2 // indirect
+	github.com/x-mod/routine v1.3.3 // indirect
+	github.com/x-mod/sigtrap v0.1.1 // indirect
 	github.com/yuin/goldmark v1.5.5 // indirect
 	go.mongodb.org/mongo-driver v1.12.1 // indirect
 	golang.org/x/arch v0.3.0 // indirect
@@ -45,6 +51,8 @@ require (
 	golang.org/x/text v0.11.0 // indirect
 	golang.org/x/tools v0.11.1 // indirect
 	gonum.org/v1/gonum v0.13.0 // indirect
+	google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55 // indirect
+	google.golang.org/grpc v1.27.1 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/mysql v1.5.1 // indirect
