@@ -1,3 +1,7 @@
+CREATE database if NOT EXISTS `fund` default character set utf8mb4 collate utf8mb4_unicode_ci;
+use `fund`;
+
+SET NAMES utf8mb4;
 create table fund_gs
 (
     id           bigint auto_increment
