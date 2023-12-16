@@ -12,7 +12,7 @@ exit /B
 if exist "%temp%\getadmin.vbs" ( del "%temp%\getadmin.vbs" )
 @echo off
 cd /d %~dp0
-c:
+d:
 cd D:\fund
 start javaw -Xms512m -Xmx512m -Dfile.encoding=UTF-8 -DhistorySleepTime=150 -DsleepTime=40 -DhistoryExecMaxTime=10800000 -jar fund-2.2.2.RELEASE.jar
 start javaw -Xms512m -Xmx512m -Dfile.encoding=UTF-8 -jar xxl-job-admin-2.4.0-SNAPSHOT.jar
