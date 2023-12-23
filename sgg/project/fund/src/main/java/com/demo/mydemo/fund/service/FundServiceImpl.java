@@ -323,7 +323,9 @@ public class FundServiceImpl implements FundService {
         if(!ObjectUtils.isEmpty(param.get("fundName"))){
             queryWrapper.like(FundGsPo::getName,param.get("fundName"));
         }
-        queryWrapper.last(" order by gzdate desc,gszzl desc");
+        queryWrapper.last(" and fundcode not in (\n" +
+                "    select fundcode from fund_a\n" +
+                ") order by gzdate desc,gszzl desc");
         return fundGsMapper.selectList(queryWrapper);
     }
 

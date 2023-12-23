@@ -18,3 +18,10 @@ create table fund_gs
 )
     comment '基金涨幅估算表';
 
+create table fund_a
+(
+    fundcode varchar(255) not null
+        primary key
+)
+    comment '非海外的基金';
+
