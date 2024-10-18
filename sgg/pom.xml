@@ -54,6 +54,7 @@
         <module>activiti</module>
         <module>xxl-job</module>
         <module>project</module>
+        <module>elastic-search-study</module>
     </modules>
 
     <properties>

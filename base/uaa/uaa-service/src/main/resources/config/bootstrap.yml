@@ -1,0 +1,31 @@
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: uaa
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 8.149.139.92:8748
+      config:
+        import-check:
+          enabled: false
+        namespace: base
+        file-extension: yml
+        shared-configs:
+          - dataId: application-common.${spring.cloud.nacos.config.file-extension}
+      discovery:
+        namespace: base
+        ip: 8.149.139.92
+  datasource:
+    dynamic:
+      primary: uaa
+      strict: true
+      datasource:
+        uaa:
+          url: jdbc:mysql://8.149.139.92:3206/mall-goods?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true
+          username: root
+          password: WN_ISland2024_06
+          hikari:
+            max-lifetime: 30000

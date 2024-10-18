@@ -2,7 +2,9 @@ spring:
   application:
     name: service-auth
   redis:
-    host: 127.0.0.1
+    host: 8.149.139.92
     database: 0
+    password: iSland2024_06_27
+    port: 6278
 server:
   port: 9098
