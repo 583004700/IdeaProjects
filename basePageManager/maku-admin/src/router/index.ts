@@ -9,7 +9,16 @@ import constant from '@/utils/constant'
 
 NProgress.configure({ showSpinner: false })
 
-const constantRoutes: RouteRecordRaw[] = [
+const constantRoutes: Array<any> = [
+	{
+		path: '/operation',
+		children: [
+			{
+				path: '/operation/hotSearch',
+				component: () => import('../views/operation/hot-search.vue'),
+			}
+		]
+	},
 	{
 		path: '/redirect',
 		component: () => import('../layout/index.vue'),
@@ -169,7 +178,7 @@ export const router = createRouter({
 const whiteList = ['/login']
 
 // 路由跳转前
-router.beforeEach(async (to, from, next) => {
+/*router.beforeEach(async (to, from, next) => {
 	NProgress.start()
 
 	const appStore = useAppStore()
@@ -226,7 +235,7 @@ router.beforeEach(async (to, from, next) => {
 			next('/login')
 		}
 	}
-})
+})*/
 
 // 路由加载后
 router.afterEach(() => {

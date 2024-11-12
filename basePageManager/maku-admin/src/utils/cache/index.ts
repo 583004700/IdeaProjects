@@ -46,9 +46,7 @@ class Cache {
 	}
 
 	getTheme = (): ITheme => {
-		var theme = (SessionStorage.getItem(CacheKey.ThemeKey) as ITheme) || themeConfig
-		console.log(theme)
-		return theme
+		return (SessionStorage.getItem(CacheKey.ThemeKey) as ITheme) || themeConfig
 	}
 
 	setTheme = (value: ITheme) => {

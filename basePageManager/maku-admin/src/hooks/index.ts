@@ -1,5 +1,6 @@
 import { IHooksOptions } from '@/hooks/interface'
 import service from '@/utils/request'
+import httpUtil from '@/utils/HttpUtil'
 import { onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import qs from 'qs'
@@ -50,22 +51,24 @@ export const useCrud = (options: IHooksOptions) => {
 
 		state.dataListLoading = true
 
-		service
-			.get(state.dataListUrl, {
+		httpUtil
+			.request({
+				url: state.dataListUrl,
 				params: {
 					order: state.order,
 					asc: state.asc,
-					page: state.isPage ? state.page : null,
-					limit: state.isPage ? state.limit : null,
+					pageNum: state.isPage ? state.page : null,
+					pageSize: state.isPage ? state.limit : null,
 					...state.queryForm
 				},
+				method: 'post',
 				paramsSerializer: params => {
 					return qs.stringify(params)
 				}
 			})
 			.then((res: any) => {
-				state.dataList = state.isPage ? res.data.list : res.data
-				state.total = state.isPage ? res.data.total : 0
+				state.dataList = state.isPage ? res.rows : res
+				state.total = state.isPage ? res.total : 0
 			})
 			.finally(() => {
 				state.dataListLoading = false

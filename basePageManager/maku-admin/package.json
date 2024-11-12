@@ -3,8 +3,8 @@
   "version": "4.5.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "dev": "vite --mode devLocal",
+    "build": "vue-tsc --noEmit && vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint --fix --ext .vue,.jsx,.ts,.tsx ."
   },
