@@ -20,11 +20,4 @@ const size = computed(() => appStore.componentSize)
 
 // 设置标题
 useTitle(t('app.title'))
-
-onMounted(() => {
-	nextTick(() => {
-		// 初始化主题样式
-		handleThemeStyle(appStore.theme)
-	})
-})
 </script>

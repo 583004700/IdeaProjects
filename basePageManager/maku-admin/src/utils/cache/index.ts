@@ -22,7 +22,7 @@ class Cache {
 	}
 
 	getSidebarOpened = (): boolean => {
-		return Storage.getItem(CacheKey.SidebarOpenedKey) || false
+		return Storage.getItem(CacheKey.SidebarOpenedKey) || true
 	}
 
 	setSidebarOpened = (value: boolean) => {
@@ -46,7 +46,9 @@ class Cache {
 	}
 
 	getTheme = (): ITheme => {
-		return (SessionStorage.getItem(CacheKey.ThemeKey) as ITheme) || themeConfig
+		var theme = (SessionStorage.getItem(CacheKey.ThemeKey) as ITheme) || themeConfig
+		console.log(theme)
+		return theme
 	}
 
 	setTheme = (value: ITheme) => {
